@@ -47,7 +47,7 @@ function Toast({ message, visible }) {
 }
 
 /**
- * Panic Triage (tab ACT) — Ascend polished theme.
+ * Panic Triage (tab ACT) — Ascend polished theme with HCI Psychological Ergonomics.
  * Props:
  *   scanResult — optional scan result object
  */
@@ -77,7 +77,14 @@ export default function PanicTriage({ scanResult = null }) {
 
   const doneCount = steps.filter((s) => completedSteps[s.id]).length;
   const allDone = steps.length > 0 && doneCount === steps.length;
-  const progress = steps.length ? (doneCount / steps.length) * 100 : 0;
+
+  // Endowed Progress Effect: Starts at 15% when 0 checked, scales to 100% when all completed
+  const endowedProgress = steps.length
+    ? doneCount === 0
+      ? 15
+      : Math.round(15 + (doneCount / steps.length) * 85)
+    : 15;
+
   const guides = sortGuides(triggeredEngines);
 
   // ── Defang URLs agar link aktif tidak tersebar ──
@@ -143,34 +150,53 @@ export default function PanicTriage({ scanResult = null }) {
 
       <div className="glass-card p-6 sm:p-8 space-y-8">
 
-        {/* ── Anti-Shame / Calming Banner ── */}
+        {/* ── Anti-Shame / Calming Banner (Affective Design & Psychological First Aid) ── */}
         <div className="banner-calm flex items-start gap-3.5">
           <span className="text-2xl shrink-0 mt-0.5">🤝</span>
-          <div>
-            <p className="text-sm sm:text-base font-semibold mb-1 text-[#5df0a8]">
+          <div className="space-y-1.5 flex-1">
+            <div className="flex items-center gap-2">
+              <span
+                className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full inline-block"
+                style={{
+                  background: "rgba(93,240,168,0.15)",
+                  color: "#5df0a8",
+                  border: "1px solid rgba(93,240,168,0.30)",
+                }}
+              >
+                Psychological First Aid (Anti-Shame Loop)
+              </span>
+            </div>
+            <p className="text-sm sm:text-base font-semibold text-[#5df0a8]">
               Anda tidak sendirian &amp; jangan malu melapor.
             </p>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Jutaan orang mengalami hal serupa. Penipu terlatih memanipulasi siapa pun.
               Fokus utama sekarang adalah <strong className="text-white font-semibold">mengamankan perangkat dan rekening Anda.</strong>
             </p>
+            <p className="text-xs text-slate-400 italic leading-relaxed pt-0.5">
+              💡 Tarik napas sejenak. Jangan membalas pesan pelaku, fokuskan energi Anda pada langkah pengamanan di bawah ini.
+            </p>
           </div>
         </div>
 
-        {/* ── Header & Tab Switcher ── */}
+        {/* ── Header & Tab Switcher (Hick's Law & Cognitive Load Optimization) ── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-4">
-          <div>
+          <div className="space-y-1">
             <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
               <LifeBuoy className="w-5 h-5 text-[#5df0a8]" />
               <span>Panduan Penyelamatan &amp; Tindakan Darurat</span>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-400">
               Pilih kondisi Anda saat ini untuk panduan langkah demi langkah yang terarah.
+            </p>
+            <p className="text-[11px] text-[#5df0a8]/90 font-medium flex items-center gap-1.5 pt-0.5">
+              <span>⚡</span>
+              <span>Mode Triage Cepat (Hick's Law): Pilih 1 kondisi Anda saat ini agar panduan langsung disaring sesuai prioritas.</span>
             </p>
           </div>
 
           <div
-            className="flex items-center p-1.5 rounded-full text-xs font-semibold self-start sm:self-auto"
+            className="flex items-center p-1.5 rounded-full text-xs font-semibold self-start sm:self-auto shrink-0"
             style={{ background: "rgba(12,18,38,0.50)", border: "1px solid var(--border)" }}
           >
             <button
@@ -208,17 +234,29 @@ export default function PanicTriage({ scanResult = null }) {
           </div>
         </div>
 
-        {/* ── 2 Flash Action Cards (Emergency only) ── */}
+        {/* ── 2 Flash Action Cards (Emergency only with Cognitive Priority Marker) ── */}
         {activeTab === "emergency" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {/* Flash Card 1 — APK */}
-            <div className="flash-card-urgent flex gap-3.5">
+            <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
               <span className="text-2xl shrink-0 mt-0.5">⏱️</span>
-              <div>
-                <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1 text-red-400">
-                  DETIK KE 0–30 (Jika Install .APK)
-                </p>
-                <p className="text-sm sm:text-base font-bold text-white mb-1">
+              <div className="space-y-1 w-full">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
+                    DETIK KE 0–30 (Jika Install .APK)
+                  </p>
+                  <span
+                    className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(239,68,68,0.20)",
+                      border: "1px solid rgba(239,68,68,0.40)",
+                      color: "#fca5a5",
+                    }}
+                  >
+                    PRIORITAS KOGNITIF UTAMA
+                  </span>
+                </div>
+                <p className="text-sm sm:text-base font-bold text-white">
                   Aktifkan Mode Pesawat &amp; Matikan Wi-Fi Sekarang!
                 </p>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -229,13 +267,25 @@ export default function PanicTriage({ scanResult = null }) {
             </div>
 
             {/* Flash Card 2 — OTP / Transfer */}
-            <div className="flash-card-urgent flex gap-3.5">
+            <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
               <span className="text-2xl shrink-0 mt-0.5">📞</span>
-              <div>
-                <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1 text-red-400">
-                  MENIT KE 1–60 (Jika Kasih OTP / Transfer)
-                </p>
-                <p className="text-sm sm:text-base font-bold text-white mb-1">
+              <div className="space-y-1 w-full">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
+                    MENIT KE 1–60 (Jika Kasih OTP / Transfer)
+                  </p>
+                  <span
+                    className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(239,68,68,0.20)",
+                      border: "1px solid rgba(239,68,68,0.40)",
+                      color: "#fca5a5",
+                    }}
+                  >
+                    PRIORITAS KOGNITIF UTAMA
+                  </span>
+                </div>
+                <p className="text-sm sm:text-base font-bold text-white">
                   Hubungi Call Center Resmi di Belakang Kartu ATM
                 </p>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -269,10 +319,13 @@ export default function PanicTriage({ scanResult = null }) {
           </div>
         )}
 
-        {/* ── Progress Checklist ── */}
+        {/* ── Progress Checklist with Endowed Progress Effect ── */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <span>Checklist · {doneCount}/{steps.length} selesai</span>
+            <span className="flex items-center gap-2">
+              <span>Checklist Protokol · {doneCount}/{steps.length} Selesai</span>
+              <span className="text-[#5df0a8] font-bold">({endowedProgress}%)</span>
+            </span>
             <button
               onClick={() => setCompletedSteps({})}
               className="px-3 py-1 rounded-full text-xs normal-case tracking-normal flex items-center gap-1.5 transition-colors"
@@ -286,38 +339,54 @@ export default function PanicTriage({ scanResult = null }) {
               <span>Reset</span>
             </button>
           </div>
-          <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(150,175,230,0.08)" }}>
+
+          {/* Visual horizontal Progress Bar */}
+          <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "rgba(150,175,230,0.08)" }}>
             <div
               className="h-full transition-all duration-500 rounded-full"
               style={{
-                width: `${progress}%`,
+                width: `${endowedProgress}%`,
                 background: activeTab === "emergency"
-                  ? "linear-gradient(90deg,#ef4444,#dc2626)"
-                  : "linear-gradient(90deg,#5df0a8,#2fd38a)",
+                  ? "linear-gradient(90deg, #ef4444, #f59e0b, #5df0a8)"
+                  : "linear-gradient(90deg, #5df0a8, #2fd38a)",
+                boxShadow: "0 0 12px rgba(93,240,168,0.35)",
               }}
             />
           </div>
+
+          {/* Endowed Progress Explanation Text */}
+          {doneCount === 0 ? (
+            <p className="text-[11px] text-[#5df0a8]/90 italic flex items-center gap-1.5 pt-0.5">
+              <span>✨</span>
+              <span>Progres Awal 15%: Anda sudah mengambil langkah penyelamatan pertama dengan membuka panduan ini.</span>
+            </p>
+          ) : !allDone ? (
+            <p className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-0.5">
+              <span>⚡</span>
+              <span>Pertahankan fokus: Lanjutkan menyelesaikan {steps.length - doneCount} protokol tersisa.</span>
+            </p>
+          ) : null}
         </div>
 
-        {/* ── ALL DONE: Success Appreciation Banner ── */}
+        {/* ── ALL DONE: Calming Emerald Success Appreciation Banner ── */}
         {allDone && (
           <div
-            className="flex items-start gap-4 p-5 sm:p-6 rounded-2xl"
+            className="flex items-start gap-4 p-5 sm:p-6 rounded-2xl animate-in fade-in duration-300"
             style={{
-              background: "linear-gradient(135deg, rgba(16,185,129,0.12), rgba(93,240,168,0.08))",
-              border: "1px solid rgba(16,185,129,0.35)",
-              boxShadow: "0 0 40px -15px rgba(93,240,168,0.30)",
+              background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(93,240,168,0.10))",
+              border: "1px solid rgba(16,185,129,0.40)",
+              boxShadow: "0 0 40px -15px rgba(93,240,168,0.35)",
             }}
           >
             <div
               className="p-2.5 rounded-2xl shrink-0"
-              style={{ background: "rgba(93,240,168,0.15)", border: "1px solid rgba(93,240,168,0.30)" }}
+              style={{ background: "rgba(93,240,168,0.18)", border: "1px solid rgba(93,240,168,0.35)" }}
             >
               <Trophy className="w-6 h-6 text-[#5df0a8]" />
             </div>
             <div>
               <p className="text-sm sm:text-base font-bold text-[#5df0a8] mb-1">
-                🎉 Luar biasa! Semua langkah penyelamatan telah selesai.
+                ✅ Seluruh Protokol Kritis Selesai! Anda telah menekan risiko kerugian dan penyadapan secara maksimal.
               </p>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                 Anda telah mengambil semua tindakan perlindungan yang tepat. Simpan bukti dan nomor laporan Anda.
