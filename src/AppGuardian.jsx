@@ -4,10 +4,6 @@ import {
   Search,
   LifeBuoy,
   BookOpen,
-  Sparkles,
-  ExternalLink,
-  ShieldCheck,
-  Zap,
   Code2
 } from "lucide-react";
 import OmniboxInput from "./components/scanner/OmniboxInput";
@@ -20,7 +16,7 @@ import PrivacyBanner from "./components/learn/PrivacyBanner";
 import { scanText } from "./engine/scannerIndex";
 import { JUDGE_PRESETS } from "./data/judgePresets";
 
-export default function App() {
+export default function AppGuardian() {
   const [activeTab, setActiveTab] = useState("recognize"); // 'recognize' | 'act' | 'learn'
   const [inputText, setInputText] = useState(JUDGE_PRESETS[0].text);
   const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
@@ -43,109 +39,133 @@ export default function App() {
     setScanResult(null);
   };
 
+  /** Navigate to ACT tab — called by ScoreGauge seamless handoff button */
+  const handleGoToAct = () => setActiveTab("act");
+
+  const tabs = [
+    { id: "recognize", label: "1. Recognize", Icon: Search },
+    { id: "act",       label: "2. Act",       Icon: LifeBuoy },
+    { id: "learn",     label: "3. Learn",     Icon: BookOpen },
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
-      {/* Top Notification Bar / Hackathon Tag */}
-      <div className="bg-gradient-to-r from-indigo-900/60 via-purple-900/60 to-slate-900 border-b border-indigo-500/20 px-4 py-2 text-center text-xs">
-        <span className="inline-flex items-center gap-1.5 font-medium text-indigo-200">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>Solusi Kompetisi Web Development MIT-WEEK 2026 — </span>
-          <span className="text-white font-semibold">The Trust Trap: Navigating Digital Deception</span>
+    <div className="min-h-screen flex flex-col font-sans" style={{ color: "var(--ink)" }}>
+
+      {/* ── Top Hackathon Ribbon ── */}
+      <div
+        style={{
+          background: "linear-gradient(90deg, rgba(58,108,255,0.18) 0%, rgba(12,18,38,0.70) 50%, rgba(93,240,168,0.10) 100%)",
+          borderBottom: "1px solid rgba(93,240,168,0.14)",
+        }}
+        className="px-4 py-2 text-center text-xs"
+      >
+        <span className="inline-flex items-center gap-1.5 font-medium" style={{ color: "var(--accent)" }}>
+          <span style={{ color: "#f59e0b" }}>✦</span>
+          <span style={{ color: "var(--muted)" }}>Solusi Kompetisi Web Development MIT-WEEK 2026 —&nbsp;</span>
+          <span className="font-semibold" style={{ color: "var(--ink)" }}>The Trust Trap: Navigating Digital Deception</span>
         </span>
       </div>
 
-      {/* Main Navbar */}
-      <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-              <ShieldAlert className="w-6 h-6" />
-            </div>
+      {/* ── Glassmorphism Navbar ── */}
+      <header
+        className="sticky top-0 z-40"
+        style={{
+          background: "rgba(4, 6, 15, 0.75)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+
+          {/* Brand mark */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            {/* Triangle mint brand mark */}
+            <span
+              className="text-2xl leading-none select-none"
+              style={{ color: "var(--accent)", filter: "drop-shadow(0 0 8px rgba(93,240,168,0.6))" }}
+              aria-hidden="true"
+            >▲</span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-indigo-100 to-slate-300 bg-clip-text text-transparent">
-                  TrustTrap Guardian
+                <span className="font-extrabold text-sm sm:text-base tracking-tight" style={{ color: "var(--ink)" }}>
+                  TRUST TRAP GUARDIAN
                 </span>
-                <span className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  Heuristic v1.0
+                <span
+                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                  style={{
+                    background: "rgba(93,240,168,0.12)",
+                    color: "var(--accent)",
+                    border: "1px solid rgba(93,240,168,0.28)",
+                  }}
+                >
+                  MIT-041
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
-                VirusTotal-Style Social Engineering & Scam Detector
+              <p className="text-[11px] hidden sm:block" style={{ color: "var(--muted)" }}>
+                VirusTotal-Style Social Engineering &amp; Scam Detector
               </p>
             </div>
           </div>
 
-          {/* 3 Pillar Tabs Navigation */}
-          <nav className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-            <button
-              onClick={() => setActiveTab("recognize")}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                activeTab === "recognize"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              <Search className="w-3.5 h-3.5" />
-              <span>1. Recognize</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("act")}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                activeTab === "act"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              <LifeBuoy className="w-3.5 h-3.5" />
-              <span>2. Act</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("learn")}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                activeTab === "learn"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                  : "text-slate-400 hover:text-white"
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>3. Learn</span>
-            </button>
+          {/* 3-Tab pill navigation */}
+          <nav
+            className="flex items-center p-1 rounded-full"
+            style={{
+              background: "rgba(12,18,38,0.70)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            {tabs.map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`tab-pill${activeTab === id ? " active" : ""}`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{label}</span>
+                <span className="sm:hidden">{label.split(". ")[1]}</span>
+              </button>
+            ))}
           </nav>
 
-          {/* GitHub Link */}
-          <div className="hidden md:flex items-center">
+          {/* GitHub link */}
+          <div className="hidden md:flex items-center shrink-0">
             <a
               href="https://github.com/Micho-Anta/TrustTrapGuardian"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-800 transition-colors"
+              className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors btn-ghost"
+              style={{ fontSize: "0.75rem" }}
             >
-              <Code2 className="w-4 h-4 text-indigo-400" />
+              <Code2 className="w-4 h-4" style={{ color: "var(--accent)" }} />
               <span>GitHub</span>
             </a>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
-        {/* TAB 1: RECOGNIZE (Bedah Bahaya ala VirusTotal) */}
+      {/* ── Main Content ── */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
+
+        {/* ── TAB 1: RECOGNIZE ── */}
         {activeTab === "recognize" && (
           <div className="space-y-6">
-            <div className="text-center sm:text-left space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Deteksi Rekayasa Sosial & Manipulasi Chat
+
+            {/* Hero header */}
+            <div className="text-center sm:text-left space-y-2">
+              <p className="eyebrow">THE TRUST TRAP · NAVIGATING DIGITAL DECEPTION</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+                Deteksi Rekayasa Sosial &amp;{" "}
+                <span className="text-mint-gradient">Manipulasi Chat</span>
               </h1>
-              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
-                Tempel teks pesan WhatsApp, tawaran loker, atau link mencurigakan. Scam Heuristic Engine akan membedah tanda bahaya manipulasi psikologis secara instan.
+              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
+                Tempel teks pesan WhatsApp, tawaran loker, atau link mencurigakan.
+                Scam Heuristic Engine akan membedah tanda bahaya manipulasi psikologis secara instan.
               </p>
             </div>
 
-            {/* Omnibox Input + 4 Presets Juri */}
+            {/* Omnibox */}
             <OmniboxInput
               text={inputText}
               setText={setInputText}
@@ -154,71 +174,81 @@ export default function App() {
               isAnalyzing={isAnalyzing}
             />
 
-            {/* Hasil Analisis: Score Gauge & Highlight View */}
+            {/* Results */}
             {scanResult && (
               <div className="space-y-6 animate-in fade-in duration-300">
                 <ScoreGauge
                   summary={scanResult.summary}
                   engines={scanResult.engines}
+                  onGoToAct={handleGoToAct}
                 />
-
                 <HighlightView scanResult={scanResult} />
               </div>
             )}
           </div>
         )}
 
-        {/* TAB 2: ACT (Langkah Penyelamatan & Kartu Peringatan) */}
+        {/* ── TAB 2: ACT ── */}
         {activeTab === "act" && (
           <div className="space-y-6">
-            <div className="text-center sm:text-left space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Langkah Penyelamatan Akun & Kartu Peringatan
+            <div className="text-center sm:text-left space-y-2">
+              <p className="eyebrow">LANGKAH PENYELAMATAN · PANIC TRIAGE</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+                Panduan Darurat &amp;{" "}
+                <span className="text-mint-gradient">Kartu Peringatan</span>
               </h1>
-              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
-                Panduan darurat langkah demi langkah jika Anda baru menerima chat atau sudah terlanjur melakukan transaksi, dilengkapi generator kartu peringatan keluarga.
+              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
+                Panduan darurat langkah demi langkah jika Anda baru menerima chat atau sudah terlanjur melakukan transaksi,
+                dilengkapi generator kartu peringatan keluarga.
               </p>
             </div>
 
-            {/* Panic Triage Component */}
-            <PanicTriage />
-
-            {/* Shareable Warning Card */}
+            <PanicTriage scanResult={scanResult} />
             <WarningCard scanResult={scanResult} />
           </div>
         )}
 
-        {/* TAB 3: LEARN (Simulasi Interaktif & Edukasi Modus) */}
+        {/* ── TAB 3: LEARN ── */}
         {activeTab === "learn" && (
           <div className="space-y-6">
-            <div className="text-center sm:text-left space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Pusat Edukasi & Simulasi Rekayasa Sosial
+            <div className="text-center sm:text-left space-y-2">
+              <p className="eyebrow">EDUKASI · SIMULASI INTERAKTIF</p>
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+                Pusat Edukasi &amp;{" "}
+                <span className="text-mint-gradient">Simulasi Rekayasa Sosial</span>
               </h1>
-              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
-                Pelajari bagaimana sindikat penipuan memanfaatkan celah psikologis rasa panik, serakah, dan empati melalui simulasi kuis interaktif.
+              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
+                Pelajari bagaimana sindikat penipuan memanfaatkan celah psikologis rasa panik, serakah, dan empati
+                melalui simulasi kuis interaktif.
               </p>
             </div>
-
-            {/* Interactive Spot The Trap Quiz */}
             <SpotTheTrap />
           </div>
         )}
 
-        {/* Banner Transparansi Privasi & Disclaimer */}
+        {/* Privacy Banner */}
         <PrivacyBanner />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
+      {/* ── Footer ── */}
+      <footer
+        className="py-6 text-center text-xs"
+        style={{
+          borderTop: "1px solid var(--border)",
+          background: "rgba(4,6,15,0.80)",
+          color: "var(--muted)",
+        }}
+      >
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            © 2026 <strong className="text-slate-400">TrustTrap Guardian</strong> — Tim The Trust Trap | MIT-WEEK 2026
+            © 2026{" "}
+            <strong style={{ color: "var(--ink)" }}>TrustTrap Guardian</strong>
+            {" "}— Tim The Trust Trap | MIT-WEEK 2026
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-slate-500">Local-First Heuristic Engine</span>
+          <div className="flex items-center gap-4" style={{ color: "var(--muted)" }}>
+            <span>Local-First Heuristic Engine</span>
             <span>•</span>
-            <span className="text-slate-500">React 19 + Tailwind CSS v4 + Vite</span>
+            <span>React 19 + Tailwind CSS v4 + Vite</span>
           </div>
         </div>
       </footer>

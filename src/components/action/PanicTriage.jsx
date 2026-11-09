@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AlertOctagon,
   CheckSquare,
+  ClipboardCopy,
   ExternalLink,
   LifeBuoy,
   PhoneCall,
@@ -21,10 +22,9 @@ import {
 } from "../../data/actGuides";
 
 /**
- * Panic Triage (tab ACT).
- * `scanResult` bersifat opsional (hasil scanText()). Tanpa prop ini komponen
- * tampil seperti sebelumnya sebagai panduan umum; dengan prop ini panduan
- * otomatis menyesuaikan modus penipuan yang terdeteksi.
+ * Panic Triage (tab ACT) — Ascend themed with UX audit upgrades.
+ * Props:
+ *   scanResult — optional scan result object
  */
 export default function PanicTriage({ scanResult = null }) {
   const triggeredEngines = getTriggeredEngineIds(scanResult);
@@ -32,23 +32,19 @@ export default function PanicTriage({ scanResult = null }) {
   const hasCritical = triggeredEngines.some((id) => CRITICAL_ENGINES.includes(id));
   const scanKey = triggeredEngines.join(",");
 
-  const [activeTab, setActiveTab] = useState(hasCritical ? "emergency" : "preventive"); // 'preventive' | 'emergency'
+  const [activeTab, setActiveTab] = useState(hasCritical ? "emergency" : "preventive");
   const [completedSteps, setCompletedSteps] = useState({});
+  const [reportCopied, setReportCopied] = useState(false);
 
-  // Saat hasil scan berganti: buka mode yang sesuai & kosongkan checklist.
   useEffect(() => {
     setActiveTab(hasCritical ? "emergency" : "preventive");
     setCompletedSteps({});
   }, [scanKey, hasCritical]);
 
   const toggleStep = (id) => {
-    setCompletedSteps((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    setCompletedSteps((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Langkah yang relevan dengan hasil scan tampil paling atas (urutan lain tetap).
   const steps = (activeTab === "preventive" ? PREVENTIVE_STEPS : EMERGENCY_STEPS)
     .map((s) => ({ ...s, relevant: !!s.engineId && triggeredEngines.includes(s.engineId) }))
     .sort((a, b) => Number(b.relevant) - Number(a.relevant));
@@ -57,40 +53,102 @@ export default function PanicTriage({ scanResult = null }) {
   const progress = steps.length ? (doneCount / steps.length) * 100 : 0;
   const guides = sortGuides(triggeredEngines);
 
+  // ── Copy Report Draft ──
+  const handleCopyReport = () => {
+    const now = new Date();
+    const dateStr = now.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
+
+    const draft = [
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "📋 LAPORAN KEJADIAN PENIPUAN DIGITAL",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      `Tanggal & Waktu Kejadian : ${dateStr} WIB`,
+      `Modus Terdeteksi         : ${triggeredEngines.length > 0 ? triggeredEngines.join(", ") : "Tidak diketahui"}`,
+      "",
+      "KRONOLOGI SINGKAT:",
+      "1. [Tuliskan kapan pertama kali dihubungi penipu]",
+      "2. [Tuliskan apa yang diminta / ditawarkan penipu]",
+      "3. [Tuliskan tindakan yang sudah dilakukan korban]",
+      "4. [Tuliskan kerugian: nominal / data yang diserahkan]",
+      "",
+      "IDENTITAS PELAKU (jika diketahui):",
+      "• Nama/Alias  : -",
+      "• No. HP/WA   : -",
+      "• No. Rekening: -",
+      "• Link/URL    : -",
+      "",
+      "BUKTI YANG TERSEDIA:",
+      "• Screenshot chat : Ada / Tidak",
+      "• Bukti transfer  : Ada / Tidak",
+      "• File .APK       : Ada / Tidak",
+      "",
+      "Diverifikasi oleh TrustTrap Guardian (trusttrapguardian.app)",
+      "Laporkan ke: IASC OJK (157) | PatroliSiber.id | Polri (110)",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    ].join("\n");
+
+    navigator.clipboard.writeText(draft).then(() => {
+      setReportCopied(true);
+      setTimeout(() => setReportCopied(false), 3000);
+    });
+  };
+
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-      {/* Header Panic Triage */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+    <div className="glass-card p-6 space-y-6">
+
+      {/* ── Anti-Shame / Calming Banner ── */}
+      <div className="banner-calm flex items-start gap-3">
+        <span className="text-2xl shrink-0">🤝</span>
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <LifeBuoy className="w-5 h-5 text-indigo-400" />
-            Panduan Penyelamatan & Tindakan Darurat (Panic Triage)
+          <p className="text-sm font-semibold mb-1" style={{ color: "var(--accent)" }}>
+            Anda tidak sendirian &amp; jangan malu melapor.
+          </p>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+            Jutaan orang mengalami hal serupa. Penipu terlatih memanipulasi siapa pun.
+            Fokus utama sekarang adalah <strong style={{ color: "var(--ink)" }}>mengamankan perangkat dan rekening Anda.</strong>
+          </p>
+        </div>
+      </div>
+
+      {/* ── Header & Tab Switcher ── */}
+      <div
+        className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-3"
+        style={{ borderBottom: "1px solid var(--border)" }}
+      >
+        <div>
+          <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: "var(--ink)" }}>
+            <LifeBuoy className="w-5 h-5" style={{ color: "var(--accent)" }} />
+            Panduan Penyelamatan &amp; Tindakan Darurat
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Pilih kondisi Anda saat ini untuk panduan langkah demi langkah yang terarah dan menenangkan.
+          <p className="text-xs mt-1" style={{ color: "var(--muted)" }}>
+            Pilih kondisi Anda saat ini untuk panduan langkah demi langkah yang terarah.
           </p>
         </div>
 
-        {/* Tab Switcher Kondisi */}
-        <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+        <div
+          className="flex items-center p-1 rounded-full text-xs font-semibold"
+          style={{ background: "rgba(4,6,15,0.60)", border: "1px solid var(--border)" }}
+        >
           <button
             onClick={() => setActiveTab("preventive")}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className="px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5"
+            style={
               activeTab === "preventive"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-white"
-            }`}
+                ? { background: "linear-gradient(180deg,#5df0a8,#2fd38a)", color: "var(--accent-on)", boxShadow: "0 4px 12px -4px rgba(93,240,168,0.5)" }
+                : { color: "var(--muted)" }
+            }
           >
             <ShieldCheck className="w-4 h-4" />
             Baru Terima Chat
           </button>
           <button
             onClick={() => setActiveTab("emergency")}
-            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+            className="px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5"
+            style={
               activeTab === "emergency"
-                ? "bg-red-600 text-white shadow"
-                : "text-slate-400 hover:text-white"
-            }`}
+                ? { background: "linear-gradient(180deg,#ef4444,#b91c1c)", color: "#fff", boxShadow: "0 4px 12px -4px rgba(239,68,68,0.5)" }
+                : { color: "var(--muted)" }
+            }
           >
             <AlertOctagon className="w-4 h-4" />
             Terlanjur Klik / Transfer
@@ -98,18 +156,62 @@ export default function PanicTriage({ scanResult = null }) {
         </div>
       </div>
 
-      {/* Konteks hasil scan */}
+      {/* ── 2 Flash Action Cards (Emergency only) ── */}
+      {activeTab === "emergency" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Flash Card 1 — APK */}
+          <div className="flash-card-urgent flex gap-3">
+            <span className="text-2xl shrink-0">⏱️</span>
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-wider mb-1" style={{ color: "#f87171" }}>
+                DETIK KE 0–30 (Jika Install .APK)
+              </p>
+              <p className="text-sm font-semibold mb-1" style={{ color: "var(--ink)" }}>
+                Aktifkan Mode Pesawat &amp; Matikan Wi-Fi Sekarang!
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+                Putuskan koneksi agar malware tidak bisa mencuri OTP atau data perbankan Anda.
+                Lalu uninstall aplikasi asing tersebut.
+              </p>
+            </div>
+          </div>
+
+          {/* Flash Card 2 — OTP / Transfer */}
+          <div className="flash-card-urgent flex gap-3">
+            <span className="text-2xl shrink-0">📞</span>
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-wider mb-1" style={{ color: "#f87171" }}>
+                MENIT KE 1–60 (Jika Kasih OTP / Transfer)
+              </p>
+              <p className="text-sm font-semibold mb-1" style={{ color: "var(--ink)" }}>
+                Hubungi Call Center Resmi di Belakang Kartu ATM
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+                Minta blokir darurat rekening tujuan sebelum dana dicairkan. Waktu adalah segalanya.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Scan Context ── */}
       {scanResult && (
-        <div className="p-4 rounded-xl border border-indigo-500/30 bg-indigo-950/20 space-y-2">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+        <div
+          className="p-4 rounded-xl space-y-2"
+          style={{ background: "rgba(93,240,168,0.06)", border: "1px solid rgba(93,240,168,0.20)" }}
+        >
+          <p
+            className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5"
+            style={{ color: "var(--accent)" }}
+          >
+            <Sparkles className="w-3.5 h-3.5" style={{ color: "#f59e0b" }} />
             Dari Hasil Scan Anda
-            <span className="normal-case font-medium text-slate-400">
+            <span className="normal-case font-medium" style={{ color: "var(--muted)" }}>
               · {triggeredEngines.length} modus terdeteksi
             </span>
           </p>
           {recommendedActions.length > 0 && (
-            <ul className="list-disc pl-5 space-y-1 text-xs text-slate-300 leading-relaxed">
+            <ul className="list-disc pl-5 space-y-1 text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
               {recommendedActions.map((a) => (
                 <li key={a}>{a}</li>
               ))}
@@ -118,29 +220,36 @@ export default function PanicTriage({ scanResult = null }) {
         </div>
       )}
 
-      {/* Progress Checklist */}
+      {/* ── Progress Checklist ── */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-          <span>
-            Checklist · {doneCount}/{steps.length} selesai
-          </span>
+        <div
+          className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider"
+          style={{ color: "var(--muted)" }}
+        >
+          <span>Checklist · {doneCount}/{steps.length} selesai</span>
           <button
             onClick={() => setCompletedSteps({})}
-            className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 normal-case tracking-normal flex items-center gap-1 transition-colors"
+            className="px-2 py-1 rounded-lg normal-case tracking-normal flex items-center gap-1 transition-colors"
+            style={{ background: "rgba(150,175,230,0.08)", border: "1px solid var(--border)", color: "var(--muted)" }}
           >
             <RotateCcw className="w-3 h-3" />
             Ulang
           </button>
         </div>
-        <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(150,175,230,0.10)" }}>
           <div
-            className={`h-full transition-all ${activeTab === "emergency" ? "bg-red-500" : "bg-indigo-500"}`}
-            style={{ width: `${progress}%` }}
+            className="h-full transition-all duration-500"
+            style={{
+              width: `${progress}%`,
+              background: activeTab === "emergency"
+                ? "linear-gradient(90deg,#ef4444,#b91c1c)"
+                : "linear-gradient(90deg,#5df0a8,#2fd38a)",
+            }}
           />
         </div>
       </div>
 
-      {/* Checklist Interaktif */}
+      {/* ── Interactive Checklist ── */}
       <div className="space-y-3">
         {steps.map((step) => {
           const isDone = !!completedSteps[step.id];
@@ -148,49 +257,62 @@ export default function PanicTriage({ scanResult = null }) {
             <div
               key={step.id}
               onClick={() => toggleStep(step.id)}
-              className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 select-none ${
+              className="p-4 rounded-xl cursor-pointer transition-all flex items-start gap-3.5 select-none"
+              style={
                 isDone
-                  ? "bg-emerald-950/20 border-emerald-800/40 opacity-75"
+                  ? { background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)", opacity: 0.75 }
                   : activeTab === "emergency"
-                  ? "bg-red-950/20 border-red-900/40 hover:border-red-700/60"
-                  : "bg-slate-950/50 border-slate-800 hover:border-slate-700"
-              }`}
+                  ? { background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.28)" }
+                  : { background: "rgba(150,175,230,0.04)", border: "1px solid var(--border)" }
+              }
             >
-              <button className="mt-0.5 text-indigo-400 shrink-0">
+              <button className="mt-0.5 shrink-0">
                 {isDone ? (
-                  <CheckSquare className="w-5 h-5 text-emerald-400" />
+                  <CheckSquare className="w-5 h-5" style={{ color: "#10b981" }} />
                 ) : (
-                  <Square className="w-5 h-5 text-slate-500" />
+                  <Square className="w-5 h-5" style={{ color: "rgba(150,175,230,0.35)" }} />
                 )}
               </button>
 
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-1.5 mb-1">
                   {step.priority && (
-                    <span className="inline-block text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">
+                    <span
+                      className="inline-block text-[10px] font-extrabold uppercase px-2 py-0.5 rounded"
+                      style={{ background: "rgba(239,68,68,0.15)", color: "#f87171", border: "1px solid rgba(239,68,68,0.30)" }}
+                    >
                       {step.priority}
                     </span>
                   )}
                   {step.relevant && (
-                    <span className="inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    <span
+                      className="inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded"
+                      style={{ background: "rgba(93,240,168,0.12)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.28)" }}
+                    >
                       Relevan dengan hasil scan
                     </span>
                   )}
                 </div>
-                <h4 className={`text-sm font-semibold ${isDone ? "line-through text-slate-400" : "text-white"}`}>
+                <h4
+                  className="text-sm font-semibold"
+                  style={{ color: isDone ? "var(--muted)" : "var(--ink)", textDecoration: isDone ? "line-through" : "none" }}
+                >
                   {step.title}
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">{step.desc}</p>
+                <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--muted)" }}>{step.desc}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Panduan per Modus Penipuan */}
-      <div className="pt-4 border-t border-slate-800">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-          <LifeBuoy className="w-4 h-4 text-indigo-400" />
+      {/* ── Guide Per Fraud Mode ── */}
+      <div className="pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+        <h4
+          className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-1.5"
+          style={{ color: "var(--muted)" }}
+        >
+          <LifeBuoy className="w-4 h-4" style={{ color: "var(--accent)" }} />
           Panduan Per Modus Penipuan
         </h4>
 
@@ -198,36 +320,43 @@ export default function PanicTriage({ scanResult = null }) {
           {guides.map((g) => (
             <div
               key={g.engineId}
-              className={`p-4 rounded-xl border text-xs ${
+              className="p-4 rounded-xl text-xs"
+              style={
                 g.relevant
-                  ? "bg-indigo-950/20 border-indigo-500/40"
-                  : "bg-slate-950/50 border-slate-800"
-              }`}
+                  ? { background: "rgba(93,240,168,0.06)", border: "1px solid rgba(93,240,168,0.22)" }
+                  : { background: "rgba(150,175,230,0.03)", border: "1px solid var(--border)" }
+              }
             >
               <div className="flex flex-wrap items-center gap-2">
-                <h5 className="text-sm font-semibold text-white">{g.title}</h5>
+                <h5 className="text-sm font-semibold" style={{ color: "var(--ink)" }}>{g.title}</h5>
                 {g.relevant && (
-                  <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <span
+                    className="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
+                    style={{ background: "rgba(93,240,168,0.12)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.28)" }}
+                  >
                     Relevan dengan hasil scan
                   </span>
                 )}
               </div>
-              <ol className="list-decimal pl-4 mt-2 space-y-1 text-slate-300 leading-relaxed">
+              <ol className="list-decimal pl-4 mt-2 space-y-1 leading-relaxed" style={{ color: "var(--muted)" }}>
                 {g.steps.map((s) => (
                   <li key={s}>{s}</li>
                 ))}
               </ol>
-              <p className="mt-3 text-[11px] text-slate-500">Siapkan: {g.docs.join(" · ")}</p>
+              <p className="mt-3 text-[11px]" style={{ color: "rgba(150,175,230,0.45)" }}>Siapkan: {g.docs.join(" · ")}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Nomor Kontak Darurat Resmi Indonesia */}
-      <div className="pt-4 border-t border-slate-800">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-          <PhoneCall className="w-4 h-4 text-emerald-400" />
-          Kanal Bantuan & Pelaporan Resmi Nasional
+      {/* ── Official Channels ── */}
+      <div className="pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+        <h4
+          className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-1.5"
+          style={{ color: "var(--muted)" }}
+        >
+          <PhoneCall className="w-4 h-4" style={{ color: "var(--accent)" }} />
+          Kanal Bantuan &amp; Pelaporan Resmi Nasional
         </h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -238,28 +367,66 @@ export default function PanicTriage({ scanResult = null }) {
                 href={c.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition-all flex items-start justify-between gap-2 text-xs group"
+                className="p-3 rounded-xl transition-all flex items-start justify-between gap-2 text-xs group"
+                style={{ background: "rgba(4,6,15,0.60)", border: "1px solid var(--border)" }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(93,240,168,0.35)"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}
               >
                 <div>
-                  <div className="font-semibold text-white group-hover:text-indigo-300">{c.name}</div>
-                  <div className="text-[11px] text-slate-400">{c.role}</div>
-                  <div className="text-[11px] text-emerald-400 font-mono mt-1">{c.contact}</div>
-                  <div className="text-[10px] text-slate-500 mt-1">Siapkan: {c.prep}</div>
+                  <div className="font-semibold" style={{ color: "var(--ink)" }}>{c.name}</div>
+                  <div className="text-[11px] mt-0.5" style={{ color: "var(--muted)" }}>{c.role}</div>
+                  <div className="text-[11px] font-mono mt-1" style={{ color: "var(--accent)" }}>{c.contact}</div>
+                  <div className="text-[10px] mt-1" style={{ color: "rgba(150,175,230,0.45)" }}>Siapkan: {c.prep}</div>
                 </div>
-                <ExternalLink className="w-4 h-4 shrink-0 text-slate-500 group-hover:text-indigo-400" />
+                <ExternalLink className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "var(--muted)" }} />
               </a>
             ) : (
-              <div key={c.id} className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs">
-                <div className="font-semibold text-white">{c.name}</div>
-                <div className="text-[11px] text-slate-400">{c.role}</div>
-                <div className="text-[11px] text-emerald-400 font-mono mt-1">{c.contact}</div>
-                <div className="text-[10px] text-slate-500 mt-1">Siapkan: {c.prep}</div>
+              <div key={c.id} className="p-3 rounded-xl text-xs" style={{ background: "rgba(4,6,15,0.60)", border: "1px solid var(--border)" }}>
+                <div className="font-semibold" style={{ color: "var(--ink)" }}>{c.name}</div>
+                <div className="text-[11px] mt-0.5" style={{ color: "var(--muted)" }}>{c.role}</div>
+                <div className="text-[11px] font-mono mt-1" style={{ color: "var(--accent)" }}>{c.contact}</div>
+                <div className="text-[10px] mt-1" style={{ color: "rgba(150,175,230,0.45)" }}>Siapkan: {c.prep}</div>
               </div>
             )
           )}
         </div>
 
-        <p className="mt-3 text-[11px] text-slate-500 leading-relaxed">{REPORTING_DISCLAIMER}</p>
+        {/* ── Copy Report Button ── */}
+        <div className="mt-4">
+          <button
+            onClick={handleCopyReport}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-sm transition-all"
+            style={{
+              background: reportCopied
+                ? "rgba(93,240,168,0.15)"
+                : "rgba(93,240,168,0.08)",
+              border: reportCopied
+                ? "1px solid rgba(93,240,168,0.45)"
+                : "1px solid rgba(93,240,168,0.25)",
+              color: "var(--accent)",
+            }}
+            onMouseEnter={e => {
+              if (!reportCopied) {
+                e.currentTarget.style.background = "rgba(93,240,168,0.14)";
+                e.currentTarget.style.borderColor = "rgba(93,240,168,0.40)";
+              }
+            }}
+            onMouseLeave={e => {
+              if (!reportCopied) {
+                e.currentTarget.style.background = "rgba(93,240,168,0.08)";
+                e.currentTarget.style.borderColor = "rgba(93,240,168,0.25)";
+              }
+            }}
+          >
+            <ClipboardCopy className="w-4 h-4" />
+            {reportCopied
+              ? "✅ Format Laporan Tersalin! Kirim ke WA IASC OJK / Bank"
+              : "Salin Format Laporan Resmi (WA IASC OJK / Bank)"}
+          </button>
+          <p className="text-[11px] mt-2 leading-relaxed" style={{ color: "rgba(150,175,230,0.45)" }}>
+            {REPORTING_DISCLAIMER}
+          </p>
+        </div>
       </div>
     </div>
   );

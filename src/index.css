@@ -1,13 +1,195 @@
 @import "tailwindcss";
 
+/* ============================================================
+   ASCEND — Deep-Space Glassmorphism & Mint Glow Design System
+   TrustTrap Guardian | MIT-WEEK 2026
+   ============================================================ */
+
 :root {
   color-scheme: dark;
+
+  /* ── Colour Palette ── */
+  --bg:        #04060f;
+  --ink:       #f3f6ff;
+  --muted:     #9aa6c4;
+  --accent:    #5df0a8;
+  --accent-2:  #2fd38a;
+  --accent-on: #032018;   /* text colour on top of accent button */
+  --surface:   rgba(12, 18, 38, 0.60);
+  --border:    rgba(150, 175, 230, 0.14);
+  --border-hover: rgba(150, 175, 230, 0.26);
+
+  /* ── Typography ── */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ── Reset / Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background-color: #0b0f19;
-  color: #f1f5f9;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  /* Ambient radial glow at top */
+  background-image: radial-gradient(
+    125% 62% at 50% -10%,
+    rgba(58, 108, 255, 0.22)  0%,
+    rgba(93, 240, 168, 0.08) 40%,
+    transparent              70%
+  );
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* ── Selection ── */
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-on);
+}
+
+/* ============================================================
+   ASCEND COMPONENT CLASSES
+   ============================================================ */
+
+/* Glass Card */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.75);
+  transition: border-color 0.2s ease;
+}
+.glass-card:hover {
+  border-color: var(--border-hover);
+}
+
+/* Primary Mint Button */
+.btn-ascend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--accent-on);
+  background: linear-gradient(180deg, #5df0a8, #2fd38a);
+  box-shadow:
+    0 10px 30px -8px rgba(93, 240, 168, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.btn-ascend:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 36px -8px rgba(93, 240, 168, 0.70),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.btn-ascend:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn-ascend:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Secondary ghost pill */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border-hover);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-ghost:hover {
+  background: rgba(150, 175, 230, 0.08);
+  border-color: rgba(150, 175, 230, 0.4);
+}
+
+/* Mint gradient text helper */
+.text-mint-gradient {
+  background: linear-gradient(180deg, #5df0a8, #2fd38a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Eyebrow label */
+.eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Tab pill */
+.tab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--muted);
+  background: transparent;
+}
+.tab-pill:hover {
+  color: var(--ink);
+  background: rgba(150, 175, 230, 0.08);
+}
+.tab-pill.active {
+  background: linear-gradient(180deg, #5df0a8, #2fd38a);
+  color: var(--accent-on);
+  box-shadow: 0 4px 16px -4px rgba(93, 240, 168, 0.5);
+  border-color: transparent;
+}
+
+/* Emergency flash card */
+.flash-card-urgent {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+/* Anti-shame banner */
+.banner-calm {
+  background: linear-gradient(135deg, rgba(93, 240, 168, 0.08), rgba(58, 108, 255, 0.08));
+  border: 1px solid rgba(93, 240, 168, 0.22);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(150, 175, 230, 0.2); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(150, 175, 230, 0.4); }

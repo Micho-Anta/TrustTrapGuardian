@@ -13,14 +13,21 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
 
   return (
     <div className="space-y-4">
-      {/* 4 Tombol Skenario Uji 1-Klik Khusus Juri */}
-      <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4">
+      {/* Preset Cards */}
+      <div className="glass-card p-4">
         <div className="flex items-center gap-2 mb-3">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <h3 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
+          <Sparkles className="w-4 h-4" style={{ color: "#f59e0b" }} />
+          <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--ink)" }}>
             Skenario Cepat Uji Juri (1-Click Presets)
           </h3>
-          <span className="text-[10px] bg-amber-400/10 text-amber-300 border border-amber-400/20 px-2 py-0.5 rounded-full font-medium">
+          <span
+            className="text-[10px] px-2 py-0.5 rounded-full font-medium"
+            style={{
+              background: "rgba(245,158,11,0.10)",
+              color: "#fcd34d",
+              border: "1px solid rgba(245,158,11,0.20)",
+            }}
+          >
             Siap Uji Langsung
           </span>
         </div>
@@ -30,19 +37,25 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
             <button
               key={preset.id}
               onClick={() => handlePresetSelect(preset)}
-              className="text-left p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 transition-all group flex flex-col justify-between"
+              className="text-left p-3 rounded-xl transition-all group flex flex-col justify-between"
+              style={{
+                background: "rgba(12,18,38,0.70)",
+                border: "1px solid var(--border)",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(93,240,168,0.35)"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}
             >
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
+                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "var(--accent)" }}>
                     {preset.badge}
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" style={{ color: "var(--muted)" }} />
                 </div>
-                <div className="text-sm font-semibold text-white group-hover:text-indigo-200 line-clamp-1">
+                <div className="text-xs sm:text-sm font-semibold line-clamp-1" style={{ color: "var(--ink)" }}>
                   {preset.title}
                 </div>
-                <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                <div className="text-[11px] line-clamp-1 mt-0.5" style={{ color: "var(--muted)" }}>
                   {preset.tagline}
                 </div>
               </div>
@@ -51,18 +64,31 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
         </div>
       </div>
 
-      {/* Kotak Input Omnibox Utama */}
-      <div className="relative bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
+      {/* Omnibox Textarea */}
+      <div
+        className="rounded-2xl shadow-2xl transition-all"
+        style={{
+          background: "rgba(12,18,38,0.70)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1px solid var(--border)",
+        }}
+        onFocusCapture={e => e.currentTarget.style.borderColor = "rgba(93,240,168,0.40)"}
+        onBlurCapture={e => e.currentTarget.style.borderColor = "var(--border)"}
+      >
         <div className="p-4 sm:p-5">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
-            <label className="text-xs font-medium text-slate-400 flex items-center gap-2">
-              <Search className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: "1px solid rgba(150,175,230,0.10)" }}>
+            <label className="text-xs font-medium flex items-center gap-2" style={{ color: "var(--muted)" }}>
+              <Search className="w-4 h-4" style={{ color: "var(--accent)" }} />
               <span>Tempel Teks Chat WhatsApp / SMS / Tawaran Loker / Link Mencurigakan</span>
             </label>
             {text && (
               <button
                 onClick={onClear}
-                className="text-xs text-slate-400 hover:text-red-400 flex items-center gap-1 transition-colors"
+                className="text-xs flex items-center gap-1 transition-colors"
+                style={{ color: "var(--muted)" }}
+                onMouseEnter={e => e.currentTarget.style.color = "#f87171"}
+                onMouseLeave={e => e.currentTarget.style.color = "var(--muted)"}
                 title="Hapus Teks"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -76,28 +102,32 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
             onChange={(e) => setText(e.target.value)}
             placeholder="Contoh: 'Selamat! Anda terpilih kerja freelance like YouTube dengan komisi harian Rp500rb. Segera transfer biaya pendaftaran Rp50rb dalam 15 menit...'"
             rows={5}
-            className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm sm:text-base focus:outline-none resize-none leading-relaxed"
+            className="w-full bg-transparent text-sm sm:text-base focus:outline-none resize-none leading-relaxed"
+            style={{ color: "var(--ink)" }}
           />
         </div>
 
-        {/* Footer Omnibox Action Bar */}
-        <div className="bg-slate-950/60 px-4 py-3 sm:px-5 rounded-b-2xl border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="text-xs text-slate-400 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+        {/* Footer Action Bar */}
+        <div
+          className="px-4 py-3 sm:px-5 rounded-b-2xl flex flex-col sm:flex-row items-center justify-between gap-3"
+          style={{ background: "rgba(4,6,15,0.50)", borderTop: "1px solid rgba(150,175,230,0.08)" }}
+        >
+          <div className="text-xs flex items-center gap-2" style={{ color: "var(--muted)" }}>
+            <span className="w-2 h-2 rounded-full" style={{ background: "var(--accent)" }}></span>
             <span>Sensor Privasi Aktif (NIK/Rekening/OTP otomatis disamarkan)</span>
           </div>
 
           <button
             onClick={() => onAnalyze(text)}
             disabled={!text.trim() || isAnalyzing}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2"
+            className="btn-ascend w-full sm:w-auto"
           >
             {isAnalyzing ? (
               <span>Menganalisis...</span>
             ) : (
               <>
                 <Search className="w-4 h-4" />
-                <span>Analisis Pola Manipulasi</span>
+                <span>Bedah Pesan Sekarang</span>
               </>
             )}
           </button>
