@@ -1,97 +1,153 @@
 # 🛡️ The Trust Trap Guardian
 > **VirusTotal-Style Social Engineering & Scam Detector for Digital Deception Defense**  
-> *Solusi Inovatif Kompetisi Web Development MIT-WEEK 2026*
+> *Karya Inovasi Kompetisi Web Development MIT-WEEK 2026 — Tim Nanti Ajah (MIT-041)*
 
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4.x-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![Tests](https://img.shields.io/badge/Tests-14%2F14%20Passing-10b981?style=flat&logo=node.js)](scripts/verifyEngine.mjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+🌐 **Live Production App:** [https://trusttrapguardian.vercel.app/](https://trusttrapguardian.vercel.app/)  
+📂 **Dokumentasi Arsitektur Lengkap:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
 ## 📌 1. Latar Belakang & Konsep: Mengapa Gaya 'VirusTotal'?
 
-Di Indonesia, lebih dari **90% kejahatan siber** yang menyasar generasi muda dan masyarakat umum di WhatsApp, Telegram, dan Direct Message **bukan menggunakan malware teknis canggih**, melainkan teknik **Rekayasa Sosial (Social Engineering)**: manipulasi psikologis yang mengeksploitasi kepanikan, rasa tergiur, atau empati korban.
+Di Indonesia, lebih dari **90% kejahatan siber** yang menyasar generasi muda dan masyarakat umum di WhatsApp, Telegram, dan Direct Message **bukan menggunakan eksploitasi celah teknis rumit**, melainkan teknik **Rekayasa Sosial (Social Engineering)**: manipulasi psikologis yang mengeksploitasi kepanikan (*artificial urgency*), rasa tergiur imbalan cepat (*greed heuristic*), atau rasa bersalah dan empati korban.
 
-Situs populer **VirusTotal** memungkinkan pengguna memeriksa file atau URL menggunakan puluhan mesin antivirus teknis secara transparan. **TrustTrap Guardian** mengadaptasi paradigma visual dan transparansi tersebut untuk **mendeteksi rekayasa sosial dan penipuan digital**:
+Platform populer **VirusTotal** memungkinkan pengguna menganalisis file atau URL menggunakan puluhan mesin antivirus teknis secara transparan. **TrustTrap Guardian** mengadopsi paradigma transparansi tersebut untuk **mendeteksi manipulasi rekayasa sosial dan penipuan digital**:
 * **VirusTotal Asli:** Memeriksa trojan, virus teknis, dan hash biner file.
-* **TrustTrap Guardian:** Memeriksa pancingan psikologis (loker BUMN fiktif, task scam like video, pancingan file `.APK`, dan desakan transfer dalam hitungan menit).
+* **TrustTrap Guardian:** Membedah pancingan psikologis (loker BUMN fiktif, *task scam* misi deposit, pancingan file malware `.APK`, dan desakan transfer dalam hitungan menit).
 
 ---
 
 ## 🏛️ 2. Arsitektur 3 Pilar Solusi (Recognize, Act, Learn)
 
-Aplikasi ini mengintegrasikan ketiga pilar studi kasus ke dalam satu antarmuka yang kohesif:
-
 ```
 TrustTrap Guardian
  ├── 1. RECOGNIZE (Bedah Bahaya ala VirusTotal)
- │    ├── Omnibox Scam Analyzer (Teks / Link / Loker)
- │    ├── 6 Preset 1-Klik Pengujian Juri
- │    ├── Radial Score Gauge (0 - 100) & Combo Multiplier
- │    └── Explainable Evidence Highlighter (Stabilo Teks)
- ├── 2. ACT (Langkah Penyelamatan Akun)
- │    ├── Panic Triage (Baru Terima Chat vs Terlanjur Transfer)
- │    ├── Checklist Interaktif Penyelamatan Akun (Endowed Progress)
- │    └── Guardian Alert Card (Format Siap Bagikan ke WhatsApp Keluarga)
+ │    ├── Omnibox Scam Analyzer (Teks / Link / Loker + Shortcut Ctrl+Enter)
+ │    ├── 6 Preset 1-Klik Pengujian Juri (Entitas Fiktif Aman)
+ │    ├── Radial Score Gauge (0 - 100) & Transparansi Rumus Multiplier
+ │    ├── Explainable Evidence Highlighter & Tombol Salin Teks Tersensor
+ │    └── Seamless Handoff ke Jalur Penyelamatan Darurat
+ ├── 2. ACT (Langkah Penyelamatan Darurat & Triage)
+ │    ├── Psychological First Aid Banner (Anti-Shame Loop)
+ │    ├── Mode Triage Cepat Berbasis Hick's Law (Baru Terima Chat vs Terlanjur Transfer)
+ │    ├── Time-Boxed Flash Action Cards (Detik 0–30 & Menit 1–60)
+ │    ├── Checklist Interaktif dengan Endowed Progress Effect (15% -> 100%)
+ │    ├── Panduan Cepat per Modus & Kanal Bantuan Resmi Nasional (IASC OJK, SPKT Polri)
+ │    └── Guardian Alert Card dengan URL Defanging Siap Bagi ke WhatsApp
  └── 3. LEARN (Simulasi & Edukasi Rekayasa Sosial)
-      ├── Kuis Interaktif "Spot The Trap" (3 Skenario Nyata)
+      ├── Simulasi Kuis Interaktif "Spot The Trap" (3 Skenario Nyata)
+      ├── Integrasi Dua Arah: Tombol Uji Skenario Langsung ke Scanner Tab 1
+      ├── Kamus 6 Pola Manipulasi Rekayasa Sosial (Threat Matrix)
       └── Jaminan Privasi 100% Sisi Klien (Zero-Data Storage)
 ```
 
-### 🧠 Landasan Psikologi Manusia (HCI & Cognitive UX)
-Berbeda dari pemindai teknis biasa, antarmuka **TrustTrapGuardian** dirancang menggunakan 4 prinsip psikologi perilaku untuk menangani kondisi mental korban penipuan (*panic paralysis*):
-1. **Hick's Law (Penyederhanaan Keputusan):** Memangkas kebingungan korban dengan membagi jalur penyelamatan menjadi 2 pilihan biner tegas (*Baru Terima Chat* vs *Terlanjur Klik/Transfer*).
-2. **Cognitive Load Theory (Pengurangan Beban Memori):** Menyajikan tindakan darurat dalam kotak *Time-Boxed* (*Detik 0–30* untuk isolasi jaringan malware `.apk` dan *Menit 1–60* untuk pemblokiran rekening) sehingga pengguna tidak kewalahan membaca teks panjang saat panik.
-3. **Affective Design & Regulasi Emosi (*Anti-Shame Loop*):** Menghadirkan *Psychological First Aid Banner* (*"Anda tidak sendirian & jangan malu melapor"*) untuk mematahkan stigma rasa malu (*victim blaming*) yang sering menghambat korban melapor ke OJK/IASC.
-4. **Endowed Progress Effect:** Memberikan progres awal 15% pada *Emergency Checklist* sejak pengguna membuka halaman untuk memicu motivasi psikologis menuntaskan seluruh langkah penyelamatan hingga 100%.
+---
+
+## 🔄 3. Diagram Alur Pemrosesan 4 Tahap (Mermaid Flowchart)
+
+```mermaid
+flowchart TD
+    A["Input Pengguna (Chat / SMS / Loker / URL)"] --> B["Tahap 1: Privacy Scrubber (Auto-Redaction & NFKC)"]
+    B --> C["Teks Tersanitasi [NIK/Rekening/OTP Disamarkan]"]
+    C --> D1["Modul 1: Upfront Fee & Deposit Trap (30 Poin)"]
+    C --> D2["Modul 2: Artificial Urgency & Fear (20 Poin)"]
+    C --> D3["Modul 3: Unrealistic Reward / Task Scam (25 Poin)"]
+    C --> D4["Modul 4: OTP & APK Harvester (40 Poin)"]
+    C --> D5["Modul 5: Identity & Channel Mismatch (25 Poin)"]
+    C --> D6["Modul 6: Phishing Link & Domain Inspector (35 Poin)"]
+    D1 --> E["Tahap 3: Combo Multiplier Engine (1.0x - 1.35x)"]
+    D2 --> E
+    D3 --> E
+    D4 --> E
+    D5 --> E
+    D6 --> E
+    E --> F["Skor Risiko Heuristik (0 - 100) & Level Non-Mutlak"]
+    F --> G1["Pilar 1 (Recognize): Score Gauge & Stabilo Teks"]
+    F --> G2["Pilar 2 (Act): Panic Triage & Defanged Alert Card"]
+    F --> G3["Pilar 3 (Learn): Threat Matrix & Simulasi Kuis"]
+```
 
 ---
 
-## ⚙️ 3. Scam Heuristic Engine (6 Modul Deteksi)
+## 🧠 4. Pendekatan Psikologi Kognitif & HCI (Human-Computer Interaction)
 
-Engine bekerja melalui 4 tahap sekuensial instan (0 milidetik):
-1. **Tahap 1 — Sensor Privasi Otomatis (Auto-Redaction):** Mengaburkan NIK, Nomor Rekening Bank, dan Kode OTP menjadi token aman `[DATA_DISAMARKAN]` di browser pengguna secara lokal.
+Berbeda dari pemindai teknis biasa yang pasif, antarmuka **TrustTrap Guardian** dirancang khusus menggunakan prinsip psikologi perilaku untuk mengatasi kondisi mental korban penipuan (*panic paralysis*):
+
+1. **Hick's Law (Penyederhanaan Jalur Keputusan):**  
+   Saat mengalami kepanikan, kemampuan kognitif manusia menurun drastis. Sistem memangkas kebingungan dengan membagi jalur penyelamatan menjadi **2 pilihan biner tegas**: *Baru Terima Chat* (tindakan preventif) vs *Terlanjur Klik / Transfer* (tindakan mitigasi kilat).
+2. **Cognitive Load Theory (Pengurangan Beban Memori Kerja):**  
+   Menyajikan instruksi darurat dalam format kotak *Time-Boxed* dengan label **"PRIORITAS KOGNITIF UTAMA"**:
+   - **Detik 0–30:** Putus koneksi internet (Mode Pesawat) agar malware `.APK` tidak dapat menyedot data SMS OTP.
+   - **Menit 1–60:** Segera hubungi call center resmi bank di belakang kartu ATM untuk membekukan rekening tujuan sebelum saldo dikuras.
+3. **Affective Design & Regulasi Emosi (*Anti-Shame Loop*):**  
+   Menghadirkan *Psychological First Aid Banner* (*"Anda tidak sendirian & jangan malu melapor"*) untuk mematahkan stigma rasa malu dan rasa bersalah (*victim blaming*) yang kerap menjadi penghambat utama korban melaporkan kejadian ke OJK/IASC.
+4. **Endowed Progress Effect:**  
+   Checklist darurat secara visual dimulai dari **progres awal 15%** saat pengguna membuka panduan penyelamatan. Hal ini memberikan dorongan motivasi awal (*endowment*) agar korban termotivasi menyelesaikan kelima protokol penyelamatan hingga 100%.
+
+---
+
+## ⚙️ 5. Scam Heuristic Engine (6 Modul Deteksi)
+
+Engine bekerja secara sekuensial instan (<1 milidetik) di sisi peramban:
+1. **Tahap 1 — Sensor Privasi Otomatis (Auto-Redaction):** Mengaburkan NIK 16-digit, Nomor Rekening Bank, Nomor HP, dan Kode OTP menjadi token aman `[DATA_DISAMARKAN]` secara lokal. Termasuk sanitasi *zero-width spaces* dan normalisasi unicode NFKC.
 2. **Tahap 2 — Evaluasi 6 Modul Independen:**
-   * **Modul 1: Upfront Fee & Deposit Trap (Bobot 30 Poin)** — Mendeteksi permintaan uang muka, biaya tiket reservasi interview, deposit misi tugas, atau modus rekening penampung aman.
-   * **Modul 2: Artificial Urgency & Fear (Bobot 20 Poin)** — Mendeteksi desakan waktu sempit ("dalam 15 menit", "kuota hangus", ancaman pemblokiran akun).
-   * **Modul 3: Unrealistic Reward / Task Scam (Bobot 25 Poin)** — Mendeteksi iming-iming gaji harian jutaan rupiah dari tugas sepele (like YouTube/TikTok).
-   * **Modul 4: OTP & APK Harvester (Bobot 40 Poin)** — Mendeteksi jebakan instalasi file `.APK` (undangan/resi palsu) dan pencurian kode OTP/PIN.
-   * **Modul 5: Identity & Channel Mismatch (Bobot 25 Poin)** — Mendeteksi pencatutan instansi resmi melalui kontak tidak resmi/personal.
-   * **Modul 6: Phishing Link & Domain Inspector (Bobot 35 Poin)** — Memeriksa pemendek link (`bit.ly`, `s.id`), domain murah berisiko (`.xyz`, `.top`), pencatutan brand, serta rasio Shannon Entropy untuk domain terobfuskasi.
-3. **Tahap 3 — Pengali Kombinasi (Combo Multiplier):** Memberikan penalti pengali (hingga 1.35x) saat pola berbahaya saling berkelindan (contoh: biaya admin + batas 15 menit).
-4. **Tahap 4 — Pemetaan Tindakan (Action Mapper):** Menghasilkan langkah mitigasi spesifik dan penjelasan berbasis bahasa manusia (*explainable AI / rules*).
+   * **Modul 1: Upfront Fee & Deposit Trap (Bobot 30)** — Permintaan biaya di muka, uang jaminan, deposit misi, atau modus baru *rekening penampung aman*.
+   * **Modul 2: Artificial Urgency & Fear (Bobot 20)** — Tekanan batas waktu sempit ("dalam 15 menit", "kuota hangus", ancaman denda/pemblokiran).
+   * **Modul 3: Unrealistic Reward / Task Scam (Bobot 25)** — Iming-iming komisi jutaan rupiah dari like YouTube / follow medsos.
+   * **Modul 4: OTP & APK Harvester (Bobot 40)** — Jebakan file installer Android berbahaya (`.APK`) dan pancingan kode OTP/PIN.
+   * **Modul 5: Identity & Channel Mismatch (Bobot 25)** — Pencatutan nama instansi besar (BUMN/Bank) yang dipadukan dengan saluran tidak resmi (nomor personal/email gratisan).
+   * **Modul 6: Phishing Link & Domain Inspector (Bobot 35)** — Pemeriksaan shortlink, TLD murah berisiko (`.xyz`, `.top`), spoofed brands, serta **rasio Shannon Entropy** ($H/\log_2(\text{len}) \ge 0.85$) untuk domain terobfuskasi.
+3. **Tahap 3 — Pengali Kombinasi (Combo Multiplier):** Penalti pengali hingga 1.35x jika beberapa pola maut terjadi bersamaan.
+4. **Tahap 4 — Pemetaan Tindakan & Explainable Text:** Menyorot kalimat bukti manipulasi dan memetakan rekomendasi langkah aman.
 
 ---
 
-## 🎯 4. Skenario Uji 1-Klik untuk Dewan Juri (Preset Showcase)
+## 🎯 6. Skenario Uji 1-Klik untuk Dewan Juri (Preset Showcase)
 
-Tersedia 6 tombol instan di halaman utama untuk mempermudah penilaian dewan juri tanpa perlu mengetik manual:
-* **Preset 1 (Loker BUMN Palsu):** Undangan interview rekrutmen PT Telekomunikasi Nusantara (Persero) palsu yang meminta transfer biaya reservasi tiket Rp 1.750.000 ke rekening panitia Bank Nasional Nusantara dalam 15 menit.
-* **Preset 2 (Task Scam Like & Subscribe):** Tawaran freelance paruh waktu kerja HP bergaji Rp500.000 - Rp2.500.000 per misi dengan syarat deposit Rp50.000.
-* **Preset 3 (Pancingan File .APK & OTP):** Modus kurir ekspedisi mengabarkan paket pending dan meminta instal file `Surat_Paket_Hilang.apk` serta meminta kode OTP SMS.
-* **Preset 4 (Link Phishing Hadiah Bank):** Pengumuman pemenang undian Bank Nasional Nusantara Rp15.000.000 yang mengarahkan ke domain palsu `bnn-klaim-gebyar.xyz`.
-* **Preset 5 (Kuota Gratis & Link Pendek):** Tautan pemendek `bit.ly` dengan klaim kuota internet gratis 50GB.
-* **Preset 6 (Pesan Edukasi Resmi / Kontrol):** Pengingat jadwal kerja kelompok normal (kontrol baseline tanpa manipulasi).
-
----
-
-## 🔒 5. Kepatuhan Privasi & Standar Keamanan (Privacy-First)
-
-* **100% Client-Side Processing:** Teks dianalisis langsung di memori browser pengguna melalui JavaScript murni.
-* **Zero External Storage:** Tidak ada data teks, NIK, atau nomor rekening pengguna yang dikirim ke server backend atau disimpan di database cloud.
-* **URL Defanging:** URL pada teks laporan otomatis didefang (`http` -> `hxxp`, `.xyz` -> `[.]xyz`) untuk mencegah penyebaran link aktif.
-* **Explainable & Transparent:** Hasil analisis dilengkapi transparansi kalkulasi formula dewan juri dan *disclaimer* bahwa sistem mendeteksi pola tanpa klaim aman mutlak.
+Tersedia 6 skenario siap uji di halaman utama menggunakan entitas fiktif yang aman:
+* **Preset 1 (Loker BUMN Palsu):** Undangan rekrutmen PT Telekomunikasi Nusantara (Persero) palsu yang meminta transfer biaya reservasi tiket Rp1.750.000 ke panitia Bank Nasional Nusantara dalam 15 menit.
+* **Preset 2 (Task Scam Like & Subscribe):** Tawaran freelance like YouTube bergaji Rp500.000–Rp2.500.000 dengan syarat deposit saldo tugas Rp50.000.
+* **Preset 3 (Pancingan File .APK & OTP):** Kurir ekspedisi mengabarkan paket pending dan memaksa menginstal `Surat_Paket_Hilang.apk` serta meminta kode OTP SMS.
+* **Preset 4 (Link Phishing Hadiah Bank):** Pengumuman undian Bank Nasional Nusantara Rp15.000.000 yang mengarahkan ke link phishing `bnn-klaim-gebyar.xyz`.
+* **Preset 5 (Kuota Gratis & Link Pendek):** Tautan pemendek `bit.ly` dengan klaim kuota gratis 50GB.
+* **Preset 6 (Pesan Edukasi Resmi / Kontrol):** Baseline kontrol pesan normal kerja kelompok tanpa indikasi manipulasi (Skor 0 / TIDAK TERDETEKSI).
 
 ---
 
-## 🚀 6. Panduan Menjalankan Proyek Secara Lokal
+## 🔒 7. Kejujuran Batasan Sistem & Privasi 100% Lokal
+
+* **100% Client-Side Processing:** Teks dievaluasi langsung di memori JavaScript peramban pengguna.
+* **Zero External Storage:** Tidak ada data teks, NIK, atau nomor rekening pengguna yang dikirim ke server luar atau disimpan di basis data.
+* **URL Defanging Aktif:** Seluruh tautan mencurigakan pada draft laporan dan kartu WhatsApp otomatis didefang (`http` $\to$ `hxxp`, `.xyz` $\to$ `[.]xyz`) untuk mencegah penyebaran tautan aktif.
+* **Kepatuhan Terminologi Non-Mutlak:** Sistem menggunakan label **"TIDAK TERDETEKSI"** dan **"RISIKO TINGGI (BANYAK TANDA BAHAYA TERDETEKSI)"** serta menegaskan bahwa sistem adalah alat bantu nalar kritis (*heuristic decision support*), bukan jaminan mutlak 100%.
+
+---
+
+## 🤝 8. Atribusi Pihak Ketiga & AI (Kepatuhan Juknis C.3–C.4)
+
+| Komponen / Pustaka | Sumber / Lisensi | Peran & Kontribusi dalam Karya |
+|---|---|---|
+| **React 19 & Vite** | MIT License | Runtime framework antarmuka reaktif dan bundler modern berbasis ESM |
+| **Tailwind CSS v4** | MIT License | Styling engine utility-first dengan implementasi sistem desain Ascend Glassmorphism |
+| **Lucide React** | ISC License | Pustaka ikon visual untuk indikator ancaman dan navigasi |
+| **Bantuan Coding AI (LLM)** | Google DeepMind / Antigravity | Asistensi refactoring kode, penyusunan regex heuristik, dan struktur skenario kuis |
+| **Scam Heuristic Engine** | Orisinal (Tim Nanti Ajah) | 100% arsitektur deteksi rekayasa sosial, formula combo multiplier, dan logika privacy scrubber dirancang khusus untuk MIT-Week 2026 |
+
+---
+
+## 🚀 9. Panduan Menjalankan Proyek Secara Lokal
 
 ### Prasyarat
 * Node.js versi 18 atau lebih tinggi
 * npm / pnpm / yarn
 
-### Langkah Instalasi
+### Instalasi & Menjalankan Pengujian
 ```bash
 # 1. Clone repositori
 git clone https://github.com/Micho-Anta/TrustTrapGuardian.git
@@ -100,52 +156,14 @@ cd TrustTrapGuardian
 # 2. Instal dependensi
 npm install
 
-# 3. Jalankan server pengembangan
+# 3. Jalankan automated engine verification test (14/14 passing)
+npm test
+
+# 4. Jalankan server pengembangan lokal
 npm run dev
-```
 
-Buka peramban di `http://localhost:5173` untuk melihat aplikasi secara interaktif.
-
-### Build untuk Produksi
-```bash
+# 5. Build untuk produksi
 npm run build
-npm run preview
-```
-
----
-
-## 🛠️ 7. Struktur Repositori
-
-```
-TrustTrapGuardian/
-├── public/                     # Aset statis & Favicon
-├── src/
-│   ├── data/
-│   │   ├── mockResult.json     # Kontrak data standar keluaran engine
-│   │   ├── judgePresets.js     # 6 preset uji juri 1-klik (entitas fiktif aman)
-│   │   └── actGuides.js        # Data panduan darurat & kanal resmi
-│   ├── engine/
-│   │   ├── privacyScrubber.js  # Sensor otomatis NIK, Rekening, OTP, HP (NFKC + zero-width scrub)
-│   │   ├── heuristicRules.js   # 6 modul heuristik & Shannon Entropy checker
-│   │   └── scannerIndex.js     # Alur eksekusi 4 tahap & scoring combo
-│   ├── components/
-│   │   ├── scanner/
-│   │   │   ├── OmniboxInput.jsx  # Input bar, limit 4000 char & preset juri
-│   │   │   ├── ScoreGauge.jsx    # Radial gauge risiko ala VirusTotal & tooltip rumus
-│   │   │   └── HighlightView.jsx # Teks stabilo interaktif & rincian modul
-│   │   ├── action/
-│   │   │   ├── PanicTriage.jsx   # Checklist darurat, endowed progress & format laporan
-│   │   │   └── WarningCard.jsx   # Generator kartu peringatan siap kirim ke WA (defanged)
-│   │   └── learn/
-│   │       ├── SpotTheTrap.jsx   # Kuis simulasi 3 skenario nyata
-│   │       └── PrivacyBanner.jsx # Banner disclaimer & privasi lokal
-│   ├── AppGuardian.jsx         # Layout utama 3 pilar navigasi (Ascend Glassmorphism)
-│   ├── index.css               # Design tokens & styling Tailwind CSS v4
-│   └── main.jsx                # Titik masuk React
-├── vercel.json                 # Security headers (CSP, X-Frame-Options, dll.)
-├── package.json
-├── vite.config.js              # Plugin Vite & Tailwind CSS
-└── README.md                   # Dokumentasi lengkap proyek
 ```
 
 ---
@@ -153,4 +171,5 @@ TrustTrapGuardian/
 ## 🏆 Tim Pengembang
 **Tim Nanti Ajah (MIT-041) — Universitas Gunadarma**  
 *Solusi Kompetisi Web Development MIT-WEEK 2026*  
-*Repository:* [https://github.com/Micho-Anta/TrustTrapGuardian](https://github.com/Micho-Anta/TrustTrapGuardian)
+*Live Deployment:* [https://trusttrapguardian.vercel.app/](https://trusttrapguardian.vercel.app/)  
+*GitHub Repository:* [https://github.com/Micho-Anta/TrustTrapGuardian](https://github.com/Micho-Anta/TrustTrapGuardian)

@@ -1,5 +1,5 @@
-import { scrubPrivacy } from "./privacyScrubber";
-import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules";
+import { scrubPrivacy } from "./privacyScrubber.js";
+import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules.js";
 
 /**
  * Scan text using Scam Heuristic Engine v1.0
@@ -147,7 +147,7 @@ export function scanText(rawText) {
   let riskLevel = "TIDAK TERDETEKSI";
   let riskColor = "emerald";
   if (finalScore >= 70) {
-    riskLevel = "RISIKO TINGGI (BANYAK TANDA BAHAYA)";
+    riskLevel = "RISIKO TINGGI (BANYAK TANDA BAHAYA TERDETEKSI)";
     riskColor = "red";
   } else if (finalScore >= 35) {
     riskLevel = "WASPADA (INDIKASI SEDANG / MENCURIGAKAN)";

@@ -1,10 +1,19 @@
-import React from "react";
-import { AlertCircle, CheckCircle, Info, Lock, ShieldAlert } from "lucide-react";
+import React, { useState } from "react";
+import { AlertCircle, Check, CheckCircle, Copy, Info, Lock, ShieldAlert } from "lucide-react";
 
 export default function HighlightView({ scanResult }) {
+  const [copiedSanitized, setCopiedSanitized] = useState(false);
+
   if (!scanResult) return null;
 
   const { sanitizedText, redactions, engines, highlightedEvidence } = scanResult;
+
+  const handleCopySanitized = () => {
+    if (!sanitizedText) return;
+    navigator.clipboard.writeText(sanitizedText);
+    setCopiedSanitized(true);
+    setTimeout(() => setCopiedSanitized(false), 2200);
+  };
 
   // Highlight matches in text
   const renderHighlightedText = () => {
@@ -85,14 +94,14 @@ export default function HighlightView({ scanResult }) {
     <div className="space-y-8 sm:space-y-10">
       {/* Highlighted Text Box */}
       <div className="glass-card p-6 sm:p-8 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.06] gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.06] gap-3">
           <div className="flex items-center gap-2.5">
             <ShieldAlert className="w-5 h-5 text-[#5df0a8]" />
             <h3 className="font-bold text-base sm:text-lg text-white">
               Bedah Sorotan Kalimat Manipulatif (Explainable Evidence)
             </h3>
           </div>
-          <div className="flex items-center gap-4 text-xs font-medium">
+          <div className="flex flex-wrap items-center gap-3 text-xs font-medium">
             <span className="flex items-center gap-1.5 text-red-300">
               <span className="w-2.5 h-2.5 rounded-sm bg-red-500/50 border border-red-400"></span>
               Pola Jebakan
@@ -101,6 +110,28 @@ export default function HighlightView({ scanResult }) {
               <span className="w-2.5 h-2.5 rounded-sm bg-cyan-500/40 border border-cyan-400"></span>
               Sensor Privasi
             </span>
+            <button
+              onClick={handleCopySanitized}
+              className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5"
+              style={{
+                background: "rgba(150, 175, 230, 0.08)",
+                border: "1px solid rgba(150, 175, 230, 0.15)",
+                color: copiedSanitized ? "#5df0a8" : "var(--ink)",
+              }}
+              title="Salin teks yang telah disamarkan data pribadinya"
+            >
+              {copiedSanitized ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-[#5df0a8]" />
+                  <span>Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Salin Teks Tersensor</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 

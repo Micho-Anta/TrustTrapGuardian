@@ -48,6 +48,15 @@ export default function AppGuardian() {
   /** Navigate to ACT tab — called by ScoreGauge seamless handoff button */
   const handleGoToAct = () => setActiveTab("act");
 
+  /** Navigate from LEARN to RECOGNIZE and test scenario text */
+  const handleTestFromLearn = (chatText) => {
+    setInputText(chatText);
+    setActiveTab("recognize");
+    setTimeout(() => {
+      handleAnalyze(chatText);
+    }, 150);
+  };
+
   const tabs = [
     { id: "recognize", label: "1. Recognize", Icon: Search },
     { id: "act",       label: "2. Act",       Icon: LifeBuoy },
@@ -229,7 +238,7 @@ export default function AppGuardian() {
                 melalui simulasi kuis interaktif.
               </p>
             </div>
-            <SpotTheTrap />
+            <SpotTheTrap onTestInScanner={handleTestFromLearn} />
           </div>
         )}
 

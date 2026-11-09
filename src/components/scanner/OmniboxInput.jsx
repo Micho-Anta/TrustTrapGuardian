@@ -31,6 +31,16 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
     }, 350);
   };
 
+  const handleKeyDown = (e) => {
+    // Shortcut Ctrl+Enter / Cmd+Enter untuk bedah cepat
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      if (text.trim() && !isAnalyzing) {
+        handleAnalyzeClick();
+      }
+    }
+  };
+
   const charCount = text ? text.length : 0;
   const isNearLimit = charCount >= MAX_CHARS * 0.9;
 
@@ -57,7 +67,7 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {JUDGE_PRESETS.map((preset) => (
             <button
               key={preset.id}
@@ -117,16 +127,20 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
         <textarea
           value={text}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           maxLength={MAX_CHARS}
           placeholder="Contoh: 'Selamat! Anda terpilih kerja freelance like YouTube dengan komisi harian Rp500rb. Segera transfer biaya pendaftaran Rp50rb dalam 15 menit...'"
           rows={5}
           className="w-full bg-transparent text-sm sm:text-base text-slate-100 placeholder-slate-500 focus:outline-none resize-none leading-relaxed"
         />
 
-        {/* Character Counter */}
-        <div className="flex justify-end">
+        {/* Shortcut Hint & Character Counter */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400">
+          <span className="flex items-center gap-1.5 font-medium text-slate-400">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-300 font-mono text-[10px] border border-white/10">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-300 font-mono text-[10px] border border-white/10">Enter</kbd> untuk membedah cepat
+          </span>
           <span
-            className="text-[11px] font-mono tabular-nums"
+            className="font-mono tabular-nums"
             style={{ color: isNearLimit ? "#f87171" : "rgba(150,175,230,0.4)" }}
           >
             {charCount} / {MAX_CHARS} karakter

@@ -35,7 +35,7 @@ export default function WarningCard({ scanResult }) {
     `🚨 *PERINGATAN WASPADA PENIPUAN DIGITAL (TrustTrap Guardian)* 🚨\n\n` +
     `Tingkat Risiko: *${summary.riskLevel}* (Skor: ${summary.score}/100)\n` +
     `Modus Terdeteksi: ${dangerousEngines.map((e) => e.name).join(", ") || "Indikasi Manipulasi"}\n\n` +
-    `⚠️ *LANGKAH PENCEGAHAN UTAMA:*\n` +
+    `⚠️ *TIGA LANGKAH PENCEGAHAN UTAMA:*\n` +
     `1. Jangan transfer uang/biaya admin ke rekening pribadi mana pun.\n` +
     `2. Jangan instal file ekstensi .APK atau berikan kode OTP 6-digit.\n` +
     `3. Jangan percaya ancaman pemblokiran dalam hitungan menit.\n\n` +
