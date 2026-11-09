@@ -6,9 +6,13 @@ import {
   BookOpen,
   Sparkles,
   ShieldCheck,
-  Code2
+  Code2,
+  Sparkle,
+  ArrowRight
 } from "lucide-react";
 import Scanner from "./components/Scanner";
+import ScoreGauge from "./components/scanner/ScoreGauge";
+import HighlightView from "./components/scanner/HighlightView";
 import PanicTriage from "./components/action/PanicTriage";
 import WarningCard from "./components/action/WarningCard";
 import SpotTheTrap from "./components/learn/SpotTheTrap";
@@ -18,10 +22,28 @@ import { JUDGE_PRESETS } from "./data/judgePresets";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("scanner"); // 'scanner' | 'action' | 'learn'
-  const defaultScan = scanText(JUDGE_PRESETS[0].text);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
+  const [currentTarget, setCurrentTarget] = useState(JUDGE_PRESETS[0].text);
+
+  const handleScan = (targetText) => {
+    if (!targetText || !targetText.trim()) return;
+    setIsScanning(true);
+    setCurrentTarget(targetText);
+
+    setTimeout(() => {
+      const result = scanText(targetText);
+      setScanResult(result);
+      setIsScanning(false);
+    }, 200);
+  };
+
+  const handlePresetClick = (preset) => {
+    handleScan(preset.text);
+  };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
       {/* Top Banner Tag */}
       <div className="bg-gradient-to-r from-indigo-900/60 via-purple-900/60 to-slate-900 border-b border-indigo-500/20 px-4 py-2 text-center text-xs">
         <span className="inline-flex items-center gap-1.5 font-medium text-indigo-200">
@@ -36,16 +58,16 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Logo Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30">
               <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-indigo-100 to-slate-300 bg-clip-text text-transparent">
+                <span className="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-cyan-100 to-slate-300 bg-clip-text text-transparent">
                   TrustTrap Guardian
                 </span>
-                <span className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  Heuristic v1.0
+                <span className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                  v1.0 Engine
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden sm:block">
@@ -60,7 +82,7 @@ export default function App() {
               onClick={() => setActiveTab("scanner")}
               className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 activeTab === "scanner"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                  ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -72,7 +94,7 @@ export default function App() {
               onClick={() => setActiveTab("action")}
               className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 activeTab === "action"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                  ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -84,7 +106,7 @@ export default function App() {
               onClick={() => setActiveTab("learn")}
               className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 activeTab === "learn"
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                  ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -101,7 +123,7 @@ export default function App() {
               rel="noopener noreferrer"
               className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-800 transition-colors"
             >
-              <Code2 className="w-4 h-4 text-indigo-400" />
+              <Code2 className="w-4 h-4 text-cyan-400" />
               <span>GitHub</span>
             </a>
           </div>
@@ -118,12 +140,57 @@ export default function App() {
                 Deteksi Rekayasa Sosial & Penipuan Chat
               </h1>
               <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
-                Analisis teks pesan WhatsApp, tawaran loker freelance, atau tautan mencurigakan. Scam Heuristic Engine akan membedah manipulasi psikologis ala VirusTotal.
+                Analisis teks obrolan, link phishing, atau pengumuman loker. Scam Heuristic Engine akan membedah tanda bahaya psikologis secara instan.
               </p>
             </div>
 
-            {/* Integrasi Komponen Scanner Utama */}
-            <Scanner />
+            {/* Komponen Scanner Form */}
+            <div className="bg-slate-900/60 border border-slate-800 p-4 sm:p-5 rounded-2xl shadow-xl">
+              <Scanner onScan={handleScan} isScanning={isScanning} />
+
+              {/* 4 Preset Skenario Cepat Uji Juri */}
+              <div className="mt-4 pt-4 border-t border-slate-800/80">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                    Skenario Uji 1-Klik Dewan Juri:
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                  {JUDGE_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      onClick={() => handlePresetClick(preset)}
+                      className="p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 text-left transition-all group flex flex-col justify-between"
+                    >
+                      <div className="flex items-center justify-between text-[10px] font-bold text-cyan-400 mb-0.5">
+                        <span>{preset.badge}</span>
+                        <ArrowRight className="w-3 h-3 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="text-xs font-semibold text-white group-hover:text-cyan-200 line-clamp-1">
+                        {preset.title}
+                      </div>
+                      <div className="text-[10px] text-slate-400 line-clamp-1">
+                        {preset.tagline}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Hasil Analisis: Score Gauge & Highlight View */}
+            {scanResult && (
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <ScoreGauge
+                  summary={scanResult.summary}
+                  engines={scanResult.engines}
+                />
+
+                <HighlightView scanResult={scanResult} />
+              </div>
+            )}
           </div>
         )}
 
@@ -132,7 +199,7 @@ export default function App() {
           <div className="space-y-6">
             <div className="text-center sm:text-left space-y-1">
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Langkah Penyelamatan & Kartu Peringatan
+                Langkah Penyelamatan Akun & Kartu Peringatan
               </h1>
               <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
                 Panduan darurat langkah demi langkah untuk pemulihan akun serta generator kartu peringatan keluarga untuk disebarkan ke WhatsApp.
@@ -140,11 +207,11 @@ export default function App() {
             </div>
 
             <PanicTriage />
-            <WarningCard scanResult={defaultScan} />
+            <WarningCard scanResult={scanResult} />
           </div>
         )}
 
-        {/* TAB 3: LEARN */}
+        {/* TAB 3: LEARN (KUIS) */}
         {activeTab === "learn" && (
           <div className="space-y-6">
             <div className="text-center sm:text-left space-y-1">
