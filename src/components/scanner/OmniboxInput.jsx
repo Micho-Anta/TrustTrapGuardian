@@ -2,14 +2,37 @@ import React from "react";
 import { Search, Sparkles, Trash2, ArrowRight } from "lucide-react";
 import { JUDGE_PRESETS } from "../../data/judgePresets";
 
-export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnalyzing }) {
+const MAX_CHARS = 4000;
+
+export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnalyzing, resultsRef }) {
   const handlePresetSelect = (preset) => {
     setText(preset.text);
     // Instant scan trigger
     setTimeout(() => {
       onAnalyze(preset.text);
+      // Scroll ke hasil setelah sedikit delay
+      setTimeout(() => {
+        resultsRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 400);
     }, 50);
   };
+
+  const handleChange = (e) => {
+    // Batasi input max 4000 karakter
+    if (e.target.value.length <= MAX_CHARS) {
+      setText(e.target.value);
+    }
+  };
+
+  const handleAnalyzeClick = () => {
+    onAnalyze(text);
+    setTimeout(() => {
+      resultsRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 350);
+  };
+
+  const charCount = text ? text.length : 0;
+  const isNearLimit = charCount >= MAX_CHARS * 0.9;
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -93,21 +116,32 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
 
         <textarea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={handleChange}
+          maxLength={MAX_CHARS}
           placeholder="Contoh: 'Selamat! Anda terpilih kerja freelance like YouTube dengan komisi harian Rp500rb. Segera transfer biaya pendaftaran Rp50rb dalam 15 menit...'"
           rows={5}
           className="w-full bg-transparent text-sm sm:text-base text-slate-100 placeholder-slate-500 focus:outline-none resize-none leading-relaxed"
         />
 
+        {/* Character Counter */}
+        <div className="flex justify-end">
+          <span
+            className="text-[11px] font-mono tabular-nums"
+            style={{ color: isNearLimit ? "#f87171" : "rgba(150,175,230,0.4)" }}
+          >
+            {charCount} / {MAX_CHARS} karakter
+          </span>
+        </div>
+
         {/* Footer Action Bar */}
-        <div className="pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-2 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#5df0a8] shadow-[0_0_8px_rgba(93,240,168,0.6)]"></span>
             <span>Sensor Privasi Aktif (NIK/Rekening/OTP otomatis disamarkan secara lokal)</span>
           </div>
 
           <button
-            onClick={() => onAnalyze(text)}
+            onClick={handleAnalyzeClick}
             disabled={!text.trim() || isAnalyzing}
             className="btn-ascend w-full sm:w-auto"
           >

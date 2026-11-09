@@ -30,9 +30,9 @@ export default function SpotTheTrap() {
         },
         {
           id: "c",
-          text: "Karena pengirim menyapa menggunakan kata 'Halo Mas'.",
+          text: "Karena nomor pengirimnya tidak tersimpan di kontak kita sehingga pasti penipu.",
           isCorrect: false,
-          reason: "Salah. Sapaan ramah adalah hal wajar, namun justru dimanfaatkan penipu untuk menurunkan kewaspadaan korban."
+          reason: "Kurang tepat. Nomor tidak dikenal tidak selalu berarti penipu — kerabat bisa ganti nomor. Ancaman nyata adalah ekstensi .APK yang digunakan sebagai 'undangan', bukan identitas pengirim semata."
         }
       ]
     },

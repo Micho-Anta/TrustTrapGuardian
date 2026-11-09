@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Search,
   LifeBuoy,
@@ -21,6 +21,9 @@ export default function AppGuardian() {
   const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // Ref untuk scroll ke hasil setelah analisis
+  const resultsRef = useRef(null);
+
   const handleAnalyze = (textToAnalyze) => {
     const text = textToAnalyze !== undefined ? textToAnalyze : inputText;
     if (!text || text.trim() === "") return;
@@ -30,6 +33,10 @@ export default function AppGuardian() {
       const result = scanText(text);
       setScanResult(result);
       setIsAnalyzing(false);
+      // Scroll ke hasil setelah sedikit delay agar DOM sudah ter-render
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
     }, 200);
   };
 
@@ -171,11 +178,12 @@ export default function AppGuardian() {
               onAnalyze={handleAnalyze}
               onClear={handleClear}
               isAnalyzing={isAnalyzing}
+              resultsRef={resultsRef}
             />
 
             {/* Results */}
             {scanResult && (
-              <div className="space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+              <div ref={resultsRef} className="space-y-8 sm:space-y-10 animate-in fade-in duration-300">
                 <ScoreGauge
                   summary={scanResult.summary}
                   engines={scanResult.engines}
@@ -242,7 +250,7 @@ export default function AppGuardian() {
           <div>
             © 2026{" "}
             <strong className="text-white font-semibold">TrustTrap Guardian</strong>
-            {" "}— Tim The Trust Trap | MIT-WEEK 2026
+            {" "}— Tim Nanti Ajah (MIT-041) — Universitas Gunadarma
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span>Local-First Heuristic Engine</span>

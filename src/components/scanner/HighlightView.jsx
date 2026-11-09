@@ -186,7 +186,7 @@ export default function HighlightView({ scanResult }) {
                         : { background: "rgba(16,185,129,0.10)", border: "1px solid rgba(16,185,129,0.25)", color: "#10b981" }
                     }
                   >
-                    {isDanger ? `BAHAYA (+${engine.score} Poin)` : "AMAN"}
+                    {isDanger ? `BAHAYA (+${engine.score} Poin)` : "TIDAK TERDETEKSI"}
                   </span>
                 </div>
 

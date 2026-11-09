@@ -42,6 +42,43 @@ export function scanText(rawText) {
           });
         }
       }
+    } else if (engine.id === "identity_mismatch") {
+      // Modul Khusus: Identity & Channel Mismatch
+      // Hanya tandai brand/instansi jika juga ditemukan saluran tidak resmi
+      const unofficialChannelPatterns = [
+        /@gmail\.com|@yahoo\.com|@hotmail\.com/gi,
+        /ke\s+wa\s+ini|via\s+whatsapp\s+ini|hubungi\s+wa/gi,
+        /rekening\s+bendahara|rekening\s+pribadi|rekening\s+admin/gi,
+        /nomor\s+pribadi|nomor\s+ini\s+saja|chat\s+ini/gi,
+        /travel\s+rekanan|mitra\s+kami\s+ini/gi,
+      ];
+      const hasUnofficialChannel = unofficialChannelPatterns.some(
+        (pat) => pat.test(sanitizedText)
+      );
+
+      for (const rule of engine.rules) {
+        const matches = sanitizedText.match(rule.pattern);
+        if (matches) {
+          // Untuk rule yang mendeteksi nama instansi/brand besar, wajibkan ada saluran tidak resmi
+          const isBrandRule =
+            rule.label.includes("BUMN") ||
+            rule.label.includes("Bank Nasional") ||
+            rule.label.includes("Instansi");
+
+          if (!isBrandRule || hasUnofficialChannel) {
+            for (const m of matches) {
+              evidenceList.push(m);
+              highlightedEvidence.push({
+                text: m,
+                engineId: engine.id,
+                engineName: engine.name,
+                reason: rule.label
+              });
+            }
+            matchedPatterns.push(rule.label);
+          }
+        }
+      }
     } else {
       // Modul Berbasis Pola Kalimat / Regex
       for (const rule of engine.rules) {
@@ -107,10 +144,10 @@ export function scanText(rawText) {
   let finalScore = Math.min(100, Math.round(totalRawScore * comboBonus));
 
   // Tentukan Level Risiko
-  let riskLevel = "AMAN / BERSIH";
+  let riskLevel = "TIDAK TERDETEKSI";
   let riskColor = "emerald";
   if (finalScore >= 70) {
-    riskLevel = "TINGGI (INDIKASI KUAT PENIPUAN)";
+    riskLevel = "RISIKO TINGGI (BANYAK TANDA BAHAYA)";
     riskColor = "red";
   } else if (finalScore >= 35) {
     riskLevel = "WASPADA (INDIKASI SEDANG / MENCURIGAKAN)";

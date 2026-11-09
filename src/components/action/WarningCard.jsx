@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 import { Check, Copy, MessageCircle, Share2, ShieldAlert } from "lucide-react";
 
+// Defang URLs agar link aktif tidak tersebar lewat pesan salin
+function defangUrls(text) {
+  return text
+    .replace(/http/g, "hxxp")
+    .replace(/\.xyz/g, "[.]xyz")
+    .replace(/\.top/g, "[.]top")
+    .replace(/\.click/g, "[.]click")
+    .replace(/\.site/g, "[.]site")
+    .replace(/\.vip/g, "[.]vip")
+    .replace(/\.online/g, "[.]online")
+    .replace(/\.cfd/g, "[.]cfd");
+}
+
 export default function WarningCard({ scanResult }) {
   const [copied, setCopied] = useState(false);
 
@@ -18,15 +31,18 @@ export default function WarningCard({ scanResult }) {
   const { summary, engines } = scanResult;
   const dangerousEngines = engines.filter((e) => e.status === "DANGER");
 
-  const formattedShareText = `🚨 *PERINGATAN WASPADA PENIPUAN DIGITAL (TrustTrap Guardian)* 🚨\n\n` +
+  const rawShareText =
+    `🚨 *PERINGATAN WASPADA PENIPUAN DIGITAL (TrustTrap Guardian)* 🚨\n\n` +
     `Tingkat Risiko: *${summary.riskLevel}* (Skor: ${summary.score}/100)\n` +
     `Modus Terdeteksi: ${dangerousEngines.map((e) => e.name).join(", ") || "Indikasi Manipulasi"}\n\n` +
-    `⚠️ *JANGAN LAKUKAN:*\n` +
+    `⚠️ *LANGKAH PENCEGAHAN UTAMA:*\n` +
     `1. Jangan transfer uang/biaya admin ke rekening pribadi mana pun.\n` +
     `2. Jangan instal file ekstensi .APK atau berikan kode OTP 6-digit.\n` +
     `3. Jangan percaya ancaman pemblokiran dalam hitungan menit.\n\n` +
     `Lindungi keluarga Anda dari jeratan penipuan online!\n` +
     `🛡️ Dianalisis mandiri oleh *The Trust Trap Guardian*`;
+
+  const formattedShareText = defangUrls(rawShareText);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formattedShareText);
@@ -36,7 +52,7 @@ export default function WarningCard({ scanResult }) {
 
   const handleWhatsAppShare = () => {
     const url = `https://wa.me/?text=${encodeURIComponent(formattedShareText)}`;
-    window.open(url, "_blank");
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -157,7 +173,7 @@ export default function WarningCard({ scanResult }) {
               color: "#fca5a5",
             }}
           >
-            <div className="font-bold text-red-300">Tiga Larangan Mutlak:</div>
+            <div className="font-bold text-red-300">Tiga Langkah Pencegahan Utama:</div>
             <div>1. Jangan pernah transfer uang ke rekening yang diminta.</div>
             <div>2. Jangan instal file berakhiran .APK apapun.</div>
             <div>3. Jangan serahkan kode OTP 6-digit SMS ke siapapun.</div>

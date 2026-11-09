@@ -5,7 +5,7 @@ export const JUDGE_PRESETS = [
     title: "Loker BUMN Palsu",
     category: "Recruitment Scam",
     tagline: "Upfront Fee & Tekanan Waktu",
-    text: "Selamat! Berdasarkan seleksi berkas administrasi Rekrutmen Bersama BUMN 2026 PT Telkom Indonesia, Anda dinyatakan Lolos ke tahap interview offline di Jakarta. Mohon konfirmasi kehadiran dengan mentransfer biaya reservasi tiket pesawat dan akomodasi sebesar Rp 1.750.000 ke rekening bendahara panitia BRI 023901002384501 an Surya Travelindo. Biaya akan diganti 100% (reimburse) saat registrasi ulang. Waktu transfer maksimal dalam 15 menit sebelum kuota hangus dan dialihkan ke kandidat cadangan. Kirim bukti transfer ke WA ini.",
+    text: "Selamat! Berdasarkan seleksi berkas administrasi Rekrutmen Bersama BUMN 2026 PT Telekomunikasi Nusantara (Persero), Anda dinyatakan Lolos ke tahap interview offline di Jakarta. Mohon konfirmasi kehadiran dengan mentransfer biaya reservasi tiket pesawat dan akomodasi sebesar Rp 1.750.000 ke rekening bendahara panitia Bank Nasional Nusantara 023901002384501 an Surya Travelindo. Biaya akan diganti 100% (reimburse) saat registrasi ulang. Waktu transfer maksimal dalam 15 menit sebelum kuota hangus dan dialihkan ke kandidat cadangan. Kirim bukti transfer ke WA ini.",
     expectedTriggers: ["Upfront Fee", "Artificial Urgency", "Identity Mismatch"],
     expectedEngineIds: ["upfront_fee", "artificial_urgency", "identity_mismatch"]
   },
@@ -35,7 +35,7 @@ export const JUDGE_PRESETS = [
     title: "Link Phishing Hadiah Bank",
     category: "Credential Phishing",
     tagline: "Gebyar Poin & Domain Palsu",
-    text: "Nasabah Yth PT Bank Central Asia (BCA), nomor rekening Anda terpilih sebagai pemenang Gebyar Undian Akhir Tahun BCA 2026 dengan hadiah saldo tunai Rp 15.000.000. Batas klaim hadiah hanya berlaku hari ini dalam 30 menit! Segera verifikasi kupon pemenang melalui tautan portal resmi: http://bca-klaim-gebyar.xyz/login. Masukkan nomor kartu ATM, PIN 6 digit, dan kode respon token Anda agar hadiah bisa langsung dikreditkan ke saldo tabungan.",
+    text: "Nasabah Yth PT Bank Nasional Nusantara (BNN), nomor rekening Anda terpilih sebagai pemenang Gebyar Undian Akhir Tahun BNN 2026 dengan hadiah saldo tunai Rp 15.000.000. Batas klaim hadiah hanya berlaku hari ini dalam 30 menit! Segera verifikasi kupon pemenang melalui tautan portal resmi: http://bnn-klaim-gebyar.xyz/login. Masukkan nomor kartu ATM, PIN 6 digit, dan kode respon token Anda agar hadiah bisa langsung dikreditkan ke saldo tabungan.",
     expectedTriggers: ["Phishing Link", "Artificial Urgency", "Identity Mismatch", "OTP & APK Harvester"],
     expectedEngineIds: ["phishing_link", "artificial_urgency", "identity_mismatch", "apk_otp_harvester"]
   },
@@ -52,7 +52,7 @@ export const JUDGE_PRESETS = [
   {
     id: "preset-6",
     badge: "Preset 6",
-    title: "Pesan Aman (Kontrol)",
+    title: "Pesan Edukasi Resmi (Kontrol)",
     category: "Pesan Normal",
     tagline: "Tidak Ada Pola Manipulasi",
     text: "Halo Kak, pengingat jadwal rapat kelompok besok jam 10 pagi di perpustakaan kampus ya. Jangan lupa bawa laptop.",

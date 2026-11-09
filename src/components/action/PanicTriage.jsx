@@ -80,12 +80,24 @@ export default function PanicTriage({ scanResult = null }) {
   const progress = steps.length ? (doneCount / steps.length) * 100 : 0;
   const guides = sortGuides(triggeredEngines);
 
+  // ── Defang URLs agar link aktif tidak tersebar ──
+  const defangUrls = (text) =>
+    text
+      .replace(/http/g, "hxxp")
+      .replace(/\.xyz/g, "[.]xyz")
+      .replace(/\.top/g, "[.]top")
+      .replace(/\.click/g, "[.]click")
+      .replace(/\.site/g, "[.]site")
+      .replace(/\.vip/g, "[.]vip")
+      .replace(/\.online/g, "[.]online")
+      .replace(/\.cfd/g, "[.]cfd");
+
   // ── Copy Report Draft ──
   const handleCopyReport = () => {
     const now = new Date();
     const dateStr = now.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
 
-    const draft = [
+    const rawDraft = [
       "━━━━━━━━━━━━━━━━━━━━━━━━━━",
       "📋 LAPORAN KEJADIAN PENIPUAN DIGITAL",
       "━━━━━━━━━━━━━━━━━━━━━━━━━━",
@@ -102,17 +114,19 @@ export default function PanicTriage({ scanResult = null }) {
       "• Nama/Alias  : -",
       "• No. HP/WA   : -",
       "• No. Rekening: -",
-      "• Link/URL    : -",
+      "• Link/URL    : - (URL didefang untuk keamanan)",
       "",
       "BUKTI YANG TERSEDIA:",
       "• Screenshot chat : Ada / Tidak",
       "• Bukti transfer  : Ada / Tidak",
       "• File .APK       : Ada / Tidak",
       "",
-      "Diverifikasi oleh TrustTrap Guardian (trusttrapguardian.app)",
-      "Laporkan ke: IASC OJK (157) | PatroliSiber.id | Polri (110)",
+      "Diverifikasi oleh TrustTrap Guardian",
+      "Laporkan ke: IASC OJK (157) | SPKT Polri/Polres Terdekat | patrolisiber[.]id",
       "━━━━━━━━━━━━━━━━━━━━━━━━━━",
     ].join("\n");
+
+    const draft = defangUrls(rawDraft);
 
     navigator.clipboard.writeText(draft).then(() => {
       setReportCopied(true);

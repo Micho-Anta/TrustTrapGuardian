@@ -56,7 +56,7 @@ export const EMERGENCY_STEPS = [
     id: "emg-1",
     priority: "KRUSIAL (1-15 Menit Pertama)",
     title: "Segera Hubungi Call Center Bank Anda",
-    desc: "Minta pemblokiran darurat rekening tujuan dan amankan rekening Anda sendiri. Semakin cepat Anda lapor, semakin besar peluang dana tertahan di rekening penampung.",
+    desc: "Minta pemblokiran darurat rekening tujuan dan amankan rekening Anda sendiri. Nomor call center resmi tercantum di bagian belakang kartu ATM Anda (tersedia 24 jam). Semakin cepat Anda lapor, semakin besar peluang dana tertahan.",
     engineId: "upfront_fee"
   },
   {
@@ -76,8 +76,8 @@ export const EMERGENCY_STEPS = [
   {
     id: "emg-4",
     priority: "LAPOR HUKUM",
-    title: "Buat Laporan Resmi di PatroliSiber.id & Kantor Polisi",
-    desc: "Kumpulkan bukti screenshot chat, mutasi rekening, dan nomor telepon pelaku sebagai lampiran berkas laporan penipuan digital."
+    title: "Buat Laporan Resmi di SPKT Kepolisian (Polres/Polda Terdekat)",
+    desc: "Datangi Sentra Pelayanan Kepolisian Terpadu (SPKT) di Polres atau Polda terdekat. Kumpulkan bukti screenshot chat, mutasi rekening, dan nomor telepon pelaku sebagai lampiran berkas laporan penipuan digital."
   },
   {
     id: "emg-5",
@@ -147,7 +147,7 @@ export const MODE_GUIDES = [
     title: "Ditekan / Diancam",
     steps: [
       "Ambil jeda, ceritakan ke orang terdekat.",
-      "Jika ada ancaman/pemerasan, lapor ke patrolisiber.id atau SPKT Polri."
+      "Jika ada ancaman/pemerasan, lapor ke SPKT Polri (Polres/Polda terdekat)."
     ],
     docs: ["Pesan ancaman", "Kronologi singkat"]
   }
@@ -168,9 +168,9 @@ export const OFFICIAL_CHANNELS = [
   },
   {
     id: "patrolisiber",
-    name: "PatroliSiber.id",
-    role: "Laporan Resmi Bareskrim Polri",
-    contact: "patrolisiber.id · SPKT Polri terdekat",
+    name: "SPKT Polri / Bareskrim",
+    role: "Laporan Resmi Kepolisian (Siber & Umum)",
+    contact: "Polres/Polda Terdekat · patrolisiber.id",
     href: "https://patrolisiber.id",
     prep: "KTP, kronologi, semua bukti."
   },
@@ -199,17 +199,10 @@ export const OFFICIAL_CHANNELS = [
     prep: "URL sebagai teks dan tangkapan layar."
   },
   {
-    id: "bca",
-    name: "Call Center Halo BCA",
-    role: "Blokir m-Banking & Kartu",
-    contact: "1500888 (24 Jam)",
-    prep: "Nomor rekening/kartu dan kronologi singkat."
-  },
-  {
-    id: "mandiri-bri",
-    name: "Call Center Mandiri / BRI",
-    role: "Blokir m-Banking & Kartu",
-    contact: "14000 / 1500017",
+    id: "bank-callcenter",
+    name: "Call Center Resmi Bank Anda",
+    role: "Blokir m-Banking & Kartu Darurat",
+    contact: "Nomor di Balik Kartu ATM Anda (24 Jam)",
     prep: "Nomor rekening/kartu dan kronologi singkat."
   }
 ];
