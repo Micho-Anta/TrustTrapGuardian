@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight, Info } from "lucide-react";
 
 /**
  * ScoreGauge — Ascend polished theme.
@@ -50,51 +50,66 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
   return (
     <div className="glass-card p-6 sm:p-8 space-y-8">
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10">
-        {/* Radial Gauge with atmospheric glow */}
-        <div className="relative flex items-center justify-center shrink-0">
-          <svg className="w-44 h-44 -rotate-90 transform" viewBox="0 0 160 160">
-            <defs>
-              <filter id="scoreGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3.5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            {/* Background track */}
-            <circle
-              cx="80"
-              cy="80"
-              r={radius}
-              stroke="rgba(150,175,230,0.08)"
-              strokeWidth="11"
-              fill="transparent"
-            />
-            {/* Score arc */}
-            <circle
-              cx="80"
-              cy="80"
-              r={radius}
-              stroke={strokeColor}
-              strokeWidth="11"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              filter="url(#scoreGlow)"
-              className="transition-all duration-1000 ease-out"
-            />
-          </svg>
+        {/* Radial Gauge with atmospheric glow & formula explanation */}
+        <div className="flex flex-col items-center justify-center shrink-0">
+          <div className="relative flex items-center justify-center">
+            <svg className="w-44 h-44 -rotate-90 transform" viewBox="0 0 160 160">
+              <defs>
+                <filter id="scoreGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3.5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              {/* Background track */}
+              <circle
+                cx="80"
+                cy="80"
+                r={radius}
+                stroke="rgba(150,175,230,0.08)"
+                strokeWidth="11"
+                fill="transparent"
+              />
+              {/* Score arc */}
+              <circle
+                cx="80"
+                cy="80"
+                r={radius}
+                stroke={strokeColor}
+                strokeWidth="11"
+                fill="transparent"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                filter="url(#scoreGlow)"
+                className="transition-all duration-1000 ease-out"
+              />
+            </svg>
 
-          {/* Centered score text */}
-          <div className="absolute flex flex-col items-center justify-center text-center">
-            <span className="text-5xl font-extrabold tracking-tight" style={{ color: textColor }}>
-              {score}
-            </span>
-            <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mt-0.5">
-              Skor Risiko / 100
-            </span>
+            {/* Centered score text */}
+            <div className="absolute flex flex-col items-center justify-center text-center">
+              <span className="text-5xl font-extrabold tracking-tight" style={{ color: textColor }}>
+                {score}
+              </span>
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mt-0.5">
+                Skor Risiko / 100
+              </span>
+            </div>
+          </div>
+
+          {/* Keterangan / Tooltip Formula Kalkulasi Dewan Juri */}
+          <div
+            className="mt-3 text-[10px] sm:text-[11px] font-mono text-slate-400 text-center flex items-center gap-1.5 px-3 py-1 rounded-full"
+            style={{
+              background: "rgba(12,18,38,0.50)",
+              border: "1px solid rgba(150,175,230,0.08)",
+            }}
+            title="Transparansi Rumus Penilaian Heuristik"
+          >
+            <Info className="w-3 h-3 text-[#5df0a8] shrink-0" />
+            <span>Formula: Min(100, Base Score × Combo Multiplier 1.25x)</span>
           </div>
         </div>
 
