@@ -1,0 +1,48 @@
+{
+  "sanitizedText": "Selamat! Anda lolos seleksi BUMN. Segera transfer biaya reservasi tiket ke rek [NOMOR_DISAMARKAN] dalam 15 menit.",
+  "redactions": ["Nomor Panjang (Rekening/NIK/OTP)"],
+  "summary": {
+    "score": 85,
+    "triggeredEngines": 3,
+    "totalEngines": 6,
+    "riskLevel": "TINGGI (INDIKASI KUAT PENIPUAN)",
+    "disclaimer": "Hasil analisis ini berbasis deteksi heuristik dan pola rekayasa sosial, bukan klaim kebenaran mutlak 100%."
+  },
+  "engines": [
+    {
+      "id": "upfront_fee",
+      "name": "Upfront Fee & Deposit Trap",
+      "category": "Financial Manipulation",
+      "status": "DANGER",
+      "score": 30,
+      "evidence": ["biaya reservasi tiket", "transfer"],
+      "explanation": "Meminta uang di muka sebagai syarat rekrutmen atau pencairan hadiah. Rekrutmen resmi tidak pernah memungut biaya tiket/administrasi di awal.",
+      "actionStep": "Jangan transfer uang sepeser pun. Segera verifikasi ke portal resmi instansi bersangkutan."
+    },
+    {
+      "id": "artificial_urgency",
+      "name": "Artificial Urgency & Fear",
+      "category": "Psychological Manipulation",
+      "status": "DANGER",
+      "score": 20,
+      "evidence": ["dalam 15 menit"],
+      "explanation": "Menciptakan tekanan waktu agar korban panik dan tidak sempat mengecek kebenaran informasi ke pihak berwenang atau keluarga.",
+      "actionStep": "Tarik napas, jangan terburu-buru. Penipu sengaja memanfaatkan rasa cemas Anda."
+    },
+    {
+      "id": "identity_mismatch",
+      "name": "Identity & Channel Mismatch",
+      "category": "Impersonation",
+      "status": "DANGER",
+      "score": 25,
+      "evidence": ["seleksi BUMN"],
+      "explanation": "Mencatut nama instansi besar melalui jalur komunikasi personal WhatsApp tanpa portal verifikasi rekrutmen resmi.",
+      "actionStep": "Periksa email/domain pengirim. BUMN resmi hanya menggunakan website portal bumn.go.id atau email korporat."
+    }
+  ],
+  "recommendedActions": [
+    "Hentikan komunikasi segera dan jangan kirim uang atau data apapun.",
+    "Lakukan cross-check ke portal atau media sosial resmi instansi.",
+    "Bagikan kartu peringatan ini ke keluarga dan kerabat terdekat untuk melindungi mereka."
+  ]
+}
