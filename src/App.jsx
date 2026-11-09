@@ -7,10 +7,10 @@ import {
   Sparkles,
   ShieldCheck,
   Code2,
-  Sparkle,
   ArrowRight
 } from "lucide-react";
 import Scanner from "./components/Scanner";
+import RiskCard from "./components/RiskCard";
 import ScoreGauge from "./components/scanner/ScoreGauge";
 import HighlightView from "./components/scanner/HighlightView";
 import PanicTriage from "./components/action/PanicTriage";
@@ -41,6 +41,25 @@ export default function App() {
   const handlePresetClick = (preset) => {
     handleScan(preset.text);
   };
+
+  // Format data untuk komponen RiskCard
+  const riskCardData = scanResult
+    ? {
+        score: scanResult.summary.score,
+        status:
+          scanResult.summary.score >= 70
+            ? "DANGEROUS"
+            : scanResult.summary.score >= 35
+            ? "SUSPICIOUS"
+            : "SAFE",
+        findings: scanResult.engines
+          .filter((e) => e.status === "DANGER")
+          .map((e) => ({
+            severity: e.score >= 35 ? "CRITICAL" : e.score >= 25 ? "HIGH" : "MEDIUM",
+            message: `${e.name}: ${e.explanation}`
+          }))
+      }
+    : null;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
@@ -180,7 +199,10 @@ export default function App() {
               </div>
             </div>
 
-            {/* Hasil Analisis: Score Gauge & Highlight View */}
+            {/* Tampilan Kartu Ringkasan Risiko (RiskCard) */}
+            {riskCardData && <RiskCard result={riskCardData} />}
+
+            {/* Hasil Analisis Lengkap: Score Gauge & Highlight View */}
             {scanResult && (
               <div className="space-y-6 animate-in fade-in duration-300">
                 <ScoreGauge
