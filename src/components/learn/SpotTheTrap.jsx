@@ -122,58 +122,84 @@ export default function SpotTheTrap() {
   const curr = scenarios[currentQuestion];
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-2">
+    <div className="glass-card p-6 sm:p-8 space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-3">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-amber-400" />
-            Simulasi Interaktif: Tebak Jebakan Chat (Spot The Trap)
+          <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
+            <Lightbulb className="w-5 h-5 text-[#5df0a8]" />
+            <span>Simulasi Interaktif: Tebak Jebakan Chat (Spot The Trap)</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Latih intuisi dan nalar kritis Anda menghadapi 3 skenario penipuan yang paling sering memakan korban di Indonesia.
           </p>
         </div>
 
-        <div className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+        <div
+          className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-slate-300 self-start sm:self-auto"
+          style={{ background: "rgba(12,18,38,0.40)", border: "1px solid var(--border)" }}
+        >
           Skenario {currentQuestion + 1} / {scenarios.length}
         </div>
       </div>
 
       {!quizFinished ? (
-        <div className="space-y-5">
-          {/* Tampilan Simulasi Chat WhatsApp */}
-          <div className="max-w-lg mx-auto bg-slate-950 rounded-2xl border border-slate-800 p-4 space-y-3 shadow-inner">
-            <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-800/80 text-slate-400">
+        <div className="space-y-6 sm:space-y-8">
+          {/* Tampilan Simulasi Chat WhatsApp - Clean & Airy */}
+          <div
+            className="max-w-xl mx-auto rounded-3xl p-5 sm:p-6 space-y-3.5"
+            style={{
+              background: "rgba(4, 6, 15, 0.50)",
+              border: "1px solid rgba(150, 175, 230, 0.08)",
+            }}
+          >
+            <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.06] text-slate-400">
               <span className="font-semibold text-slate-300">{curr.sender}</span>
-              <span className="text-[10px] text-emerald-400 font-medium">Online</span>
+              <span className="text-[11px] text-[#5df0a8] font-medium flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#5df0a8]"></span>
+                Online
+              </span>
             </div>
 
             {/* Bubble Chat Scammer */}
-            <div className="bg-slate-800/90 text-slate-100 p-3.5 rounded-2xl rounded-tl-sm text-xs sm:text-sm leading-relaxed border border-slate-700/60 shadow">
+            <div
+              className="p-4 rounded-2xl rounded-tl-sm text-xs sm:text-sm leading-relaxed text-slate-100"
+              style={{
+                background: "rgba(30, 41, 69, 0.60)",
+                border: "1px solid rgba(150, 175, 230, 0.10)",
+              }}
+            >
               {curr.chatPreview}
             </div>
           </div>
 
           {/* Pertanyaan */}
-          <div>
-            <h3 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-indigo-400" />
-              {curr.question}
+          <div className="space-y-4">
+            <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2.5">
+              <HelpCircle className="w-5 h-5 text-[#5df0a8]" />
+              <span>{curr.question}</span>
             </h3>
 
             {/* Pilihan Jawaban */}
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {curr.options.map((option) => {
                 const isSelected = selectedOption?.id === option.id;
-                let btnStyle = "bg-slate-950 border-slate-800 hover:border-indigo-500/50 text-slate-200";
+                let bgStyle = "rgba(12, 18, 38, 0.35)";
+                let borderStyle = "rgba(150, 175, 230, 0.07)";
+                let textColor = "text-slate-200";
 
                 if (showExplanation) {
                   if (option.isCorrect) {
-                    btnStyle = "bg-emerald-950/40 border-emerald-500/80 text-emerald-200";
+                    bgStyle = "rgba(16, 185, 129, 0.08)";
+                    borderStyle = "rgba(16, 185, 129, 0.35)";
+                    textColor = "text-emerald-200";
                   } else if (isSelected && !option.isCorrect) {
-                    btnStyle = "bg-red-950/40 border-red-500/80 text-red-200";
+                    bgStyle = "rgba(239, 68, 68, 0.08)";
+                    borderStyle = "rgba(239, 68, 68, 0.35)";
+                    textColor = "text-red-200";
                   } else {
-                    btnStyle = "bg-slate-950/40 border-slate-900 text-slate-500 opacity-60";
+                    bgStyle = "rgba(12, 18, 38, 0.15)";
+                    borderStyle = "rgba(150, 175, 230, 0.03)";
+                    textColor = "text-slate-500 opacity-60";
                   }
                 }
 
@@ -182,14 +208,36 @@ export default function SpotTheTrap() {
                     key={option.id}
                     onClick={() => handleSelect(option)}
                     disabled={showExplanation}
-                    className={`w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm transition-all flex items-start gap-3 ${btnStyle}`}
+                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border text-xs sm:text-sm transition-all flex items-start gap-3.5 ${textColor}`}
+                    style={{
+                      background: bgStyle,
+                      borderColor: borderStyle,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!showExplanation) {
+                        e.currentTarget.style.borderColor = "rgba(93, 240, 168, 0.35)";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!showExplanation) {
+                        e.currentTarget.style.borderColor = borderStyle;
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }
+                    }}
                   >
-                    <span className="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 font-bold flex items-center justify-center shrink-0 text-xs">
+                    <span
+                      className="w-7 h-7 rounded-xl font-bold flex items-center justify-center shrink-0 text-xs"
+                      style={{
+                        background: "rgba(150, 175, 230, 0.08)",
+                        color: "var(--accent)",
+                      }}
+                    >
                       {option.id.toUpperCase()}
                     </span>
-                    <span className="flex-1 pt-0.5">{option.text}</span>
+                    <span className="flex-1 pt-0.5 leading-relaxed">{option.text}</span>
                     {showExplanation && option.isCorrect && (
-                      <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-[#5df0a8] shrink-0 mt-0.5" />
                     )}
                     {showExplanation && isSelected && !option.isCorrect && (
                       <XCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
@@ -202,21 +250,27 @@ export default function SpotTheTrap() {
 
           {/* Penjelasan Edukasi setelah menjawab */}
           {showExplanation && (
-            <div className="bg-indigo-950/30 border border-indigo-800/40 p-4 rounded-xl space-y-2 text-xs">
-              <div className="font-bold text-indigo-300 flex items-center gap-1.5">
+            <div
+              className="p-5 sm:p-6 rounded-2xl space-y-3.5 text-xs sm:text-sm"
+              style={{
+                background: "rgba(93, 240, 168, 0.05)",
+                border: "1px solid rgba(93, 240, 168, 0.18)",
+              }}
+            >
+              <div className="font-bold flex items-center gap-2 text-[#5df0a8]">
                 <Lightbulb className="w-4 h-4 text-amber-400" />
-                Penjelasan Pola Rekayasa Sosial:
+                <span>Penjelasan Pola Rekayasa Sosial:</span>
               </div>
-              <p className="text-slate-200 leading-relaxed">
+              <p className="text-slate-300 leading-relaxed">
                 {selectedOption?.reason}
               </p>
 
               <div className="pt-2 text-right">
                 <button
                   onClick={handleNext}
-                  className="px-5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow"
+                  className="btn-ascend"
                 >
-                  {currentQuestion < scenarios.length - 1 ? "Skenario Berikutnya →" : "Lihat Hasil Akhir →"}
+                  <span>{currentQuestion < scenarios.length - 1 ? "Skenario Berikutnya →" : "Lihat Hasil Akhir →"}</span>
                 </button>
               </div>
             </div>
@@ -224,26 +278,34 @@ export default function SpotTheTrap() {
         </div>
       ) : (
         /* Hasil Skor Akhir Kuis */
-        <div className="text-center py-8 space-y-4">
-          <div className="w-16 h-16 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center mx-auto text-indigo-400">
-            <Award className="w-8 h-8" />
+        <div className="text-center py-10 space-y-5">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-[#5df0a8]"
+            style={{
+              background: "rgba(93, 240, 168, 0.10)",
+              border: "1px solid rgba(93, 240, 168, 0.25)",
+            }}
+          >
+            <Award className="w-10 h-10" />
           </div>
-          <h3 className="text-xl font-extrabold text-white">
-            Simulasi Selesai! Skor Anda: {score} / {scenarios.length}
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Simulasi Selesai! Skor Anda: <span className="text-mint-gradient">{score} / {scenarios.length}</span>
           </h3>
-          <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300 max-w-lg mx-auto leading-relaxed">
             {score === 3
               ? "Luar biasa! Nalar kritis Anda sangat tajam dalam mengenali celah manipulasi psikologis penipu digital."
               : "Bagus! Selalu ingat 3 pilar perlindungan: Tahan emosi, jangan klik .APK/link sembarangan, dan verifikasi silang langsung ke sumbernya."}
           </p>
 
-          <button
-            onClick={handleRestart}
-            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all inline-flex items-center gap-2"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Ulangi Simulasi Kuis
-          </button>
+          <div className="pt-3">
+            <button
+              onClick={handleRestart}
+              className="btn-ascend"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Ulangi Simulasi Kuis</span>
+            </button>
+          </div>
         </div>
       )}
     </div>

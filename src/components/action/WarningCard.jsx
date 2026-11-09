@@ -6,9 +6,11 @@ export default function WarningCard({ scanResult }) {
 
   if (!scanResult) {
     return (
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">
-        <ShieldAlert className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-        <p className="text-sm">Silakan lakukan analisis teks terlebih dahulu untuk membuat Kartu Peringatan WhatsApp.</p>
+      <div className="glass-card p-8 sm:p-10 text-center text-slate-400 space-y-3">
+        <ShieldAlert className="w-10 h-10 text-slate-600 mx-auto" />
+        <p className="text-sm sm:text-base leading-relaxed">
+          Silakan lakukan analisis teks terlebih dahulu untuk membuat Kartu Peringatan WhatsApp.
+        </p>
       </div>
     );
   }
@@ -38,85 +40,107 @@ export default function WarningCard({ scanResult }) {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+    <div className="glass-card p-6 sm:p-8 space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-4">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Share2 className="w-5 h-5 text-indigo-400" />
-            Kartu Peringatan Siap Bagi (Guardian Family Share)
+          <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
+            <Share2 className="w-5 h-5 text-[#5df0a8]" />
+            <span>Kartu Peringatan Siap Bagi (Guardian Family Share)</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Format siap bagikan ke grup WhatsApp keluarga atau kerabat untuk mencegah mereka menjadi korban berikutnya.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Format siap dibagikan ke grup WhatsApp keluarga atau kerabat untuk mencegah mereka menjadi korban berikutnya.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={handleCopy}
-            className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center gap-1.5"
+            className="btn-ghost"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-            {copied ? "Tersalin!" : "Salin Teks"}
+            {copied ? <Check className="w-4 h-4 text-[#5df0a8]" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? "Tersalin!" : "Salin Teks"}</span>
           </button>
 
           <button
             onClick={handleWhatsAppShare}
-            className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-1.5"
+            className="btn-ascend"
+            style={{
+              background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
+              color: "#032018",
+              fontWeight: 600,
+              borderRadius: "999px",
+            }}
           >
             <MessageCircle className="w-4 h-4" />
-            Kirim ke WhatsApp
+            <span>Kirim ke WhatsApp</span>
           </button>
         </div>
       </div>
 
-      {/* Visual Kartu Peringatan (Preview Card) */}
-      <div className="max-w-xl mx-auto rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-red-500/40 p-6 shadow-2xl relative overflow-hidden">
-        {/* Glow background accent */}
-        <div className="absolute top-0 right-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl -z-0"></div>
+      {/* Visual Kartu Peringatan (Preview Card) - Clean & Elegant */}
+      <div
+        className="max-w-xl mx-auto rounded-3xl p-6 sm:p-8 relative overflow-hidden"
+        style={{
+          background: "rgba(12, 18, 38, 0.55)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(239, 68, 68, 0.20)",
+          boxShadow: "0 25px 60px -20px rgba(0,0,0,0.75)",
+        }}
+      >
+        {/* Soft Ambient glow */}
+        <div className="absolute top-0 right-0 w-56 h-56 bg-red-500/10 rounded-full blur-3xl -z-0 pointer-events-none"></div>
 
-        <div className="relative z-10 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-red-500/20 text-red-400">
+        <div className="relative z-10 space-y-5">
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20">
                 <ShieldAlert className="w-5 h-5" />
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-red-400 block">
                   SECURITY ADVISORY BULLETIN
                 </span>
-                <span className="text-sm font-extrabold text-white">
+                <span className="text-sm sm:text-base font-extrabold text-white">
                   The Trust Trap: Digital Guardian
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <span className="text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold text-red-300 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full">
                 Skor Bahaya {summary.score}/100
               </span>
             </div>
           </div>
 
           <div>
-            <h3 className="text-base font-bold text-white mb-1">
-              ⚠️ Peringatan: {summary.riskLevel}
+            <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 flex items-center gap-2">
+              <span>⚠️ Peringatan: {summary.riskLevel}</span>
             </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Pesan yang Anda terima mengandung manipulasi psikologis khas sindikat penipuan digital Indonesia.
             </p>
           </div>
 
           {/* List of dangerous patterns */}
           {dangerousEngines.length > 0 && (
-            <div className="space-y-2 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div
+              className="space-y-2 p-4 rounded-2xl"
+              style={{
+                background: "rgba(4, 6, 15, 0.50)",
+                border: "1px solid rgba(150, 175, 230, 0.06)",
+              }}
+            >
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
                 Modus Bahaya yang Teridentifikasi:
               </span>
-              <ul className="space-y-1.5 text-xs text-slate-200">
+              <ul className="space-y-2 text-xs sm:text-sm text-slate-200">
                 {dangerousEngines.map((eng) => (
-                  <li key={eng.id} className="flex items-start gap-2">
+                  <li key={eng.id} className="flex items-start gap-2.5">
                     <span className="text-red-400 font-bold">•</span>
-                    <span>
-                      <strong className="text-red-300">{eng.name}:</strong> {eng.explanation}
+                    <span className="leading-relaxed">
+                      <strong className="text-red-300 font-semibold">{eng.name}:</strong>{" "}
+                      <span className="text-slate-300">{eng.explanation}</span>
                     </span>
                   </li>
                 ))}
@@ -125,7 +149,14 @@ export default function WarningCard({ scanResult }) {
           )}
 
           {/* Golden Rules */}
-          <div className="p-3 bg-red-950/30 rounded-xl border border-red-800/40 text-xs text-red-200 space-y-1">
+          <div
+            className="p-4 rounded-2xl text-xs sm:text-sm space-y-1.5 leading-relaxed"
+            style={{
+              background: "rgba(239, 68, 68, 0.08)",
+              border: "1px solid rgba(239, 68, 68, 0.20)",
+              color: "#fca5a5",
+            }}
+          >
             <div className="font-bold text-red-300">Tiga Larangan Mutlak:</div>
             <div>1. Jangan pernah transfer uang ke rekening yang diminta.</div>
             <div>2. Jangan instal file berakhiran .APK apapun.</div>

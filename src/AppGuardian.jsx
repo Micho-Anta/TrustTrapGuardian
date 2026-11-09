@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  ShieldAlert,
   Search,
   LifeBuoy,
   BookOpen,
@@ -54,55 +53,55 @@ export default function AppGuardian() {
       {/* ── Top Hackathon Ribbon ── */}
       <div
         style={{
-          background: "linear-gradient(90deg, rgba(58,108,255,0.18) 0%, rgba(12,18,38,0.70) 50%, rgba(93,240,168,0.10) 100%)",
-          borderBottom: "1px solid rgba(93,240,168,0.14)",
+          background: "linear-gradient(90deg, rgba(58,108,255,0.12) 0%, rgba(12,18,38,0.50) 50%, rgba(93,240,168,0.08) 100%)",
+          borderBottom: "1px solid rgba(150,175,230,0.06)",
         }}
-        className="px-4 py-2 text-center text-xs"
+        className="px-4 py-2.5 text-center text-xs"
       >
-        <span className="inline-flex items-center gap-1.5 font-medium" style={{ color: "var(--accent)" }}>
-          <span style={{ color: "#f59e0b" }}>✦</span>
-          <span style={{ color: "var(--muted)" }}>Solusi Kompetisi Web Development MIT-WEEK 2026 —&nbsp;</span>
-          <span className="font-semibold" style={{ color: "var(--ink)" }}>The Trust Trap: Navigating Digital Deception</span>
+        <span className="inline-flex items-center gap-2 font-medium">
+          <span style={{ color: "var(--accent)" }}>✦</span>
+          <span style={{ color: "var(--muted)" }}>Solusi Kompetisi Web Development MIT-WEEK 2026 —</span>
+          <span className="font-semibold text-white tracking-wide">The Trust Trap: Navigating Digital Deception</span>
         </span>
       </div>
 
-      {/* ── Glassmorphism Navbar ── */}
+      {/* ── Floating Glassmorphic Navbar ── */}
       <header
-        className="sticky top-0 z-40"
+        className="sticky top-0 z-40 transition-all"
         style={{
-          background: "rgba(4, 6, 15, 0.75)",
+          background: "rgba(4, 6, 15, 0.72)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
           borderBottom: "1px solid var(--border)",
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
 
           {/* Brand mark */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            {/* Triangle mint brand mark */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Mint triangle brand mark with gentle glow */}
             <span
-              className="text-2xl leading-none select-none"
-              style={{ color: "var(--accent)", filter: "drop-shadow(0 0 8px rgba(93,240,168,0.6))" }}
+              className="text-2xl leading-none select-none transition-transform hover:scale-105"
+              style={{ color: "var(--accent)", filter: "drop-shadow(0 0 10px rgba(93,240,168,0.55))" }}
               aria-hidden="true"
             >▲</span>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm sm:text-base tracking-tight" style={{ color: "var(--ink)" }}>
+              <div className="flex items-center gap-2.5">
+                <span className="font-extrabold text-base sm:text-lg tracking-tight text-white">
                   TRUST TRAP GUARDIAN
                 </span>
                 <span
-                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
                   style={{
-                    background: "rgba(93,240,168,0.12)",
+                    background: "rgba(93,240,168,0.10)",
                     color: "var(--accent)",
-                    border: "1px solid rgba(93,240,168,0.28)",
+                    border: "1px solid rgba(93,240,168,0.22)",
                   }}
                 >
                   MIT-041
                 </span>
               </div>
-              <p className="text-[11px] hidden sm:block" style={{ color: "var(--muted)" }}>
+              <p className="text-xs text-slate-400 hidden sm:block mt-0.5">
                 VirusTotal-Style Social Engineering &amp; Scam Detector
               </p>
             </div>
@@ -110,10 +109,11 @@ export default function AppGuardian() {
 
           {/* 3-Tab pill navigation */}
           <nav
-            className="flex items-center p-1 rounded-full"
+            className="flex items-center p-1.5 rounded-full"
             style={{
-              background: "rgba(12,18,38,0.70)",
+              background: "rgba(12,18,38,0.55)",
               border: "1px solid var(--border)",
+              boxShadow: "0 4px 16px -4px rgba(0,0,0,0.40)",
             }}
           >
             {tabs.map(({ id, label, Icon }) => (
@@ -135,8 +135,7 @@ export default function AppGuardian() {
               href="https://github.com/Micho-Anta/TrustTrapGuardian"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors btn-ghost"
-              style={{ fontSize: "0.75rem" }}
+              className="btn-ghost"
             >
               <Code2 className="w-4 h-4" style={{ color: "var(--accent)" }} />
               <span>GitHub</span>
@@ -145,23 +144,23 @@ export default function AppGuardian() {
         </div>
       </header>
 
-      {/* ── Main Content ── */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
+      {/* ── Main Content Area ── */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8 sm:space-y-10">
 
         {/* ── TAB 1: RECOGNIZE ── */}
         {activeTab === "recognize" && (
-          <div className="space-y-6">
+          <div className="space-y-8 sm:space-y-10">
 
-            {/* Hero header */}
-            <div className="text-center sm:text-left space-y-2">
+            {/* Hero header - Strong typography & breathing room */}
+            <div className="text-center sm:text-left space-y-3">
               <p className="eyebrow">THE TRUST TRAP · NAVIGATING DIGITAL DECEPTION</p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Deteksi Rekayasa Sosial &amp;{" "}
                 <span className="text-mint-gradient">Manipulasi Chat</span>
               </h1>
-              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
-                Tempel teks pesan WhatsApp, tawaran loker, atau link mencurigakan.
-                Scam Heuristic Engine akan membedah tanda bahaya manipulasi psikologis secara instan.
+              <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
+                Tempel teks pesan WhatsApp, tawaran loker, atau tautan mencurigakan.
+                Scam Heuristic Engine akan membedah tanda bahaya manipulasi psikologis secara instan dan explainable.
               </p>
             </div>
 
@@ -176,7 +175,7 @@ export default function AppGuardian() {
 
             {/* Results */}
             {scanResult && (
-              <div className="space-y-6 animate-in fade-in duration-300">
+              <div className="space-y-8 sm:space-y-10 animate-in fade-in duration-300">
                 <ScoreGauge
                   summary={scanResult.summary}
                   engines={scanResult.engines}
@@ -190,14 +189,14 @@ export default function AppGuardian() {
 
         {/* ── TAB 2: ACT ── */}
         {activeTab === "act" && (
-          <div className="space-y-6">
-            <div className="text-center sm:text-left space-y-2">
+          <div className="space-y-8 sm:space-y-10">
+            <div className="text-center sm:text-left space-y-3">
               <p className="eyebrow">LANGKAH PENYELAMATAN · PANIC TRIAGE</p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Panduan Darurat &amp;{" "}
                 <span className="text-mint-gradient">Kartu Peringatan</span>
               </h1>
-              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
+              <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
                 Panduan darurat langkah demi langkah jika Anda baru menerima chat atau sudah terlanjur melakukan transaksi,
                 dilengkapi generator kartu peringatan keluarga.
               </p>
@@ -210,14 +209,14 @@ export default function AppGuardian() {
 
         {/* ── TAB 3: LEARN ── */}
         {activeTab === "learn" && (
-          <div className="space-y-6">
-            <div className="text-center sm:text-left space-y-2">
+          <div className="space-y-8 sm:space-y-10">
+            <div className="text-center sm:text-left space-y-3">
               <p className="eyebrow">EDUKASI · SIMULASI INTERAKTIF</p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: "var(--ink)" }}>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Pusat Edukasi &amp;{" "}
                 <span className="text-mint-gradient">Simulasi Rekayasa Sosial</span>
               </h1>
-              <p className="text-sm max-w-2xl leading-relaxed" style={{ color: "var(--muted)" }}>
+              <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
                 Pelajari bagaimana sindikat penipuan memanfaatkan celah psikologis rasa panik, serakah, dan empati
                 melalui simulasi kuis interaktif.
               </p>
@@ -232,20 +231,20 @@ export default function AppGuardian() {
 
       {/* ── Footer ── */}
       <footer
-        className="py-6 text-center text-xs"
+        className="py-8 text-center text-xs"
         style={{
           borderTop: "1px solid var(--border)",
-          background: "rgba(4,6,15,0.80)",
+          background: "rgba(4, 6, 15, 0.70)",
           color: "var(--muted)",
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             © 2026{" "}
-            <strong style={{ color: "var(--ink)" }}>TrustTrap Guardian</strong>
+            <strong className="text-white font-semibold">TrustTrap Guardian</strong>
             {" "}— Tim The Trust Trap | MIT-WEEK 2026
           </div>
-          <div className="flex items-center gap-4" style={{ color: "var(--muted)" }}>
+          <div className="flex items-center gap-4 text-slate-400">
             <span>Local-First Heuristic Engine</span>
             <span>•</span>
             <span>React 19 + Tailwind CSS v4 + Vite</span>
