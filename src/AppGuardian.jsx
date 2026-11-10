@@ -45,7 +45,7 @@ export default function AppGuardian() {
     setScanResult(null);
   };
 
-  /** Navigate to ACT tab — called by ScoreGauge seamless handoff button */
+  /** Navigate to ACT tab - called by ScoreGauge seamless handoff button */
   const handleGoToAct = () => {
     setActiveTab("act");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -82,12 +82,19 @@ export default function AppGuardian() {
           background: "linear-gradient(90deg, rgba(58,108,255,0.12) 0%, rgba(12,18,38,0.50) 50%, rgba(93,240,168,0.08) 100%)",
           borderBottom: "1px solid rgba(150,175,230,0.06)",
         }}
-        className="px-4 py-2.5 text-center text-xs"
+        className="px-3 sm:px-4 py-2 sm:py-2.5 text-center text-xs"
       >
-        <span className="inline-flex items-center gap-2 font-medium">
+        <span className="inline-flex items-center gap-1.5 sm:gap-2 font-medium">
           <span style={{ color: "var(--accent)" }}>✦</span>
-          <span style={{ color: "var(--muted)" }}>Solusi Kompetisi Web Development MIT-WEEK 2026 —</span>
-          <span className="font-semibold text-white tracking-wide">The Trust Trap: Navigating Digital Deception</span>
+          <span className="sm:hidden font-semibold text-white tracking-wide">
+            MIT-WEEK 2026 | The Trust Trap
+          </span>
+          <span className="hidden sm:inline" style={{ color: "var(--muted)" }}>
+            Solusi Kompetisi Web Development MIT-WEEK 2026 |
+          </span>
+          <span className="hidden sm:inline font-semibold text-white tracking-wide">
+            The Trust Trap: Navigating Digital Deception
+          </span>
         </span>
       </div>
 
@@ -101,23 +108,26 @@ export default function AppGuardian() {
           borderBottom: "1px solid var(--border)",
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4 min-w-0">
 
           {/* Brand mark */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Mint triangle brand mark with gentle glow */}
             <span
-              className="text-2xl leading-none select-none transition-transform hover:scale-105"
+              className="text-xl sm:text-2xl leading-none select-none transition-transform hover:scale-105 shrink-0"
               style={{ color: "var(--accent)", filter: "drop-shadow(0 0 10px rgba(93,240,168,0.55))" }}
               aria-hidden="true"
             >▲</span>
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="font-extrabold text-base sm:text-lg tracking-tight text-white">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                <span className="brand-text-mobile">
+                  TrustTrap
+                </span>
+                <span className="brand-text-desktop">
                   TRUST TRAP GUARDIAN
                 </span>
                 <span
-                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
+                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0"
                   style={{
                     background: "rgba(93,240,168,0.10)",
                     color: "var(--accent)",
@@ -135,7 +145,7 @@ export default function AppGuardian() {
 
           {/* 3-Tab pill navigation */}
           <nav
-            className="flex items-center p-1.5 rounded-full"
+            className="flex items-center p-1 sm:p-1.5 rounded-full shrink-0 min-w-0"
             style={{
               background: "rgba(12,18,38,0.55)",
               border: "1px solid var(--border)",
@@ -148,7 +158,7 @@ export default function AppGuardian() {
                 onClick={() => handleTabChange(id)}
                 className={`tab-pill${activeTab === id ? " active" : ""}`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline">{label}</span>
                 <span className="sm:hidden">{label.split(". ")[1]}</span>
               </button>
@@ -269,7 +279,7 @@ export default function AppGuardian() {
           <div>
             © 2026{" "}
             <strong className="text-white font-semibold">TrustTrap Guardian</strong>
-            {" "}— Tim Nanti Ajah (MIT-041) — Universitas Gunadarma
+            {" "}· Tim Nanti Ajah (MIT-041) · Universitas Gunadarma
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span>Local-First Heuristic Engine</span>
