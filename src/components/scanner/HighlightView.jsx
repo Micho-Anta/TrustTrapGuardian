@@ -30,7 +30,7 @@ export default function HighlightView({ scanResult }) {
 
     const allTokens = [...new Set([...evidenceWords, ...redactionTokens])];
     if (allTokens.length === 0) {
-      return <p className="leading-relaxed text-sm sm:text-base text-slate-200">{sanitizedText}</p>;
+      return <p className="leading-relaxed text-sm sm:text-base text-slate-200 [overflow-wrap:anywhere] break-words">{sanitizedText}</p>;
     }
 
     const escapedTokens = allTokens
@@ -41,7 +41,7 @@ export default function HighlightView({ scanResult }) {
     const parts = sanitizedText.split(regex);
 
     return (
-      <p className="leading-relaxed text-sm sm:text-base text-slate-200 whitespace-pre-wrap">
+      <p className="leading-relaxed text-sm sm:text-base text-slate-200 whitespace-pre-wrap [overflow-wrap:anywhere] break-words">
         {parts.map((part, index) => {
           const lowerPart = part.toLowerCase();
 
@@ -234,7 +234,7 @@ export default function HighlightView({ scanResult }) {
                           {engine.evidence.map((ev, i) => (
                             <span
                               key={i}
-                              className="px-2.5 py-0.5 rounded-md font-mono text-[11px]"
+                              className="px-2.5 py-0.5 rounded-md font-mono text-[11px] [overflow-wrap:anywhere] break-words"
                               style={{
                                 background: "rgba(239,68,68,0.12)",
                                 color: "#fca5a5",
@@ -248,7 +248,7 @@ export default function HighlightView({ scanResult }) {
                       </div>
                     )}
                     <div
-                      className="text-xs sm:text-sm p-3.5 rounded-xl flex items-start gap-2.5 leading-relaxed"
+                      className="text-xs sm:text-sm p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-2.5 leading-relaxed"
                       style={{
                         background: "rgba(4,6,15,0.50)",
                         border: "1px solid rgba(150,175,230,0.06)",
@@ -256,7 +256,7 @@ export default function HighlightView({ scanResult }) {
                       }}
                     >
                       <span className="font-bold shrink-0 text-[#5df0a8]">Langkah Cepat:</span>
-                      <span className="text-slate-300">{engine.actionStep}</span>
+                      <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{engine.actionStep}</span>
                     </div>
                   </div>
                 )}

@@ -2,11 +2,11 @@ import React from "react";
 import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight, Info } from "lucide-react";
 
 /**
- * ScoreGauge — Ascend polished theme.
+ * ScoreGauge - Ascend polished theme.
  * Props:
- *   summary   — scan summary object
- *   engines   — array of engine results
- *   onGoToAct — callback to switch parent tab to 'act' (Seamless Handoff)
+ *   summary   - scan summary object
+ *   engines   - array of engine results
+ *   onGoToAct - callback to switch parent tab to 'act' (Seamless Handoff)
  */
 export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
   if (!summary) return null;

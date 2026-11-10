@@ -113,12 +113,12 @@ export default function WarningCard({ scanResult }) {
         <div className="absolute top-0 right-0 w-56 h-56 bg-red-500/10 rounded-full blur-3xl -z-0 pointer-events-none"></div>
 
         <div className="relative z-10 space-y-5">
-          <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20">
+          <div className="flex items-center justify-between flex-wrap gap-2 border-b border-white/[0.08] pb-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20 shrink-0">
                 <ShieldAlert className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-red-400 block">
                   SECURITY ADVISORY BULLETIN
                 </span>
@@ -127,8 +127,8 @@ export default function WarningCard({ scanResult }) {
                 </span>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-xs font-bold text-red-300 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full">
+            <div className="text-right shrink-0">
+              <span className="text-xs font-bold text-red-300 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full whitespace-nowrap shrink-0 inline-block">
                 Skor Bahaya {summary.score}/100
               </span>
             </div>
@@ -161,7 +161,7 @@ export default function WarningCard({ scanResult }) {
                     <span className="text-red-400 font-bold">•</span>
                     <span className="leading-relaxed">
                       <strong className="text-red-300 font-semibold">{eng.name}:</strong>{" "}
-                      <span className="text-slate-300">{eng.explanation}</span>
+                      <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{eng.explanation}</span>
                     </span>
                   </li>
                 ))}

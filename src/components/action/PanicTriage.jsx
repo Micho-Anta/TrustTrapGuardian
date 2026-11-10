@@ -47,9 +47,9 @@ function Toast({ message, visible }) {
 }
 
 /**
- * Panic Triage (tab ACT) — Ascend polished theme with HCI Psychological Ergonomics.
+ * Panic Triage (tab ACT) - Ascend polished theme with HCI Psychological Ergonomics.
  * Props:
- *   scanResult — optional scan result object
+ *   scanResult - optional scan result object
  */
 export default function PanicTriage({ scanResult = null }) {
   const triggeredEngines = getTriggeredEngineIds(scanResult);
@@ -237,13 +237,13 @@ export default function PanicTriage({ scanResult = null }) {
         {/* ── 2 Flash Action Cards (Emergency only with Cognitive Priority Marker) ── */}
         {activeTab === "emergency" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            {/* Flash Card 1 — APK */}
+            {/* Flash Card 1 - APK */}
             <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
               <span className="text-2xl shrink-0 mt-0.5">⏱️</span>
               <div className="space-y-1 w-full">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
-                    DETIK KE 0–30 (Jika Install .APK)
+                    DETIK KE 0-30 (Jika Install .APK)
                   </p>
                   <span
                     className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
@@ -266,13 +266,13 @@ export default function PanicTriage({ scanResult = null }) {
               </div>
             </div>
 
-            {/* Flash Card 2 — OTP / Transfer */}
+            {/* Flash Card 2 - OTP / Transfer */}
             <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
               <span className="text-2xl shrink-0 mt-0.5">📞</span>
               <div className="space-y-1 w-full">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
-                    MENIT KE 1–60 (Jika Kasih OTP / Transfer)
+                    MENIT KE 1-60 (Jika Kasih OTP / Transfer)
                   </p>
                   <span
                     className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
@@ -441,12 +441,12 @@ export default function PanicTriage({ scanResult = null }) {
                     )}
                   </div>
                   <h4
-                    className="text-sm sm:text-base font-bold"
+                    className="text-sm sm:text-base font-bold [overflow-wrap:anywhere] break-words"
                     style={{ color: isDone ? "var(--muted)" : "#ffffff", textDecoration: isDone ? "line-through" : "none" }}
                   >
                     {step.title}
                   </h4>
-                  <p className="text-xs sm:text-sm mt-1 text-slate-400 leading-relaxed">{step.desc}</p>
+                  <p className="text-xs sm:text-sm mt-1 text-slate-400 leading-relaxed [overflow-wrap:anywhere] break-words">{step.desc}</p>
                 </div>
               </div>
             );
@@ -508,7 +508,7 @@ export default function PanicTriage({ scanResult = null }) {
                   href={c.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-4 rounded-2xl transition-all flex items-start justify-between gap-2.5 text-xs group"
+                  className="p-4 rounded-2xl transition-all flex items-start justify-between gap-2.5 text-xs group min-w-0"
                   style={{ background: "rgba(12,18,38,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = "rgba(93,240,168,0.30)";
@@ -520,10 +520,10 @@ export default function PanicTriage({ scanResult = null }) {
                   }}
                 >
                   <div>
-                    <div className="font-bold text-white group-hover:text-[#5df0a8] transition-colors">{c.name}</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">{c.role}</div>
-                    <div className="text-xs font-mono font-semibold mt-1.5 text-[#5df0a8]">{c.contact}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">Siapkan: {c.prep}</div>
+                    <div className="font-bold text-white group-hover:text-[#5df0a8] transition-colors [overflow-wrap:anywhere] break-words">{c.name}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5 [overflow-wrap:anywhere] break-words">{c.role}</div>
+                    <div className="text-xs font-mono font-semibold mt-1.5 text-[#5df0a8] [overflow-wrap:anywhere] break-words">{c.contact}</div>
+                    <div className="text-[10px] text-slate-400 mt-1 [overflow-wrap:anywhere] break-words">Siapkan: {c.prep}</div>
                   </div>
                   <ExternalLink className="w-4 h-4 shrink-0 text-slate-500 group-hover:text-[#5df0a8] transition-colors mt-0.5" />
                 </a>
@@ -533,7 +533,7 @@ export default function PanicTriage({ scanResult = null }) {
                   className="p-4 rounded-2xl text-xs"
                   style={{ background: "rgba(12,18,38,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
                 >
-                  <div className="font-bold text-white">{c.name}</div>
+                  <div className="font-bold text-white [overflow-wrap:anywhere] break-words">{c.name}</div>
                   <div className="text-[11px] text-slate-400 mt-0.5">{c.role}</div>
                   <div className="text-xs font-mono font-semibold mt-1.5 text-[#5df0a8]">{c.contact}</div>
                   <div className="text-[10px] text-slate-400 mt-1">Siapkan: {c.prep}</div>

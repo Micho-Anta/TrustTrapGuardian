@@ -453,7 +453,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
 
               {/* Bubble Chat Scammer */}
               <div
-                className="p-4 rounded-2xl rounded-tl-sm text-xs sm:text-sm leading-relaxed text-slate-100"
+                className="p-4 rounded-2xl rounded-tl-sm text-xs sm:text-sm leading-relaxed text-slate-100 [overflow-wrap:anywhere] break-words"
                 style={{
                   background: "rgba(30, 41, 69, 0.60)",
                   border: "1px solid rgba(150, 175, 230, 0.10)",
@@ -678,7 +678,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
 
                   <h4 className="font-bold text-sm text-white">{item.title}</h4>
 
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
                     {item.tactic}
                   </p>
                 </div>
@@ -686,11 +686,11 @@ export default function SpotTheTrap({ onTestInScanner }) {
                 <div className="space-y-2 pt-3 border-t border-white/[0.05] text-[11px]">
                   <div>
                     <span className="font-semibold text-slate-400">Trigger Phrases: </span>
-                    <span className="text-red-300 font-mono">{item.trigger}</span>
+                    <span className="text-red-300 font-mono [overflow-wrap:anywhere] break-words">{item.trigger}</span>
                   </div>
                   <div>
                     <span className="font-semibold text-slate-400">Benteng Nalar: </span>
-                    <span className="text-[#5df0a8]">{item.countermeasure}</span>
+                    <span className="text-[#5df0a8] [overflow-wrap:anywhere] break-words">{item.countermeasure}</span>
                   </div>
                 </div>
               </div>
