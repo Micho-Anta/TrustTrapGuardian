@@ -6,10 +6,10 @@
 
 ## 1. Filosofi Desain: Mengapa Local-First & Explainable?
 
-Sebagian besar korban penipuan digital di Indonesia (*social engineering*) mengalami **"Panic Paralysis"**, yaitu ketidakmampuan berpikir jernih saat ditekan batas waktu atau ancaman hukum palsu. TrustTrap Guardian dirancang dengan 3 prinsip fundamental:
+Sebagian besar korban penipuan digital di Indonesia (*social engineering*) mengalami **"Panic Paralysis"**, yaitu ketidakmampuan berpikir jernih saat ditekan batas waktu atau ancaman hukum palsu. Terinspirasi dari transparansi VirusTotal, sistem ini menyajikan deteksi pola heuristik yang dapat dijelaskan secara transparan, namun dijalankan sebagai satu set aturan berbasis pola sisi klien tanpa ketergantungan server luar. TrustTrap Guardian dirancang dengan 3 prinsip fundamental:
 
-1. **Zero-Knowledge Privacy (100% Client-Side):** Tidak ada satu byte pun data teks, NIK, nomor rekening, atau riwayat chat yang dikirim ke server luar. Semua pemrosesan selesai di dalam memori browser pengguna.
-2. **Explainable Threat Evidence (Bukan Black-Box):** Alih-alih hanya memberikan skor angka tanpa alasan, sistem menyorot frasa manipulatif secara presisi (*Explainable AI/Heuristics*) dan menjelaskan modus psikologis di baliknya.
+1. **Local-First Privacy (100% Client-Side):** Tidak ada satu byte pun data teks, NIK, nomor rekening, atau riwayat chat yang dikirim ke server luar. Semua pemrosesan selesai di dalam memori browser pengguna.
+2. **Explainable Threat Evidence (Bukan Black-Box):** Alih-alih hanya memberikan skor angka tanpa alasan, sistem menyorot frasa manipulatif secara presisi (*Explainable Heuristics*) dan menjelaskan modus psikologis di baliknya.
 3. **HCI Psychological First Aid:** Antarmuka diarahkan untuk meredakan kepanikan, memandu tindakan berdasar waktu darurat, dan mematahkan lingkaran rasa malu (*Anti-Shame Loop*).
 
 ---
@@ -102,4 +102,16 @@ Jika $\frac{H}{\log_2(\text{len})} \ge 0.85$ pada domain berpanjang $\ge 8$ kara
 - **URL Defanging:** Teks laporan resmi dan pesan yang disalin otomatis mendefang link (`http` $\to$ `hxxp`, `.xyz` $\to$ `[.]xyz`) agar korban tidak menyebarkan link aktif ke grup WhatsApp.
 - **Unicode & Zero-Width Sanitizer:** Membersihkan karakter tak terlihat (`\u200B` s/d `\u200D`, `\uFEFF`) dan normalisasi NFKC sebelum teks diproses oleh engine.
 - **HTTP Security Headers (`vercel.json`):** Menerapkan `Content-Security-Policy`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, dan `Referrer-Policy: strict-origin-when-cross-origin`.
-- **Automated Regression Suite (`scripts/verifyEngine.mjs`):** 26 pengujian otomatis mencakup privasi, deteksi bahaya, anti false-positive pesan resmi, dan validasi seluruh 10 modul heuristik.
+- **Automated Regression Suite (`scripts/verifyEngine.mjs`):** 32 pengujian otomatis mencakup privasi, deteksi bahaya, anti false-positive pesan resmi, dan validasi seluruh 10 modul heuristik.
+
+---
+
+## 7. Keterbatasan yang Diketahui (Known Limitations)
+
+Sebagai wujud kejujuran ilmiah dan kepatuhan etis:
+1. **Berbasis Pola Kata & Frasa:** Analisis mengandalkan aturan pencocokan pola heuristik dan regex, bukan model bahasa alami (NLP) probabilistik berskala besar.
+2. **Cakupan Bahasa:** Deteksi saat ini dioptimalkan khusus untuk bahasa Indonesia dan istilah percakapan digital lokal.
+3. **Potensi Terlewat (False Negative):** Modus penipuan baru atau teks yang diparafrasekan secara sangat halus mungkin tidak memicu aturan deteksi yang ada.
+4. **Potensi Salah Tandai (False Positive):** Pesan sah yang secara kebetulan memuat kombinasi kata peringatan atau istilah darurat dapat memicu kenaikan skor risiko.
+5. **Tanpa Verifikasi Daring:** Sistem beroperasi 100% lokal di browser pengguna dan tidak memverifikasi nomor rekening bank, nomor telepon, atau reputasi domain secara daring ke server pihak ketiga.
+6. **Bukan Jaminan Aman:** Skor risiko 0 ("TIDAK TERDETEKSI") berarti tidak ditemukan pola manipulasi umum, bukan jaminan mutlak bahwa suatu pesan pasti 100% aman.

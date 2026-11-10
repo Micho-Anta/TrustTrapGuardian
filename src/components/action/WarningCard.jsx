@@ -68,28 +68,33 @@ export default function WarningCard({ scanResult }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={handleCopy}
-            className="btn-ghost"
-          >
-            {copied ? <Check className="w-4 h-4 text-[#5df0a8]" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? "Tersalin!" : "Salin Teks"}</span>
-          </button>
+        <div className="flex flex-col sm:items-end gap-1.5">
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handleCopy}
+              className="btn-ghost"
+            >
+              {copied ? <Check className="w-4 h-4 text-[#5df0a8]" /> : <Copy className="w-4 h-4" />}
+              <span>{copied ? "Tersalin!" : "Salin Teks"}</span>
+            </button>
 
-          <button
-            onClick={handleWhatsAppShare}
-            className="btn-ascend"
-            style={{
-              background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
-              color: "#032018",
-              fontWeight: 600,
-              borderRadius: "999px",
-            }}
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>Kirim ke WhatsApp</span>
-          </button>
+            <button
+              onClick={handleWhatsAppShare}
+              className="btn-ascend"
+              style={{
+                background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
+                color: "#032018",
+                fontWeight: 600,
+                borderRadius: "999px",
+              }}
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Kirim ke WhatsApp</span>
+            </button>
+          </div>
+          <span className="text-[11px] text-slate-400 text-left sm:text-right max-w-sm leading-tight">
+            Teks peringatan (tautan sudah didefang) baru dikirim ke WhatsApp ketika pengguna menekan tombol dan memilih penerima. Tidak ada data dikirim otomatis.
+          </span>
         </div>
       </div>
 
