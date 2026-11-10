@@ -1,4 +1,5 @@
-import React, { Component, Suspense, useState } from "react";
+import React, { Component, Suspense } from "react";
+import useVisualEffectsEnabled from "./useVisualEffectsEnabled";
 
 // Muat komponen Particles secara lazy
 const LazyParticles = React.lazy(() => import("./Particles"));
@@ -32,23 +33,7 @@ class ParticlesErrorBoundary extends Component {
  * dan eksklusif saat tab "Recognize" aktif.
  */
 export default function BackgroundFx({ active = false }) {
-  // Hitung kondisi kapabilitas perangkat sekali saat mount
-  const [shouldEnable] = useState(() => {
-    if (typeof window === "undefined") return false;
-
-    const reducedMotion =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const isMobile = window.innerWidth < 640;
-
-    const isLowPower =
-      typeof navigator !== "undefined" &&
-      typeof navigator.hardwareConcurrency === "number" &&
-      navigator.hardwareConcurrency <= 4;
-
-    return !reducedMotion && !isMobile && !isLowPower;
-  });
+  const shouldEnable = useVisualEffectsEnabled();
 
   if (!shouldEnable || !active) {
     return null;

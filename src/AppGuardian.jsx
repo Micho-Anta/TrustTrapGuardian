@@ -13,13 +13,16 @@ import WarningCard from "./components/action/WarningCard";
 import SpotTheTrap from "./components/learn/SpotTheTrap";
 import PrivacyBanner from "./components/learn/PrivacyBanner";
 import BackgroundFx from "./components/BackgroundFx";
+import useVisualEffectsEnabled from "./components/useVisualEffectsEnabled";
 import AnimatedContent from "./components/AnimatedContent";
+import GradualBlur from "./components/GradualBlur";
 import { scanText } from "./engine/scannerIndex";
 import { JUDGE_PRESETS } from "./data/judgePresets";
 
 export default function AppGuardian() {
   const [activeTab, setActiveTab] = useState("recognize"); // 'recognize' | 'act' | 'learn'
   const [hasOpenedLearn, setHasOpenedLearn] = useState(false);
+  const visualEffectsEnabled = useVisualEffectsEnabled();
   const [inputText, setInputText] = useState(JUDGE_PRESETS[0].text);
   const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
   const [scanCount, setScanCount] = useState(0);
@@ -334,6 +337,20 @@ export default function AppGuardian() {
           </div>
         </div>
       </footer>
+
+      {visualEffectsEnabled && (
+        <GradualBlur
+          position="bottom"
+          target="page"
+          height="5rem"
+          strength={1.5}
+          layers={6}
+          curve="bezier"
+          tint="rgba(4, 6, 15, 0.55)"
+          autoHide
+          zIndex={30}
+        />
+      )}
     </div>
   );
 }
