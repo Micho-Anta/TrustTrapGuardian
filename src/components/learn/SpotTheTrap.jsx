@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Heart
 } from "lucide-react";
+import Disclosure from "../ui/Disclosure";
 
 const THREAT_MATRIX = [
   {
@@ -640,60 +641,52 @@ export default function SpotTheTrap({ onTestInScanner }) {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-start">
           {THREAT_MATRIX.map((item) => {
             const Icon = item.icon;
             return (
-              <div
+              <Disclosure
                 key={item.id}
-                className="p-5 rounded-2xl space-y-3.5 transition-all flex flex-col justify-between"
-                style={{
-                  background: "rgba(12, 18, 38, 0.35)",
-                  border: "1px solid rgba(150, 175, 230, 0.06)",
-                }}
+                icon={
+                  <span
+                    className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                    style={{
+                      background: `${item.color}15`,
+                      color: item.color,
+                      border: `1px solid ${item.color}30`,
+                    }}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </span>
+                }
+                title={item.title}
+                summary={item.category}
+                defaultOpen={false}
+                panelClassName="pt-2"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                      style={{
-                        background: `${item.color}15`,
-                        color: item.color,
-                        border: `1px solid ${item.color}35`,
-                      }}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </span>
-                    <span
-                      className="text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold tracking-wide uppercase"
-                      style={{
-                        background: `${item.color}12`,
-                        color: item.color,
-                        border: `1px solid ${item.color}25`,
-                      }}
-                    >
-                      {item.category}
-                    </span>
-                  </div>
-
-                  <h4 className="font-bold text-sm text-white">{item.title}</h4>
-
+                <div
+                  className="p-4 rounded-2xl space-y-3"
+                  style={{
+                    background: "rgba(12, 18, 38, 0.35)",
+                    border: "1px solid rgba(150, 175, 230, 0.08)",
+                  }}
+                >
                   <p className="text-xs text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
                     {item.tactic}
                   </p>
-                </div>
 
-                <div className="space-y-2 pt-3 border-t border-white/[0.05] text-[11px]">
-                  <div>
-                    <span className="font-semibold text-slate-400">Trigger Phrases: </span>
-                    <span className="text-red-300 font-mono [overflow-wrap:anywhere] break-words">{item.trigger}</span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-slate-400">Benteng Nalar: </span>
-                    <span className="text-[#5df0a8] [overflow-wrap:anywhere] break-words">{item.countermeasure}</span>
+                  <div className="space-y-2 pt-3 border-t border-white/[0.06] text-[11px]">
+                    <div>
+                      <span className="font-semibold text-slate-400">Trigger Phrases: </span>
+                      <span className="text-amber-200 font-mono [overflow-wrap:anywhere] break-words">{item.trigger}</span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-400">Benteng Nalar: </span>
+                      <span className="text-[#5df0a8] [overflow-wrap:anywhere] break-words">{item.countermeasure}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Disclosure>
             );
           })}
         </div>
