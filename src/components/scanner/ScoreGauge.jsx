@@ -11,7 +11,7 @@ import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight,
 export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
   if (!summary) return null;
 
-  const { score, triggeredEngines, totalEngines, riskLevel, comboBonus, combosTriggered } = summary;
+  const { score, rawScore, triggeredEngines, totalEngines, riskLevel, comboBonus, combosTriggered } = summary;
 
   // Visual calculations for radial circle
   const radius = 70;
@@ -109,7 +109,7 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
             title="Transparansi Rumus Penilaian Heuristik"
           >
             <Info className="w-3 h-3 text-[#5df0a8] shrink-0" />
-            <span>Formula: Min(100, Base Score × Combo Multiplier 1.25x)</span>
+            <span>Formula: Min(100, {rawScore ?? 'Base Score'} × Combo Multiplier {comboBonus ?? 1}x)</span>
           </div>
         </div>
 

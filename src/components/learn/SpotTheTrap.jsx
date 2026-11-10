@@ -7,7 +7,6 @@ import {
   RefreshCw,
   XCircle,
   ArrowRight,
-  ShieldAlert,
   BookOpen,
   DollarSign,
   Clock,
@@ -91,7 +90,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
     {
       id: 1,
       title: "Skenario 1: Undangan Pernikahan Digital via WA",
-      chatPreview: "Halo Mas Micho! Kami bermaksud mengundang ke acara pernikahan kami hari Minggu besok. Surat undangan lengkap ada di file ini ya, mohon kehadirannya: SuratUndanganDigital_Vip.apk. Ditunggu kedatangannya!",
+      chatPreview: "Halo Kak! Kami bermaksud mengundang ke acara pernikahan kami hari Minggu besok. Surat undangan lengkap ada di file ini ya, mohon kehadirannya: SuratUndanganDigital_Vip.apk. Ditunggu kedatangannya!",
       sender: "Nomor Tidak Dikenal (+62 813-9821-xxxx)",
       question: "Mengapa pesan ini berbahaya dan merupakan jebakan rekayasa sosial?",
       options: [
@@ -145,7 +144,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
     {
       id: 3,
       title: "Skenario 3: Teman Dekat Pinjam Uang Mendesak",
-      chatPreview: "Bro Micho, ini nomor baruku. HP lamaku hilang kecopetan di stasiun. Aku lagi butuh banget dana darurat Rp 800.000 buat nebus obat di apotek, ATM-ku keblokir. Bisa tolong transfer ke rek temanku sekarang? Besok pagi langsung kuganti.",
+      chatPreview: "Bro, ini nomor baruku. HP lamaku hilang kecopetan di stasiun. Aku lagi butuh banget dana darurat Rp 800.000 buat nebus obat di apotek, ATM-ku keblokir. Bisa tolong transfer ke rek temanku sekarang? Besok pagi langsung kuganti.",
       sender: "Profil Foto Teman Lama tapi Nomor Baru",
       question: "Langkah terbaik apa yang wajib Anda lakukan sebelum mentransfer dana?",
       options: [

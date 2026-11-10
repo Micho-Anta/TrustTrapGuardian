@@ -46,15 +46,25 @@ export default function AppGuardian() {
   };
 
   /** Navigate to ACT tab — called by ScoreGauge seamless handoff button */
-  const handleGoToAct = () => setActiveTab("act");
+  const handleGoToAct = () => {
+    setActiveTab("act");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   /** Navigate from LEARN to RECOGNIZE and test scenario text */
   const handleTestFromLearn = (chatText) => {
     setInputText(chatText);
     setActiveTab("recognize");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => {
       handleAnalyze(chatText);
     }, 150);
+  };
+
+  /** Change tab with smooth scroll to top */
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const tabs = [
@@ -135,7 +145,7 @@ export default function AppGuardian() {
             {tabs.map(({ id, label, Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id)}
+                onClick={() => handleTabChange(id)}
                 className={`tab-pill${activeTab === id ? " active" : ""}`}
               >
                 <Icon className="w-3.5 h-3.5" />
