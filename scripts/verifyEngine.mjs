@@ -556,6 +556,82 @@ runTest("Fake Job Upfront Fee", "Pungutan Biaya Loker Palsu: 'Dibutuhkan admin o
 }, "Dibutuhkan admin online shop... bayar seragam 150rb dulu");
 
 // ─────────────────────────────────────────────────────────────
+// SUITE 6: INTEGRASI POLA REKAN TIM (4 SCAM + 3 SAFE SIMILAR)
+// ─────────────────────────────────────────────────────────────
+console.log("\n📦 SUITE 6: Pola Integrasi Rekan Tim (4 Kasus Penipuan + 3 Pesan Sah)");
+
+runTest("Pattern Urgency", "Pola Baru artificial_urgency (kesempatan terakhir, akun terancam, sanksi pidana): skor >= 35", () => {
+  const text = "Kesempatan terakhir! Akun Anda terancam dibekukan dan dikenai sanksi pidana, segera transfer biaya verifikasi Rp 250.000 sekarang.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("artificial_urgency"), "Modul artificial_urgency harus terpicu");
+  return scan.summary.score;
+}, "Kesempatan terakhir! Akun Anda terancam dibekukan dan dikenai sanksi pidana, segera transfer biaya verifikasi Rp 250.000 sekarang.");
+
+runTest("Pattern APK/OTP", "Pola Baru apk_otp_harvester (m-token, nomor kartu ATM, buka di HP Android): skor >= 35", () => {
+  const text = "Silakan masukkan nomor kartu ATM dan kode m-token Anda, lalu buka di HP Android aplikasi verifikasi rekening kami.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("apk_otp_harvester"), "Modul apk_otp_harvester harus terpicu");
+  return scan.summary.score;
+}, "Silakan masukkan nomor kartu ATM dan kode m-token Anda, lalu buka di HP Android aplikasi verifikasi rekening kami.");
+
+runTest("Pattern Gov Impersonation", "Pola Baru identity_mismatch (ditjen pajak & surat tilang + urgensi): skor >= 35", () => {
+  const text = "Pemberitahuan resmi dari Ditjen Pajak dan surat tilang elektronik atas nama Anda belum diselesaikan, segera konfirmasi sebelum tindakan hukum dalam 15 menit.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("identity_mismatch"), "Modul identity_mismatch harus terpicu");
+  return scan.summary.score;
+}, "Pemberitahuan resmi dari Ditjen Pajak dan surat tilang elektronik atas nama Anda belum diselesaikan, segera konfirmasi sebelum tindakan hukum dalam 15 menit.");
+
+runTest("Pattern Suspicious TLD", "Pola Baru phishing_link (.icu, .zip, .mov): semua memicu skor >= 35", () => {
+  const sampleUrls = [
+    "Cek pembaruan tagihan Anda di https://verifikasi-layanan.icu sekarang.",
+    "Silakan unduh dokumen di https://arsip-portal.zip untuk konfirmasi.",
+    "Lihat bukti pengiriman melalui https://info-resi.mov segera."
+  ];
+  let lastScore = 0;
+  for (const text of sampleUrls) {
+    const scan = scanText(text);
+    assert.ok(scan.summary.score >= 35, `Expected score >= 35 for '${text}', got ${scan.summary.score}`);
+    const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+    assert.ok(triggeredIds.includes("phishing_link"), `Modul phishing_link harus terpicu pada '${text}'`);
+    lastScore = scan.summary.score;
+  }
+  return lastScore;
+}, "Cek pembaruan tagihan Anda di https://verifikasi-layanan.icu sekarang.");
+
+runTest("Safe Similar M-Token", "Pesan Sah 1 (Artikel Edukasi m-token): skor < 35 (tidak WASPADA)", () => {
+  const text = "Artikel edukasi keamanan digital: pahami cara kerja m-token perbankan dan jangan pernah membagikan data sensitif ke pihak lain.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("apk_otp_harvester"), "Artikel edukasi m-token tidak boleh memicu apk_otp_harvester");
+  return scan.summary.score;
+}, "Artikel edukasi keamanan digital: pahami cara kerja m-token perbankan dan jangan pernah membagikan data sensitif ke pihak lain.");
+
+runTest("Safe Similar E-Tilang", "Pesan Sah 2 (Tilang Elektronik Resmi Pemerintah): skor < 35 (tidak WASPADA)", () => {
+  const text = "Info layanan publik: pengecekan tilang elektronik resmi lewat situs pemerintah dapat dilakukan mandiri di portal etle nasional tanpa perlu transfer lewat chat.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("identity_mismatch"), "Info tilang elektronik resmi tidak boleh memicu identity_mismatch");
+  return scan.summary.score;
+}, "Info layanan publik: pengecekan tilang elektronik resmi lewat situs pemerintah dapat dilakukan mandiri di portal etle nasional tanpa perlu transfer lewat chat.");
+
+runTest("Safe Similar Pajak & File", "Pesan Sah 3 (Sosialisasi Ditjen Pajak & Lampiran panduan.zip/.mov): skor < 35 (tidak WASPADA)", () => {
+  const text = "Berita kampus: sosialisasi pelaporan pajak bersama Ditjen Pajak membahas materi PDF dan berkas lampiran panduan.zip serta rekaman acara.mov bagi mahasiswa.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("phishing_link"), "Nama file lokal .zip/.mov tanpa URL tidak boleh memicu phishing_link");
+  return scan.summary.score;
+}, "Berita kampus: sosialisasi pelaporan pajak bersama Ditjen Pajak membahas materi PDF dan berkas lampiran panduan.zip serta rekaman acara.mov bagi mahasiswa.");
+
+// ─────────────────────────────────────────────────────────────
 // TABEL RINGKASAN & LAPORAN AKHIR
 // ─────────────────────────────────────────────────────────────
 console.log("\n📊 TABEL SKOR & HASIL VERIFIKASI ENGINE (MIT-041):\n");

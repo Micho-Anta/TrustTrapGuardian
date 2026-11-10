@@ -36,11 +36,12 @@ export const HEURISTIC_ENGINES = [
     rules: [
       { pattern: /(?:(?:dalam\s*waktu|dalam|proses)\s*(?:15|30|10|5|\d+)\s*menit)/gi, label: "Batas Waktu Ketat (Hitungan Menit)" },
       { pattern: /(?:sebelum\s*(?:kuota\s*)?hangus)/gi, label: "Manipulasi Kuota Hangus" },
-      { pattern: /(?:akun\s*(?:anda\s*)?(?:diblokir|dibekukan|ditangguhkan))/gi, label: "Ancaman Pemblokiran Akun" },
-      { pattern: /(?:denda\s*keterlambatan|tindakan\s*hukum)/gi, label: "Ancaman Denda / Sanksi" },
+      { pattern: /(?:akun\s*(?:anda\s*)?(?:diblokir|dibekukan|ditangguhkan|terancam))/gi, label: "Ancaman Pemblokiran / Akun Terancam" },
+      { pattern: /(?:denda\s*keterlambatan|tindakan\s*hukum|sanksi\s*pidana)/gi, label: "Ancaman Denda / Sanksi Pidana" },
       { pattern: /(?:berlaku\s*hari\s*ini\s*saja|segera\s*(?:transfer|klaim|konfirmasi|verifikasi)|\bsekarang(?:\s*juga)?\b)/gi, label: "Tekanan Urgensi Hari Ini / Sekarang" },
       { pattern: /(?:darurat(?:\s+di\s+rumah\s+sakit|\s+tolong|\s+butuh)?|\bdarurat\b)/gi, label: "Pura-pura Kondisi Darurat" },
-      { pattern: /(?:penting\s*banget|mendesak|sangat\s*penting|butuh\s*(?:cepat|sekarang)|\burgent(?:\s*banget)?\b)/gi, label: "Manipulasi Urgensi Mendesak" }
+      { pattern: /(?:penting\s*banget|mendesak|sangat\s*penting|butuh\s*(?:cepat|sekarang)|\burgent(?:\s*banget)?\b)/gi, label: "Manipulasi Urgensi Mendesak" },
+      { pattern: /kesempatan\s*terakhir/gi, label: "Tekanan Kesempatan Terakhir" }
     ]
   },
   {
@@ -74,7 +75,9 @@ export const HEURISTIC_ENGINES = [
       { pattern: /(?:kode\s*otp\b|sebutkan\s*(?:kode|pin)|pin\s*6\s*digit)/gi, label: "Permintaan Penyerahan Kode OTP / PIN" },
       { pattern: /(?:surat_.*\.apk|undangan_.*\.apk|paket_.*\.apk|resi_.*\.apk)/gi, label: "Kedok File Surat/Paket .APK" },
       { pattern: /(?:(?:instal|pasang|download|unduh)\s*(?:dan\s*buka|aplikasi))/gi, label: "Paksaan Menginstal/Download Aplikasi Eksternal" },
-      { pattern: /(?:token\s*anda|kode\s*respon\s*token)/gi, label: "Pencurian Respon Token Perbankan" }
+      { pattern: /\bbuka\s*di\s*hp\s*android/gi, label: "Arahan Membuka Aplikasi di HP Android" },
+      { pattern: /(?:token\s*anda|kode\s*respon\s*token|\bm-token\b)/gi, label: "Pencurian Token / M-Token Perbankan" },
+      { pattern: /nomor\s*kartu\s*atm/gi, label: "Permintaan Data Nomor Kartu ATM" }
     ]
   },
   {
@@ -89,7 +92,7 @@ export const HEURISTIC_ENGINES = [
       { pattern: /(?:bank\s*nasional\s*nusantara|(?:bank\s*)?(?:bca|bri|mandiri|bni)\b)/gi, label: "Catut Nama Bank Nasional" },
       { pattern: /(?:j&t\s*express|jnt|pos\s*indonesia|sicepat)/gi, label: "Catut Nama Jasa Ekspedisi" },
       { pattern: /(?:gebyar\s*(?:undian|hadiah|poin))/gi, label: "Pencatutan Program Gebyar Hadiah" },
-      { pattern: /(?:djp|kantor\s*pajak|kemensos|bansos)/gi, label: "Pencatutan Lembaga Pemerintah" }
+      { pattern: /(?:djp|ditjen\s*pajak|kantor\s*pajak|kemensos|bansos|surat\s*tilang)/gi, label: "Pencatutan Lembaga Pemerintah" }
     ]
   },
   {
@@ -219,7 +222,7 @@ export function inspectLinksInText(text) {
   const matches = text.match(urlRegex) || [];
   const findings = [];
 
-  const suspiciousTlds = [".xyz", ".top", ".click", ".site", ".work", ".info", ".vip", ".club", ".online", ".buzz", ".live", ".space", ".cfd", ".gq", ".ml", ".tk", ".ga"];
+  const suspiciousTlds = [".xyz", ".top", ".click", ".site", ".work", ".info", ".vip", ".club", ".online", ".buzz", ".live", ".space", ".cfd", ".gq", ".ml", ".tk", ".ga", ".icu", ".zip", ".mov"];
   const shorteners = ["bit.ly", "s.id", "t.ly", "tinyurl.com", "is.gd", "cutt.ly", "rb.gy"];
 
   const brandTokens = [

@@ -168,6 +168,7 @@ Sebagai wujud kejujuran ilmiah, transparansi akademis, dan kepatuhan etis:
 | **React Bits** | [reactbits.dev](https://reactbits.dev) / MIT + Commons Clause License | Komponen background Particles (dekoratif). Efek visual hanya dekoratif dan tidak memproses data pengguna. |
 | **Bantuan Coding AI (LLM)** | Google DeepMind / Antigravity | Asistensi refactoring kode, penyusunan regex heuristik, dan struktur skenario kuis |
 | **Scam Heuristic Engine** | Orisinal (Tim Nanti Ajah) | 100% arsitektur deteksi rekayasa sosial, formula combo multiplier, dan logika privacy scrubber dirancang khusus untuk MIT-Week 2026 |
+| **Pola Deteksi Heuristik Tambahan** | Kontribusi Anggota Tim (Radit220) | Penambahan pola tekanan psikologis, pencurian `m-token`/kartu ATM, pencatutan instansi pemerintah (`ditjen pajak`, `surat tilang`), dan TLD berisiko (`.icu`, `.zip`, `.mov`) pada `heuristicRules.js` |
 
 ---
 
