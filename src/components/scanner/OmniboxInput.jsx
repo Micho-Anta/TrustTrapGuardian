@@ -1,10 +1,22 @@
-import React from "react";
-import { Search, Sparkles, Trash2, ArrowRight } from "lucide-react";
+import React, { useMemo } from "react";
+import { Search, Sparkles, Trash2 } from "lucide-react";
 import { JUDGE_PRESETS } from "../../data/judgePresets";
+import AnimatedList from "../AnimatedList";
 
 const MAX_CHARS = 4000;
 
 export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnalyzing, resultsRef }) {
+  const presetItems = useMemo(
+    () =>
+      JUDGE_PRESETS.map((preset) => ({
+        id: preset.id,
+        title: preset.title,
+        description: preset.tagline,
+        meta: preset.badge,
+        preset,
+      })),
+    []
+  );
   const handlePresetSelect = (preset) => {
     setText(preset.text);
     // Instant scan trigger
@@ -67,42 +79,23 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {JUDGE_PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              onClick={() => handlePresetSelect(preset)}
-              className="text-left p-4 rounded-2xl transition-all group flex flex-col justify-between"
-              style={{
-                background: "rgba(12, 18, 38, 0.40)",
-                border: "1px solid rgba(150, 175, 230, 0.07)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(93, 240, 168, 0.35)";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(150, 175, 230, 0.07)";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-            >
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5df0a8]">
-                    {preset.badge}
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 transition-transform group-hover:translate-x-1 group-hover:text-[#5df0a8]" />
-                </div>
-                <div className="text-sm font-semibold text-white group-hover:text-slate-100 line-clamp-1">
-                  {preset.title}
-                </div>
-                <div className="text-xs text-slate-400 line-clamp-1 mt-1 leading-relaxed">
-                  {preset.tagline}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
+        <AnimatedList
+          items={presetItems}
+          onItemSelect={(item) => handlePresetSelect(item.preset)}
+          theme="dark"
+          accentColor="#5df0a8"
+          width="100%"
+          maxHeight={480}
+          gap={8}
+          radius={14}
+          animation="slide"
+          animateOnce={true}
+          stagger={0.04}
+          showGradients={false}
+          displayScrollbar={false}
+          enableArrowNavigation={true}
+          selectOnHover={true}
+        />
       </div>
 
       {/* Omnibox Textarea - Soft Glass Card */}
