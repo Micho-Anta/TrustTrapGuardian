@@ -74,10 +74,8 @@ export function scanText(rawText) {
           });
         }
       }
-    } else if (engine.id === "family_impersonation") {
-      // Modul Khusus: Family Impersonation (Wajib Co-occurrence Dua Kelompok)
-      // Kelompok A: nomor baru, ganti nomor, hp rusak/hilang, anakmu, darurat, rumah sakit, kecelakaan
-      // Kelompok B: pulsa, transfer, kirim uang, talangin, pinjam uang, rekening
+    } else if (engine.id === "family_impersonation" || engine.id === "romance_advance_fee") {
+      // Modul Khusus: Co-occurrence Dua Kelompok (Family Impersonation & Romance Scam)
       const matchedA = [];
       const matchedB = [];
 
@@ -99,13 +97,18 @@ export function scanText(rawText) {
 
       if (matchedA.length > 0 && matchedB.length > 0) {
         const combined = mapWithOriginals([...matchedA, ...matchedB]);
+        const reasonText =
+          engine.id === "romance_advance_fee"
+            ? "Pola romance scam: pendekatan emosional disertai pancingan biaya paket atau hadiah"
+            : "Pola penyamaran kerabat meminta uang atau pulsa darurat";
+
         for (const word of combined) {
           evidenceList.push(word);
           highlightedEvidence.push({
             text: word,
             engineId: engine.id,
             engineName: engine.name,
-            reason: "Pola penyamaran kerabat meminta uang atau pulsa darurat"
+            reason: reasonText
           });
         }
       }
@@ -398,6 +401,15 @@ export function scanText(rawText) {
     combosTriggered.push("Pola Investasi Bodong Berkedok Setoran Modal atau Biaya Registrasi");
   }
 
+  // Kombinasi Maut 7: Romance Scam + Uang Muka atau Urgensi
+  if (
+    triggeredIds.has("romance_advance_fee") &&
+    (triggeredIds.has("upfront_fee") || triggeredIds.has("artificial_urgency"))
+  ) {
+    comboBonus += 0.3;
+    combosTriggered.push("Pola Romance Scam: Manipulasi Emosional Asing Disertai Biaya Paket atau Desakan");
+  }
+
   let finalScore = Math.min(100, Math.round(totalRawScore * comboBonus));
 
   // Tentukan Level Risiko
@@ -439,6 +451,9 @@ export function scanText(rawText) {
   }
   if (triggeredIds.has("investment_scam")) {
     recommendedActions.push("Periksa legalitas entitas di Satgas Pasti OJK (kontak 157). Jangan transfer modal investasi ke rekening pribadi di grup chat.");
+  }
+  if (triggeredIds.has("romance_advance_fee")) {
+    recommendedActions.push("Jangan transfer biaya ke orang yang belum pernah ditemui secara langsung. Cek foto profil dengan pencarian gambar balik, lapor ke platform dan IASC OJK 157 jika sudah transfer.");
   }
   if (recommendedActions.length === 0) {
     recommendedActions.push("Pesan tidak menunjukkan ciri manipulasi rekayasa sosial umum, namun tetaplah waspada terhadap permintaan data sensitif.");

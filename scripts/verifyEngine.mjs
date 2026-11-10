@@ -231,6 +231,17 @@ runTest("Task Scam Reviewer", "Modul Task Scam Reviewer TikTok Shop + Top Up Mod
   return scan.summary.score;
 }, "Kamu terpilih jadi reviewer produk TikTok Shop, komisi 200rb per tugas. Top up modal 100rb untuk tugas pertama, pasti dikembalikan");
 
+runTest("Romance Advance Fee", "Modul Romance Scam & Biaya Kiriman Bea Cukai (skor >= 35)", () => {
+  const text = "Hai, aku Dimas, dokter di Suriah. Aku suka profilmu. Bisa kita ngobrol lebih dekat? Aku akan kirim paket hadiah dan butuh biaya bea cukai";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("romance_advance_fee"), "Modul romance_advance_fee harus terpicu");
+  assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus terpicu");
+  assert.ok(scan.summary.combosTriggered.some(c => c.includes("Romance Scam")), "Combo Romance Scam harus terpicu");
+  return scan.summary.score;
+}, "Hai, aku Dimas, dokter di Suriah. Aku suka profilmu. Bisa kita ngobrol lebih dekat? Aku akan kirim paket hadiah dan butuh biaya bea cukai");
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 3: ANTI FALSE-POSITIVE & 8+ PESAN AMAN
 // ─────────────────────────────────────────────────────────────
@@ -414,6 +425,36 @@ runTest("Safe Book Reviewer", "Pesan Aman 15: Reviewer Buku Perpustakaan Kampus 
   assert.equal(dangerEngines.length, 0);
   return scan.summary.score;
 }, "Aku jadi reviewer buku di perpustakaan kampus, rapat evaluasi jam 3 ya");
+
+runTest("Safe Clinic Doctor", "Pesan Aman 16: Jadwal Dokter di Klinik Kampus (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Dokter di klinik kampus buka jam 8, jangan lupa bawa kartu pasien";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0, `Expected score 0, got ${scan.summary.score}`);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Dokter di klinik kampus buka jam 8, jangan lupa bawa kartu pasien");
+
+runTest("Safe Instagram Acquaintance", "Pesan Aman 17: Kenalan Instagram Info Magang Kampus (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Aku kenalan di Instagram sama kakak tingkat, katanya ada info magang";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0, `Expected score 0, got ${scan.summary.score}`);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Aku kenalan di Instagram sama kakak tingkat, katanya ada info magang");
+
+runTest("Safe Package Status", "Pesan Aman 18: Notifikasi Paket Toko Online Sudah Dikirim (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Paket dari toko online sudah dikirim, estimasi tiba besok";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0, `Expected score 0, got ${scan.summary.score}`);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Paket dari toko online sudah dikirim, estimasi tiba besok");
 
 // ─────────────────────────────────────────────────────────────
 // SUITE 4: SPECIAL TESTS (SECRECY EXCEPTION & BOUNDARIES)

@@ -1,6 +1,6 @@
 /**
  * Scam Heuristic Engine Rules
- * 10 Modul Deteksi Modus Penipuan Rekayasa Sosial & Phishing
+ * 11 Modul Deteksi Modus Penipuan Rekayasa Sosial & Phishing
  */
 
 import { isOfficialDomain } from "../data/officialDomains.js";
@@ -14,14 +14,14 @@ export const HEURISTIC_ENGINES = [
     explanation: "Meminta uang di muka sebagai syarat rekrutmen kerja, pencairan hadiah, atau deposit tugas. Instansi resmi dan undian legal tidak pernah memungut biaya di awal.",
     actionStep: "Jangan transfer uang sepeser pun. Rekrutmen & undian resmi tidak pernah meminta transfer biaya reservasi/administrasi di awal.",
     rules: [
-      { pattern: /(?:biaya\s*(?:admin|reservasi|pendaftaran|materai|tiket|registrasi|asuransi))/gi, label: "Permintaan Biaya Administrasi/Reservasi" },
+      { pattern: /(?:biaya\s*(?:admin|reservasi|pendaftaran|materai|tiket|registrasi|asuransi|bea\s*cukai|clearance|custom|pengiriman))/gi, label: "Permintaan Biaya Administrasi/Reservasi/Bea Cukai" },
       { pattern: /(?:deposit\s*(?:tugas|saldo|awal|misi))/gi, label: "Pola Deposit Tugas" },
       { pattern: /(?:top\s*up\s*(?:deposit|saldo\s*tugas))/gi, label: "Top Up Saldo Misi" },
       { pattern: /(?:top\s*up\s+(?:modal|saldo|deposit))/gi, label: "Instruksi Top Up Modal atau Saldo Deposit" },
       { pattern: /(?:(?:pasti|dijamin)\s+(?:dikembalikan|kembali|diganti))/gi, label: "Janji Dana Pasti Dikembalikan" },
       { pattern: /(?:modal\s+(?:akan\s+)?(?:dikembalikan|kembali))/gi, label: "Klausa Modal Akan Dikembalikan" },
       { pattern: /\b(?:me|men|di)?transfer\s+(?:biaya|uang|dana|tiket|reservasi|admin|deposit|\d+(?:\s*(?:juta|ribu|rb|k))?)\b/gi, label: "Instruksi Transfer Uang di Muka" },
-      { pattern: /(?:(?:bayar|transfer|me?transfer|di?transfer|biaya)\s+(?:biaya\s+|uang\s+)?(?:seragam|pelatihan|training|berkas|administrasi|kit|medical|alat\s*kerja))/gi, label: "Pungutan Biaya Rekrutmen / Loker Palsu" },
+      { pattern: /(?:(?:bayar|transfer|me?transfer|di?transfer|biaya)\s+(?:biaya\s+|uang\s+)?(?:seragam|pelatihan|training|berkas|administrasi|kit|medical|alat\s*kerja|bea\s*cukai|pajak\s*kiriman))/gi, label: "Pungutan Biaya Rekrutmen / Loker Palsu / Bea Cukai" },
       { pattern: /(?:modal\s*deposit|uang\s*jaminan)/gi, label: "Klausa Modal Jaminan" },
       { pattern: /(?:rekening\s*(?:penampung|sementara)|alihkan\s*saldo|amankan\s*saldo)/gi, label: "Modus Rekening Penampung Aman" }
     ]
@@ -171,6 +171,30 @@ export const HEURISTIC_ENGINES = [
       { pattern: /modal\s*(?:minimal\s*)?\d+(?:rb|k|jt|juta|ribu)?/gi, label: "Pola Modal Minimal Investasi" },
       { pattern: /join\s*grup\s*(?:telegram|whatsapp)/gi, label: "Undangan Bergabung ke Grup Chat Privat" },
       { pattern: /tanpa\s*risiko/gi, label: "Klaim Palsu Investasi Tanpa Risiko" }
+    ]
+  },
+  {
+    id: "romance_advance_fee",
+    name: "Romance Scam & Biaya Kiriman Paket",
+    category: "Emotional Manipulation",
+    baseWeight: 30,
+    explanation: "Pendekatan emosional romantis atau profil luar negeri fiktif yang meminta biaya pengiriman paket, hadiah mewah, atau bea cukai.",
+    actionStep: "Jangan transfer uang sepeser pun kepada orang yang belum pernah ditemui secara langsung. Cek foto profil dengan pencarian gambar balik dan laporkan ke platform terkait.",
+    groupA: [
+      { pattern: /(?:dokter|tentara|perwira|insinyur|pilot|pengusaha)\s+(?:di|dari)\s+(?:suriah|syria|afghanistan|luar\s*negeri|london|dubai)/gi, label: "Pencitraan Profesi Luar Negeri / Zona Konflik" },
+      { pattern: /suka\s+(?:sama\s+)?profil(?:mu|\s*kamu)/gi, label: "Pendekatan Emosional Profil Medsos" },
+      { pattern: /ngobrol\s+lebih\s+dekat/gi, label: "Ajakan Hubungan Lebih Dekat" },
+      { pattern: /ingin\s+serius/gi, label: "Klaim Ingin Hubungan Serius" },
+      { pattern: /kenalan\s+di\s+(?:ig|instagram|facebook|tinder|aplikasi)/gi, label: "Pancingan Kenalan Aplikasi / Medsos" }
+    ],
+    groupB: [
+      { pattern: /(?:kirim|kirimkan)\s+(?:paket|hadiah|kado|uang)/gi, label: "Pancingan Pengiriman Paket / Hadiah / Uang" },
+      { pattern: /bea\s*cukai/gi, label: "Pencatutan Bea Cukai" },
+      { pattern: /biaya\s+(?:pengiriman|custom|clearance|pajak|administrasi)\s+(?:paket|barang|kiriman)/gi, label: "Pungutan Biaya Pengiriman atau Pajak Paket" }
+    ],
+    rules: [
+      { pattern: /(?:(?:dokter|tentara|perwira|insinyur|pilot|pengusaha)\s+(?:di|dari)\s+(?:suriah|syria|afghanistan|luar\s*negeri|london|dubai)|suka\s+(?:sama\s+)?profil(?:mu|\s*kamu)|ngobrol\s+lebih\s+dekat|ingin\s+serius|kenalan\s+di\s+(?:ig|instagram|facebook|tinder|aplikasi))/gi, label: "Pendekatan Romantis & Profil Luar Negeri Fiktif" },
+      { pattern: /(?:(?:kirim|kirimkan)\s+(?:paket|hadiah|kado|uang)|bea\s*cukai|biaya\s+(?:pengiriman|custom|clearance|pajak|administrasi)\s+(?:paket|barang|kiriman))/gi, label: "Pungutan Biaya Paket / Hadiah / Bea Cukai" }
     ]
   }
 ];

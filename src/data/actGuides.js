@@ -190,6 +190,16 @@ export const MODE_GUIDES = [
       "Laporkan entitas ke Satgas Pasti OJK (waspadainvestasi@ojk.go.id)."
     ],
     docs: ["Bukti transfer setoran", "Tautan grup Telegram/WhatsApp", "Tangkapan layar janji keuntungan"]
+  },
+  {
+    engineId: "romance_advance_fee",
+    title: "Romance Scam & Biaya Kiriman Paket",
+    steps: [
+      "Jangan transfer biaya apa pun kepada orang yang belum pernah Anda temui langsung secara fisik.",
+      "Periksa keaslian foto profil pelaku menggunakan pencarian gambar balik (reverse image search).",
+      "Laporkan akun ke platform media sosial terkait dan segera lapor ke IASC OJK 157 jika sudah terlanjur transfer."
+    ],
+    docs: ["Tangkapan layar percakapan & profil pelaku", "Bukti transfer jika ada", "Resi atau nomor paket fiktif"]
   }
 ];
 

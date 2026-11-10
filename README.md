@@ -6,7 +6,7 @@
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4.x-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-49%2F49%20Passing-10b981?style=flat&logo=node.js)](scripts/verifyEngine.mjs)
+[![Tests](https://img.shields.io/badge/Tests-53%2F53%20Passing-10b981?style=flat&logo=node.js)](scripts/verifyEngine.mjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 🌐 **Live Production App:** [https://trusttrapguardian.vercel.app/](https://trusttrapguardian.vercel.app/)  
@@ -45,7 +45,7 @@ TrustTrap Guardian
       ├── Simulasi Kuis Interaktif "Spot The Trap" (8 Skenario Lengkap Termasuk Pesan Resmi)
       ├── Pengacakan Pilihan Jawaban Acak (Randomized Options) & Umpan Balik Edukatif
       ├── Integrasi Dua Arah: Tombol Uji Skenario Langsung ke Scanner Tab 1
-      ├── Kamus 10 Pola Manipulasi Rekayasa Sosial (Threat Matrix)
+      ├── Kamus 11 Pola Manipulasi Rekayasa Sosial (Threat Matrix)
       └── Jaminan Local-First Privacy (Zero External Data Storage)
 ```
 
@@ -67,6 +67,7 @@ flowchart TD
     C --> D8["Modul 8: Pinjol Ilegal & Akses Data (30 Poin)"]
     C --> D9["Modul 9: Ancaman & Pemerasan Kontak (35 Poin)"]
     C --> D10["Modul 10: Investasi Bodong Ponzi (30 Poin)"]
+    C --> D11["Modul 11: Romance Scam Paket (30 Poin)"]
     D1 --> E["Tahap 3: Combo Multiplier Engine (1.0x - 1.35x)"]
     D2 --> E
     D3 --> E
@@ -77,6 +78,7 @@ flowchart TD
     D8 --> E
     D9 --> E
     D10 --> E
+    D11 --> E
     E --> F["Skor Risiko Heuristik (0 - 100) & Level Non-Mutlak"]
     F --> G1["Pilar 1 (Recognize): Score Gauge & Stabilo Teks"]
     F --> G2["Pilar 2 (Act): Panic Triage & Defanged Alert Card"]
@@ -102,11 +104,11 @@ Berbeda dari pemindai teknis biasa yang pasif, antarmuka **TrustTrap Guardian** 
 
 ---
 
-## ⚙️ 5. Scam Heuristic Engine (10 Modul Deteksi)
+## ⚙️ 5. Scam Heuristic Engine (11 Modul Deteksi)
 
 Engine bekerja secara sekuensial dan dijalankan seketika di peramban:
 1. **Tahap 1: Sensor Privasi Otomatis (Auto-Redaction):** Mengaburkan NIK 16-digit, Nomor Rekening Bank, Nomor HP, dan Kode OTP menjadi token aman `[DATA_DISAMARKAN]` secara lokal. Termasuk sanitasi *zero-width spaces* dan normalisasi unicode NFKC.
-2. **Tahap 2: Evaluasi 10 Modul Independen:**
+2. **Tahap 2: Evaluasi 11 Modul Independen:**
    * **Modul 1: Upfront Fee & Deposit Trap (Bobot 30):** Permintaan biaya di muka, uang jaminan, deposit misi, atau modus rekening penampung aman.
    * **Modul 2: Artificial Urgency & Fear (Bobot 20):** Tekanan batas waktu sempit ("dalam 15 menit", "kuota hangus", ancaman denda atau pemblokiran).
    * **Modul 3: Unrealistic Reward / Task Scam (Bobot 25):** Iming-iming komisi jutaan rupiah dari like YouTube atau follow medsos.
@@ -117,7 +119,8 @@ Engine bekerja secara sekuensial dan dijalankan seketika di peramban:
    * **Modul 8: Pinjol Ilegal & Akses Data Sensitif (Bobot 30):** Tawaran pinjaman online tanpa jaminan atau SLIK yang memaksa izin akses kontak telepon dan galeri foto.
    * **Modul 9: Ancaman & Pemerasan Kontak (Bobot 35):** Intimidasi penyebaran data pribadi, foto, atau video ke daftar kontak keluarga disertai paksaan membayar tagihan segera.
    * **Modul 10: Investasi Bodong & Skema Ponzi (Bobot 30):** Tawaran profit berkala tidak wajar, klaim dijamin cuan tanpa risiko, keanggotaan member VIP, dan undangan ke grup chat privat.
-3. **Tahap 3: Pengali Kombinasi (Combo Multiplier):** Penalti pengali hingga 1.35x dari 6 pola kombinasi berbahaya (urgensi, task scam, pembajakan akun, impersonasi kerabat, pemerasan pinjol, dan investasi bodong).
+   * **Modul 11: Romance Scam & Biaya Kiriman Paket (Bobot 30):** Pendekatan emosional romantis atau profil luar negeri fiktif yang meminta biaya pengiriman paket hadiah atau bea cukai.
+3. **Tahap 3: Pengali Kombinasi (Combo Multiplier):** Penalti pengali hingga 1.35x dari 7 pola kombinasi berbahaya (urgensi, task scam, pembajakan akun, impersonasi kerabat, pemerasan pinjol, investasi bodong, dan romance scam).
 4. **Tahap 4: Pemetaan Tindakan & Explainable Text:** Menyorot kalimat bukti manipulasi dan memetakan rekomendasi langkah konkret penyelamatan.
 
 ---
@@ -182,7 +185,7 @@ cd TrustTrapGuardian
 # 2. Instal dependensi
 npm install
 
-# 3. Jalankan automated engine verification test (49/49 passing)
+# 3. Jalankan automated engine verification test (53/53 passing)
 npm test
 
 # 4. Jalankan server pengembangan lokal

@@ -17,7 +17,8 @@ import {
   Users,
   CreditCard,
   AlertOctagon,
-  TrendingUp
+  TrendingUp,
+  Heart
 } from "lucide-react";
 
 const THREAT_MATRIX = [
@@ -120,6 +121,16 @@ const THREAT_MATRIX = [
     tactic: "Menjanjikan keuntungan berkala tidak wajar dengan klaim tanpa risiko, skema keanggotaan VIP, dan ajakan masuk ke grup chat tertutup.",
     trigger: "Profit 30% per minggu, dijamin cuan, member VIP, modal minimal, join grup telegram",
     countermeasure: "Prinsip 2L (Legal & Logis): Pastikan izin entitas terdaftar di OJK/Bappebti dan tolak tawaran investasi dengan imbal hasil tetap tidak realistis."
+  },
+  {
+    id: "romance_advance_fee",
+    title: "11. Romance Scam & Biaya Kiriman Paket",
+    category: "Emotional Manipulation",
+    icon: Heart,
+    color: "#f43f5e",
+    tactic: "Mengeksploitasi kedekatan emosional dan profil fiktif luar negeri (dokter, militer, pilot) untuk memancing pengiriman hadiah mewah yang berujung permintaan biaya bea cukai.",
+    trigger: "Dokter di Suriah/London, suka profilmu, ngobrol lebih dekat, kirim paket hadiah, butuh biaya bea cukai",
+    countermeasure: "Prinsip Cek Fisik: Jangan pernah mentransfer biaya paket/hadiah ke orang asing yang belum pernah Anda temui secara fisik. Cek foto profil dengan pencarian gambar balik."
   }
 ];
 

@@ -30,6 +30,7 @@ flowchart TD
     C --> D8["Modul 8: Pinjol Ilegal & Akses Data (30 Poin)"]
     C --> D9["Modul 9: Ancaman & Pemerasan Kontak (35 Poin)"]
     C --> D10["Modul 10: Investasi Bodong Ponzi (30 Poin)"]
+    C --> D11["Modul 11: Romance Scam Paket (30 Poin)"]
     D1 --> E["Tahap 3: Combo Multiplier Engine (1.0x - 1.35x)"]
     D2 --> E
     D3 --> E
@@ -40,6 +41,7 @@ flowchart TD
     D8 --> E
     D9 --> E
     D10 --> E
+    D11 --> E
     E --> F["Skor Risiko Heuristik Terkalibrasi (0 - 100)"]
     F --> G1["Pilar 1 (Recognize): Score Gauge & Stabilo Teks"]
     F --> G2["Pilar 2 (Act): Panic Triage & Defanged Alert Card"]
@@ -48,7 +50,7 @@ flowchart TD
 
 ---
 
-## 3. Matriks 10 Modul Deteksi Heuristik
+## 3. Matriks 11 Modul Deteksi Heuristik
 
 | ID Modul | Nama Modul | Kategori Ancaman | Bobot Dasar | Trik Psikologis yang Dieksploitasi | Pola / Regex Deteksi Utama |
 |---|---|---|---|---|---|
@@ -62,6 +64,7 @@ flowchart TD
 | `illegal_loan` | **Pinjol Ilegal & Akses Data Sensitif** | Predatory Lending | 30 | *Desperation & False Ease* | Minimal 2 pola cocok: Pinjaman kilat cair, tanpa jaminan/SLIK, proses hitungan menit, dan paksaan izin akses kontak/galeri |
 | `threat_extortion` | **Ancaman & Pemerasan Kontak** | Coercion & Extortion | 35 | *Fear, Intimidation & Blackmail* | Ancaman sebar foto/data/video/kontak keluarga, teror kontak, dan ultimatum bayar hutang/tagihan hari ini atau disebarkan |
 | `investment_scam` | **Investasi Bodong & Skema Ponzi** | Financial Fraud | 30 | *Greed Bias & Social Proof Trap* | Janji profit berkala tidak wajar (% per hari/minggu/bulan), klaim dijamin cuan, member VIP, modal minimal, dan ajakan grup chat privat |
+| `romance_advance_fee` | **Romance Scam & Biaya Kiriman Paket** | Emotional Manipulation | 30 | *Flattery & False Relationship* | Co-occurrence dua kelompok: Pendekatan emosional/profil luar negeri (dokter, tentara, pilot di Suriah/London/luar negeri) + Pengiriman paket hadiah/kado dan pungutan biaya bea cukai/clearance/pajak |
 
 ---
 
@@ -75,6 +78,7 @@ Ketika beberapa modul menyala secara simultan, tingkat bahaya meningkat secara n
 - **Kombinasi 4 (Penyamaran Kerabat + Uang Muka/Urgensi):** Pengali $+0.30\times$ (Pola manipulasi emosional keluarga tertimpa musibah).
 - **Kombinasi 5 (Pinjol Ilegal + Pemerasan Kontak):** Pengali $+0.30\times$ (Pola jeratan pinjaman predatory disertai intimidasi kontak).
 - **Kombinasi 6 (Investasi Bodong + Setoran Modal):** Pengali $+0.30\times$ (Pola pengumpulan dana berkedok member VIP berbayar).
+- **Kombinasi 7 (Romance Scam + Uang Muka/Urgensi):** Pengali $+0.30\times$ (Pola manipulasi asmara fiktif disertai tagihan bea cukai paket hadiah).
 
 Formula Akhir:
 $$\text{Final Score} = \min\left(100, \, \text{Round}\left(\sum \text{BaseWeight} \times \text{ComboBonus}\right)\right)$$
@@ -102,7 +106,7 @@ Jika $\frac{H}{\log_2(\text{len})} \ge 0.85$ pada domain berpanjang $\ge 8$ kara
 - **URL Defanging:** Teks laporan resmi dan pesan yang disalin otomatis mendefang link (`http` $\to$ `hxxp`, `.xyz` $\to$ `[.]xyz`) agar korban tidak menyebarkan link aktif ke grup WhatsApp.
 - **Unicode & Zero-Width Sanitizer:** Membersihkan karakter tak terlihat (`\u200B` s/d `\u200D`, `\uFEFF`) dan normalisasi NFKC sebelum teks diproses oleh engine.
 - **HTTP Security Headers (`vercel.json`):** Menerapkan `Content-Security-Policy`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, dan `Referrer-Policy: strict-origin-when-cross-origin`.
-- **Automated Regression Suite (`scripts/verifyEngine.mjs`):** 32 pengujian otomatis mencakup privasi, deteksi bahaya, anti false-positive pesan resmi, dan validasi seluruh 10 modul heuristik.
+- **Automated Regression Suite (`scripts/verifyEngine.mjs`):** Pengujian otomatis mencakup privasi, deteksi bahaya, anti false-positive pesan resmi, dan validasi seluruh 11 modul heuristik.
 
 ---
 
