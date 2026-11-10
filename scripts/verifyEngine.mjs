@@ -130,6 +130,31 @@ test("Pesan Edukasi Resmi Bank tidak menghasilkan False Positive", () => {
   assert.ok(!triggeredIds.includes("phishing_link"));
 });
 
+test("Pesan peringatan resmi OTP menghasilkan skor 0 (TIDAK TERDETEKSI)", () => {
+  const otpWarning = "Info resmi: jangan berikan kode OTP kepada siapa pun termasuk pihak yang mengaku dari bank.";
+  const scan = scanText(otpWarning);
+  assert.equal(scan.summary.score, 0);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("apk_otp_harvester"));
+});
+
+test("Tagihan resmi PLN Mobile menghasilkan skor <= 15", () => {
+  const plnBill = "Tagihan listrik bulan ini Rp 250.000, jatuh tempo tanggal 20. Bayar lewat aplikasi PLN Mobile resmi, transfer biaya admin Rp 2.500 sudah termasuk.";
+  const scan = scanText(plnBill);
+  assert.ok(scan.summary.score <= 15, `Expected score <= 15, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("upfront_fee"));
+});
+
+test("Frasa kerahasiaan penipu (jangan beritahu siapa pun) tidak dianggap peringatan resmi", () => {
+  const secrecyScam = "Kode OTP Anda 482910 telah dikirim. Berikan kepada petugas dan jangan beritahu siapa pun atau keluarga karena ini rahasia sistem.";
+  const scan = scanText(secrecyScam);
+  assert.ok(scan.summary.score >= 40, `Expected score >= 40, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("apk_otp_harvester"), "apk_otp_harvester harus terdeteksi");
+});
+
 test("Input kosong / whitespace menghasilkan return null secara aman", () => {
   assert.equal(scanText(""), null);
   assert.equal(scanText("   \n\t  "), null);

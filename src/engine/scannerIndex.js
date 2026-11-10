@@ -1,11 +1,16 @@
 import { scrubPrivacy } from "./privacyScrubber.js";
 import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules.js";
+import {
+  splitSentences,
+  isEducationalWarningSentence,
+  isOfficialChannelSentence
+} from "./contextGuards.js";
 
 /**
  * Scan text using Scam Heuristic Engine v1.0
  * Alur 4 Tahap:
  * 1. Auto-Redaction Sensor Privasi
- * 2. 6-Module Heuristic Examination
+ * 2. 6-Module Heuristic Examination dengan Context Guards
  * 3. Combo Multiplier Calculation
  * 4. Action & Explanation Mapping
  */
@@ -21,6 +26,9 @@ export function scanText(rawText) {
   const highlightedEvidence = [];
   let totalRawScore = 0;
   const triggeredIds = new Set();
+
+  const sentences = splitSentences(sanitizedText);
+  const upfrontFeeEvidenceSentences = [];
 
   // Tahap 2: Pemeriksaan 6 Modul Modus Penipuan
   for (const engine of HEURISTIC_ENGINES) {
@@ -57,15 +65,43 @@ export function scanText(rawText) {
       );
 
       for (const rule of engine.rules) {
-        const matches = sanitizedText.match(rule.pattern);
-        if (matches) {
-          // Untuk rule yang mendeteksi nama instansi/brand besar, wajibkan ada saluran tidak resmi
+        for (const sentence of sentences) {
           const isBrandRule =
             rule.label.includes("BUMN") ||
             rule.label.includes("Bank Nasional") ||
             rule.label.includes("Instansi");
 
           if (!isBrandRule || hasUnofficialChannel) {
+            const matches = sentence.match(rule.pattern);
+            if (matches) {
+              for (const m of matches) {
+                evidenceList.push(m);
+                highlightedEvidence.push({
+                  text: m,
+                  engineId: engine.id,
+                  engineName: engine.name,
+                  reason: rule.label
+                });
+              }
+              matchedPatterns.push(rule.label);
+            }
+          }
+        }
+      }
+    } else {
+      // Modul Berbasis Pola Kalimat / Regex
+      for (const rule of engine.rules) {
+        for (const sentence of sentences) {
+          // Abaikan kalimat peringatan/edukasi resmi untuk apk_otp_harvester dan upfront_fee
+          if (
+            (engine.id === "apk_otp_harvester" || engine.id === "upfront_fee") &&
+            isEducationalWarningSentence(sentence)
+          ) {
+            continue;
+          }
+
+          const matches = sentence.match(rule.pattern);
+          if (matches) {
             for (const m of matches) {
               evidenceList.push(m);
               highlightedEvidence.push({
@@ -76,24 +112,11 @@ export function scanText(rawText) {
               });
             }
             matchedPatterns.push(rule.label);
+
+            if (engine.id === "upfront_fee") {
+              upfrontFeeEvidenceSentences.push(sentence);
+            }
           }
-        }
-      }
-    } else {
-      // Modul Berbasis Pola Kalimat / Regex
-      for (const rule of engine.rules) {
-        const matches = sanitizedText.match(rule.pattern);
-        if (matches) {
-          for (const m of matches) {
-            evidenceList.push(m);
-            highlightedEvidence.push({
-              text: m,
-              engineId: engine.id,
-              engineName: engine.name,
-              reason: rule.label
-            });
-          }
-          matchedPatterns.push(rule.label);
         }
       }
     }
@@ -117,6 +140,39 @@ export function scanText(rawText) {
       explanation: engine.explanation,
       actionStep: engine.actionStep
     });
+  }
+
+  // Evaluasi Khusus: Abaikan upfront_fee jika berada di kanal resmi
+  // dan tidak ada desakan waktu (urgency) maupun ketidakcocokan identitas (channel mismatch)
+  if (triggeredIds.has("upfront_fee")) {
+    const hasUrgency = triggeredIds.has("artificial_urgency");
+    const hasIdentityMismatch = triggeredIds.has("identity_mismatch");
+
+    if (!hasUrgency && !hasIdentityMismatch) {
+      const allOfficial =
+        upfrontFeeEvidenceSentences.length > 0 &&
+        upfrontFeeEvidenceSentences.every((s) => isOfficialChannelSentence(s));
+
+      if (allOfficial) {
+        triggeredIds.delete("upfront_fee");
+        totalRawScore = Math.max(0, totalRawScore - 30);
+
+        const upfrontResult = engineResults.find((e) => e.id === "upfront_fee");
+        if (upfrontResult) {
+          upfrontResult.status = "CLEAN";
+          upfrontResult.score = 0;
+          upfrontResult.evidence = [];
+          upfrontResult.patterns = [];
+        }
+
+        // Hapus temuan upfront_fee dari highlightedEvidence
+        for (let i = highlightedEvidence.length - 1; i >= 0; i--) {
+          if (highlightedEvidence[i].engineId === "upfront_fee") {
+            highlightedEvidence.splice(i, 1);
+          }
+        }
+      }
+    }
   }
 
   // Tahap 3: Pengali Kombinasi (Combo Multiplier)
