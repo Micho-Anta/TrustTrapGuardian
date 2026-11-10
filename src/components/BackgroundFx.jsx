@@ -64,20 +64,20 @@ export default function BackgroundFx({ active = false }) {
         <ParticlesErrorBoundary>
           <Suspense fallback={null}>
             <LazyParticles
-              particleColors={["#5df0a8", "#3a6cff", "#9fb4ff"]}
-              particleCount={120}
+              particleColors={["#5ab9fc", "#8fa3bf", "#e9edf3"]}
+              particleCount={70}
               particleSpread={10}
               speed={0.15}
               particleBaseSize={120}
               sizeRandomness={0.8}
-              glow={1.0}
-              twinkle={0.5}
+              glow={0.6}
+              twinkle={0}
               drift="up"
               driftSpeed={0.4}
               moveParticlesOnHover={false}
               clickBurst={false}
               pixelRatio={1.5}
-              opacity={0.5}
+              opacity={0.28}
             />
           </Suspense>
         </ParticlesErrorBoundary>
