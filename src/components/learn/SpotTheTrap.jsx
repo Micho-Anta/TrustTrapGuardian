@@ -123,96 +123,246 @@ const THREAT_MATRIX = [
   }
 ];
 
+function shuffleArray(array) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+const INITIAL_SCENARIOS = [
+  {
+    id: 1,
+    title: "Skenario 1: Undangan Seleksi Loker BUMN",
+    sender: "Panitia Rekrutmen Bersama BUMN (Akun WA Bisnis)",
+    chatPreview: "Selamat! Anda dinyatakan lolos seleksi administrasi BUMN PT Telekomunikasi Nusantara (Persero). Undangan interview offline di Jakarta tanggal 25. Wajib transfer biaya reservasi tiket & hotel Rp1.750.000 ke rekening Surya Travelindo dalam waktu 30 menit. Biaya diganti 100% saat registrasi.",
+    question: "Apa tanda bahaya paling fatal yang membuktikan pesan ini adalah penipuan?",
+    options: [
+      {
+        id: "s1-a",
+        text: "Rekrutmen resmi instansi BUMN tidak pernah memungut biaya transportasi dan tidak menunjuk travel agent berbayar.",
+        isCorrect: true,
+        reason: "Tepat sekali! Seluruh proses rekrutmen BUMN resmi selalu gratis tanpa pungutan biaya reservasi tiket apa pun."
+      },
+      {
+        id: "s1-b",
+        text: "Karena lokasi wawancara diselenggarakan di Jakarta pada tanggal 25.",
+        isCorrect: false,
+        reason: "Kurang tepat. Lokasi dan jadwal wawancara adalah hal lumrah. Tanda bahaya fatalnya adalah pungutan biaya reservasi di muka."
+      },
+      {
+        id: "s1-c",
+        text: "Karena pengirim menggunakan format akun WhatsApp bisnis.",
+        isCorrect: false,
+        reason: "Salah. Akun bisnis biasa bisa dibuat siapa saja. Bukti penipuan kuncinya adalah jebakan uang di muka (upfront fee)."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Skenario 2: Lowongan Freelance Like & Subscribe",
+    sender: "HRD Global Media Partner (Akun WA Personal)",
+    chatPreview: "Halo Kak! Kami membuka lowongan freelance paruh waktu kerja dari HP tanpa modal. Cukup like 3 video YouTube dan follow TikTok dapat komisi Rp150.000 per hari. Untuk aktivasi akun dan ambil tugas perdana, silakan transfer deposit tugas Rp30.000 ke rekening admin.",
+    question: "Taktik psikologis apa yang sedang dimanfaatkan oleh pelaku pada pesan ini?",
+    options: [
+      {
+        id: "s2-a",
+        text: "Foot-in-the-door technique (meminta deposit kecil dulu sebelum menuntut setoran jutaan rupiah).",
+        isCorrect: true,
+        reason: "Tepat sekali! Scammer sengaja meminta deposit awal yang kecil (Rp30-50rb) agar korban merasa aman sebelum menjerat ke deposit bertingkat jutaan rupiah."
+      },
+      {
+        id: "s2-b",
+        text: "Pencurian identitas melalui nomor KTP dan KK.",
+        isCorrect: false,
+        reason: "Kurang tepat. Pada pesan ini, modus utamanya adalah skema perputaran deposit bertingkat (task scam)."
+      },
+      {
+        id: "s2-c",
+        text: "Pemerasan langsung dengan intimidasi fisik.",
+        isCorrect: false,
+        reason: "Salah. Di awal interaksi, pelaku task scam bersikap sangat sopan dan menjanjikan imbalan manis."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Skenario 3: Kurir Ekspedisi & File APK Resi",
+    sender: "Kurir Ekspedisi Nusantara Express",
+    chatPreview: "Halo Kak, paket penting Anda tertahan di gudang transit karena alamat kurang lengkap. Mohon cek foto paket dan nomor resi di aplikasi pelacakan kami: Resi_Pengiriman_Paket.apk. Silakan instal sekarang di HP Android Anda.",
+    question: "Mengapa pesan kurir ini sangat berbahaya bagi keamanan rekening dan data Anda?",
+    options: [
+      {
+        id: "s3-a",
+        text: "File berekstensi .APK adalah malware Android yang dapat membaca SMS OTP dan membajak mobile banking.",
+        isCorrect: true,
+        reason: "Benar sekali! Kurir ekspedisi resmi hanya memberikan nomor resi teks atau tautan situs resmi, tidak pernah membagikan file installer .APK."
+      },
+      {
+        id: "s3-b",
+        text: "Karena paketnya tertahan di gudang transit ekspedisi.",
+        isCorrect: false,
+        reason: "Paket tertahan adalah kendala pengiriman biasa. Bahaya kritisnya terletak pada file berekstensi .APK yang dikirimkan."
+      },
+      {
+        id: "s3-c",
+        text: "Karena kurir menghubungi via chat WhatsApp bukan telepon suara.",
+        isCorrect: false,
+        reason: "Kurir sering berkoordinasi lewat chat. Namun permintaan menginstal file .APK adalah ciri mutlak malware."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Skenario 4: Nomor Baru 'Keluarga' Minta Pulsa",
+    sender: "Nomor Baru Mengaku Anak / Kerabat (+62 858-1234-xxxx)",
+    chatPreview: "Mah ini aku pakai nomor baru, HP lamaku rusak jatuh di jalan. Tolong kirimin pulsa 200rb dulu ke nomor ini ya Mah, penting banget buat hubungi kantor, nanti sore aku ganti.",
+    question: "Langkah penyelamatan pertama apa yang paling bijak dilakukan sebelum bertindak?",
+    options: [
+      {
+        id: "s4-a",
+        text: "Telepon biasa (voice call) langsung ke nomor lama anak untuk verifikasi suara sebelum mengirimkan pulsa.",
+        isCorrect: true,
+        reason: "Tepat sekali! Selalu lakukan konfirmasi suara atau video ke nomor lama kerabat untuk memastikan identitas sebelum mentransfer dana atau pulsa."
+      },
+      {
+        id: "s4-b",
+        text: "Langsung mengirimkan pulsa 200rb karena cemas anak mengalami kendala di kantor.",
+        isCorrect: false,
+        reason: "Sangat berisiko! Penipu memanfaatkan rasa panik dan kasih sayang keluarga agar korban bertindak tanpa nalar kritis."
+      },
+      {
+        id: "s4-c",
+        text: "Kirim pulsa setengahnya saja (100rb) untuk jaga-jaga.",
+        isCorrect: false,
+        reason: "Keliru. Jika pengirim adalah penipu, pulsa Anda tetap hilang dan penipu akan menuntut permintaan lainnya."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "Skenario 5: Tawaran Pinjol Ilegal Minta Akses Kontak",
+    sender: "Dana Cepat Kilat (SMS Blast)",
+    chatPreview: "Butuh dana mendesak? Pinjaman online langsung cair Rp 10.000.000 tanpa jaminan, tanpa SLIK/BI Checking, proses 5 menit. Unduh aplikasi kami di link ini dan izinkan akses kontak telepon & galeri foto Anda.",
+    question: "Mengapa permintaan izin akses kontak dan galeri foto merupakan tanda bahaya besar?",
+    options: [
+      {
+        id: "s5-a",
+        text: "Pinjol legal OJK dilarang mengakses kontak dan galeri. Data tersebut akan dipakai pinjol ilegal untuk teror dan pemerasan.",
+        isCorrect: true,
+        reason: "Tepat sekali! Fintech lending resmi berizin OJK hanya boleh mengakses kamera, mikrofon, dan lokasi (CAMILAN). Akses kontak dan galeri adalah sarana teror pinjol ilegal."
+      },
+      {
+        id: "s5-b",
+        text: "Karena bunga pinjaman yang ditawarkan terlalu murah.",
+        isCorrect: false,
+        reason: "Bunga pinjol ilegal justru sangat mencekik. Bahaya privasi fatalnya adalah penyedotan seluruh kontak telepon untuk intimidasi."
+      },
+      {
+        id: "s5-c",
+        text: "Karena proses pencairan dana memerlukan waktu 5 menit.",
+        isCorrect: false,
+        reason: "Proses cepat hanyalah pancingan pemasaran. Bahaya intinya adalah peretasan privasi kontak keluarga."
+      }
+    ]
+  },
+  {
+    id: "s6",
+    title: "Skenario 6: Tautan Brand Palsu (Domain Mirip)",
+    sender: "Pusat Bantuan Akun Pelanggan (SMS / Chat)",
+    chatPreview: "Peringatan Keamanan: Terdeteksi aktivitas login mencurigakan pada akun belanja Anda. Akun akan dibekukan permanen dalam 15 menit. Segera verifikasi kepemilikan akun Anda sekarang di https://shopee-id-verifikasi.example/login",
+    question: "Bagaimana cara mengenali bahwa tautan pada pesan tersebut adalah situs phishing?",
+    options: [
+      {
+        id: "s6-a",
+        text: "Nama domain menggunakan embel-embel 'shopee-id-verifikasi' yang bukan domain resmi platform bersangkutan.",
+        isCorrect: true,
+        reason: "Benar sekali! Pelaku melakukan brand spoofing dengan menyelipkan nama merek di domain pihak ketiga. Domain resmi berakhiran .co.id atau .com resmi platform."
+      },
+      {
+        id: "s6-b",
+        text: "Karena tautan tersebut menggunakan protokol HTTPS.",
+        isCorrect: false,
+        reason: "Salah paham umum. Protokol HTTPS (ikon gembok) saat ini juga bisa dipakai situs phishing. Yang paling menentukan adalah nama domain induknya."
+      },
+      {
+        id: "s6-c",
+        text: "Karena peringatan dikirimkan pada malam hari.",
+        isCorrect: false,
+        reason: "Waktu pengiriman tidak menentukan keaslian. Tanda bahayanya adalah nama domain tiruan dan manipulasi urgensi 15 menit."
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: "Skenario 7: Investasi Profit Harian & Grup Telegram",
+    sender: "Mentor Trading Sukses (DM Telegram)",
+    chatPreview: "Halo Kak! Mau penghasilan pasif modal minim? Join program investasi aset crypto kami, profit 35% per minggu dijamin cuan tanpa risiko rugi. Buka slot member VIP dengan modal awal Rp500.000. Gabung grup Telegram privat kami sekarang!",
+    question: "Klaim apa pada tawaran ini yang melanggar prinsip dasar investasi legal?",
+    options: [
+      {
+        id: "s7-a",
+        text: "Janji imbal hasil tetap tinggi (35%/minggu) dengan klaim 'dijamin tanpa risiko' adalah ciri klasik skema Ponzi bodong.",
+        isCorrect: true,
+        reason: "Tepat sekali! Prinsip investasi legal adalah high return = high risk. Tidak ada investasi sah di dunia yang menjamin keuntungan pasti tanpa risiko kerugian."
+      },
+      {
+        id: "s7-b",
+        text: "Penggunaan media Telegram untuk sarana komunikasi.",
+        isCorrect: false,
+        reason: "Telegram hanyalah media perpesanan. Ciri penipuannya adalah iming-iming keuntungan fantastis yang dijamin tanpa risiko."
+      },
+      {
+        id: "s7-c",
+        text: "Karena modal awal yang disyaratkan sebesar Rp500.000.",
+        isCorrect: false,
+        reason: "Besaran modal bukan masalah utama. Masalah fatalnya adalah janji keuntungan tidak masuk akal yang disamarkan sebagai investasi resmi."
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: "Skenario 8: Notifikasi Mutasi Transaksi Resmi Bank",
+    sender: "Bank Nasional Nusantara (SMS Banking Resmi)",
+    chatPreview: "BNN Notifikasi: Rekening 02390100xxxx telah menerima transfer dana masuk Rp 500.000 pada 10/11 08:30 WIB. Saldo akhir Rp 2.450.000. Hubungi call center resmi 150000 jika transaksi tidak Anda kenali.",
+    question: "Bagaimana Anda menyikapi pesan notifikasi perbankan ini?",
+    options: [
+      {
+        id: "s8-a",
+        text: "Pesan ini adalah notifikasi resmi yang wajar (tidak meminta OTP, tidak ada tautan mencurigakan, dan tidak meminta transfer biaya).",
+        isCorrect: true,
+        reason: "Luar biasa! Nalar kritis Anda seimbang. Tidak semua pesan adalah penipuan. Notifikasi ini hanya memberi tahu transaksi masuk tanpa tautan berbahaya dan menyertakan hotline resmi."
+      },
+      {
+        id: "s8-b",
+        text: "Pasti penipuan karena menyebutkan nominal saldo rekening secara terbuka.",
+        isCorrect: false,
+        reason: "Kurang tepat. Notifikasi mutasi resmi SMS banking memang lazim memuat nominal dana masuk dan nomor rekening yang sebagian digitnya disamarkan."
+      },
+      {
+        id: "s8-c",
+        text: "Berbahaya karena mengarahkan nasabah menghubungi nomor telepon 150000.",
+        isCorrect: false,
+        reason: "Salah. Nomor 150000 adalah format hotline resmi perbankan nasional, bukan nomor seluler pribadi atau link phising."
+      }
+    ]
+  }
+];
+
 export default function SpotTheTrap({ onTestInScanner }) {
+  const [quizScenarios, setQuizScenarios] = useState(() =>
+    INITIAL_SCENARIOS.map((s) => ({
+      ...s,
+      options: shuffleArray(s.options)
+    }))
+  );
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
-
-  const scenarios = [
-    {
-      id: 1,
-      title: "Skenario 1: Undangan Pernikahan Digital via WA",
-      chatPreview: "Halo Kak! Kami bermaksud mengundang ke acara pernikahan kami hari Minggu besok. Surat undangan lengkap ada di file ini ya, mohon kehadirannya: SuratUndanganDigital_Vip.apk. Ditunggu kedatangannya!",
-      sender: "Nomor Tidak Dikenal (+62 813-9821-xxxx)",
-      question: "Mengapa pesan ini berbahaya dan merupakan jebakan rekayasa sosial?",
-      options: [
-        {
-          id: "a",
-          text: "Karena pengirimnya tidak mencantumkan tanggal jam pernikahan secara rinci.",
-          isCorrect: false,
-          reason: "Kurang tepat. Format teks yang tidak lengkap bukanlah ancaman keamanan utama."
-        },
-        {
-          id: "b",
-          text: "Karena menggunakan ekstensi file .APK yang merupakan malware pencuri SMS perbankan & OTP.",
-          isCorrect: true,
-          reason: "Tepat sekali! Dokumen undangan asli biasanya berbentuk link website atau file PDF/gambar, bukan file installer aplikasi Android (.APK) yang berbahaya."
-        },
-        {
-          id: "c",
-          text: "Karena nomor pengirimnya tidak tersimpan di kontak kita sehingga pasti penipu.",
-          isCorrect: false,
-          reason: "Kurang tepat. Nomor tidak dikenal tidak selalu berarti penipu, kerabat bisa ganti nomor. Ancaman nyata adalah ekstensi .APK yang digunakan sebagai 'undangan', bukan identitas pengirim semata."
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "Skenario 2: Tawaran Kerja Freelance Like & Subscribe",
-      chatPreview: "Selamat siang Kak! Kami dari PT Digital Agency membuka lowongan freelance paruh waktu. Cukup like 3 video YouTube per hari dapat Rp150.000. Untuk ambil tugas pertama, silakan deposit jaminan tugas Rp30.000 ke rekening admin.",
-      sender: "HRD Global Talent (Akun WA Bisnis Palsu)",
-      question: "Apa pola psikologis utama yang dimanfaatkan oleh penipu pada skenario ini?",
-      options: [
-        {
-          id: "a",
-          text: "Foot-in-the-door technique (meminta deposit kecil dulu sebelum menaikkan jumlah ke jutaan rupiah).",
-          isCorrect: true,
-          reason: "Tepat sekali! Scammer sengaja meminta deposit nominal kecil (Rp30-50rb) agar korban merasa aman. Setelah itu, korban ditagih jutaan rupiah dengan dalih 'buka penarikan dana'."
-        },
-        {
-          id: "b",
-          text: "Ancaman fisik dan pemerasan langsung.",
-          isCorrect: false,
-          reason: "Salah. Pada tahap awal, penipu task scam bersikap sangat sopan dan menjanjikan keuntungan manis."
-        },
-        {
-          id: "c",
-          text: "Pencurian identitas melalui nomor KTP.",
-          isCorrect: false,
-          reason: "Kurang tepat. Modus ini murni skema deposit uang bertingkat (Ponzi-like Task Scam)."
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: "Skenario 3: Teman Dekat Pinjam Uang Mendesak",
-      chatPreview: "Bro, ini nomor baruku. HP lamaku hilang kecopetan di stasiun. Aku lagi butuh banget dana darurat Rp 800.000 buat nebus obat di apotek, ATM-ku keblokir. Bisa tolong transfer ke rek temanku sekarang? Besok pagi langsung kuganti.",
-      sender: "Profil Foto Teman Lama tapi Nomor Baru",
-      question: "Langkah terbaik apa yang wajib Anda lakukan sebelum mentransfer dana?",
-      options: [
-        {
-          id: "a",
-          text: "Langsung transfer karena merasa kasihan melihat teman mengalami musibah.",
-          isCorrect: false,
-          reason: "Sangat berbahaya! Rasa empati dan desakan darurat palsu adalah senjata utama penipu akun kloning."
-        },
-        {
-          id: "b",
-          text: "Telepon biasa (voice call) atau video call langsung ke nomor lama / hubungi kerabatnya untuk verifikasi identitas fisik.",
-          isCorrect: true,
-          reason: "Benar sekali! Selalu lakukan verifikasi suara atau video di luar chat teks saat ada teman/kerabat yang mendadak meminta transfer ke rekening atas nama orang lain."
-        },
-        {
-          id: "c",
-          text: "Kirim uang setengahnya saja agar risiko berkurang.",
-          isCorrect: false,
-          reason: "Salah. Tetap saja uang Anda akan hilang jika yang meminta adalah penipu."
-        }
-      ]
-    }
-  ];
 
   const handleSelect = (option) => {
     if (showExplanation) return;
@@ -226,7 +376,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
   const handleNext = () => {
     setSelectedOption(null);
     setShowExplanation(false);
-    if (currentQuestion < scenarios.length - 1) {
+    if (currentQuestion < quizScenarios.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
       setQuizFinished(true);
@@ -234,6 +384,12 @@ export default function SpotTheTrap({ onTestInScanner }) {
   };
 
   const handleRestart = () => {
+    setQuizScenarios(
+      INITIAL_SCENARIOS.map((s) => ({
+        ...s,
+        options: shuffleArray(s.options)
+      }))
+    );
     setCurrentQuestion(0);
     setSelectedOption(null);
     setShowExplanation(false);
@@ -241,7 +397,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
     setQuizFinished(false);
   };
 
-  const curr = scenarios[currentQuestion];
+  const curr = quizScenarios[currentQuestion];
 
   return (
     <div className="space-y-8 sm:space-y-10">
@@ -254,7 +410,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
               <span>Simulasi Interaktif: Tebak Jebakan Chat (Spot The Trap)</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Latih intuisi dan nalar kritis Anda menghadapi 3 skenario penipuan yang paling sering memakan korban di Indonesia.
+              Latih intuisi dan nalar kritis Anda menghadapi {quizScenarios.length} skenario chat (termasuk pesan resmi) yang paling sering ditemui sehari-hari.
             </p>
           </div>
 
@@ -262,7 +418,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
             className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-slate-300 self-start sm:self-auto"
             style={{ background: "rgba(12,18,38,0.40)", border: "1px solid var(--border)" }}
           >
-            Skenario {currentQuestion + 1} / {scenarios.length}
+            Skenario {currentQuestion + 1} / {quizScenarios.length}
           </div>
         </div>
 
@@ -319,8 +475,9 @@ export default function SpotTheTrap({ onTestInScanner }) {
 
               {/* Pilihan Jawaban */}
               <div className="space-y-3">
-                {curr.options.map((option) => {
+                {curr.options.map((option, idx) => {
                   const isSelected = selectedOption?.id === option.id;
+                  const letter = String.fromCharCode(65 + idx);
                   let bgStyle = "rgba(12, 18, 38, 0.35)";
                   let borderStyle = "rgba(150, 175, 230, 0.07)";
                   let textColor = "text-slate-200";
@@ -371,7 +528,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                           color: "var(--accent)",
                         }}
                       >
-                        {option.id.toUpperCase()}
+                        {letter}
                       </span>
                       <span className="flex-1 pt-0.5 leading-relaxed">{option.text}</span>
                       {showExplanation && option.isCorrect && (
@@ -408,7 +565,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                     onClick={handleNext}
                     className="btn-ascend"
                   >
-                    <span>{currentQuestion < scenarios.length - 1 ? "Skenario Berikutnya →" : "Lihat Hasil Akhir →"}</span>
+                    <span>{currentQuestion < quizScenarios.length - 1 ? "Skenario Berikutnya →" : "Lihat Hasil Akhir →"}</span>
                   </button>
                 </div>
               </div>
@@ -427,12 +584,14 @@ export default function SpotTheTrap({ onTestInScanner }) {
               <Award className="w-10 h-10" />
             </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Simulasi Selesai! Skor Anda: <span className="text-mint-gradient">{score} / {scenarios.length}</span>
+              Simulasi Selesai! Skor Anda: <span className="text-mint-gradient">{score} / {quizScenarios.length}</span>
             </h3>
             <p className="text-sm sm:text-base text-slate-300 max-w-lg mx-auto leading-relaxed">
-              {score === 3
-                ? "Luar biasa! Nalar kritis Anda sangat tajam dalam mengenali celah manipulasi psikologis penipu digital."
-                : "Bagus! Selalu ingat 3 pilar perlindungan: Tahan emosi, jangan klik .APK/link sembarangan, dan verifikasi silang langsung ke sumbernya."}
+              {score >= 7
+                ? "Luar biasa! Nalar kritis Anda sangat tajam dan seimbang dalam mengenali celah manipulasi psikologis sekaligus membedakan pesan resmi yang aman."
+                : score >= 5
+                ? "Bagus! Anda sudah memahami sebagian besar pola rekayasa sosial. Terus tingkatkan kehati-hatian pada detail domain dan izin akses data sensitif."
+                : "Tetap waspada! Selalu ingat 3 pilar perlindungan: Tahan emosi, jangan klik .APK/link sembarangan, dan verifikasi silang langsung ke kanal resmi."}
             </p>
 
             <div className="pt-3">
@@ -479,42 +638,48 @@ export default function SpotTheTrap({ onTestInScanner }) {
                 className="p-5 rounded-2xl space-y-3.5 transition-all flex flex-col justify-between"
                 style={{
                   background: "rgba(12, 18, 38, 0.35)",
-                  border: "1px solid rgba(150, 175, 230, 0.07)",
+                  border: "1px solid rgba(150, 175, 230, 0.06)",
                 }}
               >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="p-2 rounded-xl"
-                        style={{ background: `${item.color}15`, border: `1px solid ${item.color}30` }}
-                      >
-                        <Icon className="w-4 h-4" style={{ color: item.color }} />
-                      </div>
-                      <span className="font-bold text-sm sm:text-base text-white">{item.title}</span>
-                    </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                      style={{
+                        background: `${item.color}15`,
+                        color: item.color,
+                        border: `1px solid ${item.color}35`,
+                      }}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </span>
+                    <span
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold tracking-wide uppercase"
+                      style={{
+                        background: `${item.color}12`,
+                        color: item.color,
+                        border: `1px solid ${item.color}25`,
+                      }}
+                    >
+                      {item.category}
+                    </span>
                   </div>
 
-                  <span
-                    className="inline-block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mb-2.5"
-                    style={{ background: `${item.color}10`, color: item.color, border: `1px solid ${item.color}25` }}
-                  >
-                    {item.category}
-                  </span>
+                  <h4 className="font-bold text-sm text-white">{item.title}</h4>
 
-                  <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                  <p className="text-xs text-slate-300 leading-relaxed">
                     {item.tactic}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-3 border-t border-white/[0.06] text-xs">
+                <div className="space-y-2 pt-3 border-t border-white/[0.05] text-[11px]">
                   <div>
-                    <span className="text-slate-400 font-semibold block text-[11px]">Kata/Pola Pemicu:</span>
-                    <span className="text-slate-200 font-mono text-[11px] leading-relaxed">{item.trigger}</span>
+                    <span className="font-semibold text-slate-400">Trigger Phrases: </span>
+                    <span className="text-red-300 font-mono">{item.trigger}</span>
                   </div>
-                  <div className="p-2.5 rounded-xl" style={{ background: "rgba(4, 6, 15, 0.45)", border: "1px solid rgba(150, 175, 230, 0.05)" }}>
-                    <span className="text-[#5df0a8] font-semibold block text-[11px] mb-0.5">🛡️ Benteng Pertahanan:</span>
-                    <span className="text-slate-300 text-[11px] leading-relaxed">{item.countermeasure}</span>
+                  <div>
+                    <span className="font-semibold text-slate-400">Benteng Nalar: </span>
+                    <span className="text-[#5df0a8]">{item.countermeasure}</span>
                   </div>
                 </div>
               </div>
