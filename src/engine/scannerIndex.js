@@ -1,5 +1,5 @@
-import { scrubSensitiveData, scrubPrivacy } from "./privacyScrubber";
-import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules";
+import { scrubSensitiveData, scrubPrivacy } from "./privacyScrubber.js";
+import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules.js";
 
 /**
  * Scan text using Scam Heuristic Engine v1.0
@@ -25,14 +25,23 @@ export function scanText(rawText) {
 
   // Daftarkan token sensor ke highlightedEvidence agar UI HighlightView & ScannerSuite memecah dan menampilkan pill sensor
   if (Array.isArray(redactions) && redactions.length > 0) {
+    const tokenMap = {
+      "Nomor Induk Kependudukan (NIK 16-Digit)": "[NIK_DISAMARKAN]",
+      "Kode OTP / PIN Transaksi": "[KODE_OTP_DISAMARKAN]",
+      "Nomor Rekening Bank": "[REKENING_DISAMARKAN]",
+      "Nomor Handphone Pribadi": "[NOMOR_HP_DISAMARKAN]",
+      "Nomor Identitas / Akun Panjang": "[NOMOR_PANJANG_DISAMARKAN]"
+    };
     for (const r of redactions) {
-      const token = typeof r === "object" && r !== null ? r.replacement : r;
+      const token = typeof r === "object" && r !== null
+        ? (r.replacement || r.token || String(r))
+        : (tokenMap[r] || r);
       if (token && typeof token === "string") {
         highlightedEvidence.push({
           text: token,
           engineId: "privacy_scrubber",
           engineName: "Privacy Scrubber",
-          reason: "Sensor Privasi Otomatis"
+          reason: typeof r === "object" && r !== null ? (r.label || "Sensor Privasi Otomatis") : r || "Sensor Privasi Otomatis"
         });
       }
     }
@@ -56,6 +65,44 @@ export function scanText(rawText) {
             engineName: engine.name,
             reason: finding.reason
           });
+        }
+      }
+    } else if (engine.id === "identity_mismatch") {
+      // Modul Khusus: Identity & Channel Mismatch
+      // Hanya tandai brand/instansi jika juga ditemukan saluran tidak resmi
+      const unofficialChannelPatterns = [
+        /@gmail\.com|@yahoo\.com|@hotmail\.com/gi,
+        /ke\s+wa\s+ini|via\s+whatsapp\s+ini|hubungi\s+wa/gi,
+        /rekening\s+bendahara|rekening\s+pribadi|rekening\s+admin/gi,
+        /nomor\s+pribadi|nomor\s+ini\s+saja|chat\s+ini/gi,
+        /travel\s+rekanan|mitra\s+kami\s+ini/gi,
+      ];
+      const hasUnofficialChannel = unofficialChannelPatterns.some(
+        (pat) => pat.test(sanitizedText)
+      );
+
+      for (const rule of engine.rules) {
+        const regex = new RegExp(rule.pattern.source, rule.pattern.flags);
+        const matches = sanitizedText.match(regex);
+        if (matches) {
+          // Untuk rule yang mendeteksi nama instansi/brand besar, wajibkan ada saluran tidak resmi
+          const isBrandRule =
+            rule.label.includes("BUMN") ||
+            rule.label.includes("Bank Nasional") ||
+            rule.label.includes("Instansi");
+
+          if (!isBrandRule || hasUnofficialChannel) {
+            for (const m of matches) {
+              evidenceList.push(m);
+              highlightedEvidence.push({
+                text: m,
+                engineId: engine.id,
+                engineName: engine.name,
+                reason: rule.label
+              });
+            }
+            matchedPatterns.push(rule.label);
+          }
         }
       }
     } else if (Array.isArray(engine.rules)) {
@@ -125,10 +172,10 @@ export function scanText(rawText) {
   const finalScore = Math.min(100, Math.round(totalRawScore * comboBonus));
 
   // Tentukan Level Risiko dan Warna Status
-  let riskLevel = "AMAN / BERSIH";
+  let riskLevel = "TIDAK TERDETEKSI";
   let riskColor = "emerald";
   if (finalScore >= 70) {
-    riskLevel = "TINGGI (INDIKASI KUAT PENIPUAN)";
+    riskLevel = "RISIKO TINGGI (BANYAK TANDA BAHAYA TERDETEKSI)";
     riskColor = "red";
   } else if (finalScore >= 35) {
     riskLevel = "WASPADA (INDIKASI SEDANG / MENCURIGAKAN)";

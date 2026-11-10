@@ -1,11 +1,12 @@
 /**
  * Tahap 1: Privacy Scrubber
- * Menyensor NIK (16 digit), Nomor Telepon Indonesia, dan Nomor Rekening (10-15 digit)
- * secara lokal di browser sebelum dianalisis lebih lanjut.
+ * Sensor Privasi Otomatis (Auto-Redaction) Sisi Klien
+ * Menyensor NIK (16 digit), Nomor Telepon Indonesia, Rekening Bank, Kode OTP/PIN,
+ * dan Angka Identitas Panjang secara lokal di browser sebelum dianalisis lebih lanjut.
  */
 
-function createRedaction(type, originalLength, replacement, defaultLabel) {
-  const item = { type, originalLength, replacement };
+export function createRedaction(type, originalLength, replacement, defaultLabel) {
+  const item = { type, originalLength, replacement, label: defaultLabel || type };
   Object.defineProperty(item, "toString", {
     value: function () {
       return defaultLabel || type;
@@ -21,31 +22,57 @@ export function scrubSensitiveData(rawText = "") {
   if (!rawText || typeof rawText !== "string") {
     return { sanitizedText: "", redactions: [] };
   }
-  let sanitizedText = rawText;
+
+  // Strip zero-width characters & normalize unicode
+  let text = rawText
+    .replace(/[\u200B-\u200D\u202A-\u202E\uFEFF]/g, "")
+    .normalize("NFKC");
+
   const redactions = [];
 
-  // 1. Sensor NIK (16 digit angka berurutan)
-  const nikRegex = /\b\d{16}\b/g;
-  sanitizedText = sanitizedText.replace(nikRegex, (match) => {
-    redactions.push(createRedaction("NIK", match.length, "[NIK_DISENSOR]", "Nomor Induk Kependudukan (NIK)"));
-    return "[NIK_DISENSOR]";
-  });
+  // 1. Redact NIK (16 digit, continuous atau terpisah 4-4-4-4 / 6-6-4 / 2-2-2-6-4)
+  const nikRegex = /\b\d{4}[\s.\-]\d{4}[\s.\-]\d{4}[\s.\-]\d{4}\b|\b\d{6}[\s.\-]\d{6}[\s.\-]\d{4}\b|\b\d{1,2}[\s.\-]\d{2}[\s.\-]\d{2}[\s.\-]\d{6}[\s.\-]\d{4}\b|\b\d{16}\b/g;
+  if (text.match(nikRegex)) {
+    text = text.replace(nikRegex, "[NIK_DISAMARKAN]");
+    redactions.push("Nomor Induk Kependudukan (NIK 16-Digit)");
+  }
 
-  // 2. Sensor Nomor Telepon / WhatsApp Indonesia (+62 / 62 / 08 diikuti 8-12 digit)
-  const phoneRegex = /(\+62|62|08)[0-9\s\-]{8,14}\b/g;
-  sanitizedText = sanitizedText.replace(phoneRegex, (match) => {
-    redactions.push(createRedaction("PHONE", match.trim().length, "[NOMOR_HP_DISENSOR]", "Nomor HP/WhatsApp"));
-    return "[NOMOR_HP_DISENSOR]";
-  });
+  // 2. Redact Kode OTP & PIN (4-6 digit dengan konteks kata kunci di sekitarnya)
+  const otpRegex = /(?:otp|pin|kode\s*(?:verifikasi|rahasia|sms)?)[^\d\n]{0,30}?([0-9]{4,6})\b/gi;
+  if (text.match(otpRegex)) {
+    text = text.replace(otpRegex, (match, code) => {
+      return match.replace(code, "[KODE_OTP_DISAMARKAN]");
+    });
+    redactions.push("Kode OTP / PIN Transaksi");
+  }
 
-  // 3. Sensor Nomor Rekening Bank (10 sampai 15 digit angka berurutan)
-  const accountRegex = /\b\d{10,15}\b/g;
-  sanitizedText = sanitizedText.replace(accountRegex, (match) => {
-    redactions.push(createRedaction("BANK_ACCOUNT", match.length, "[REKENING_DISENSOR]", "Nomor Rekening Bank"));
-    return "[REKENING_DISENSOR]";
-  });
+  // 3. Redact Nomor Rekening Bank dengan konteks kata kunci rek / rekening
+  const rekContextRegex = /(?:rek(?:ening)?[\s\S]{0,30}?)([\d][\d\s.\-]{9,22}[\d])/gi;
+  if (text.match(rekContextRegex)) {
+    text = text.replace(rekContextRegex, (match, acc) => {
+      return match.replace(acc, "[REKENING_DISAMARKAN]");
+    });
+    redactions.push("Nomor Rekening Bank");
+  }
 
-  return { sanitizedText, redactions };
+  // 4. Redact Nomor HP Indonesia (+62 atau 08xx) termasuk yang dipisah spasi/hubung
+  const phoneRegex = /(?:\+62|62|0)8[1-9][0-9\s.\-]{7,13}[0-9]/g;
+  if (text.match(phoneRegex)) {
+    text = text.replace(phoneRegex, "[NOMOR_HP_DISAMARKAN]");
+    redactions.push("Nomor Handphone Pribadi");
+  }
+
+  // 5. Fallback: Tangkap angka panjang standalone 10-16 digit jika belum tersensor
+  const longNumRegex = /\b\d[\d\s.\-]{9,20}\d\b/g;
+  if (text.match(longNumRegex)) {
+    text = text.replace(longNumRegex, "[NOMOR_PANJANG_DISAMARKAN]");
+    redactions.push("Nomor Identitas / Akun Panjang");
+  }
+
+  return {
+    sanitizedText: text,
+    redactions: Array.from(new Set(redactions))
+  };
 }
 
 // Backward-compatibility alias

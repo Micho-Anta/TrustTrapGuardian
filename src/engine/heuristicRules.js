@@ -15,8 +15,9 @@ export const HEURISTIC_ENGINES = [
       { pattern: /(?:biaya\s*(?:admin|administrasi|reservasi|pendaftaran|materai|tiket|registrasi|asuransi|pengiriman|ongkir|talangan))/gi, label: "Permintaan Biaya Administrasi/Reservasi" },
       { pattern: /(?:deposit\s*(?:tugas|saldo|awal|misi|jaminan|dana|akun))/gi, label: "Pola Deposit Tugas" },
       { pattern: /(?:top\s*up\s*(?:deposit|saldo\s*tugas|saldo|dana))/gi, label: "Top Up Saldo Misi" },
-      { pattern: /(?:transfer\s*(?:biaya|uang|dana|sebesar|rp|ke\s*rekening))/gi, label: "Instruksi Transfer Uang di Muka" },
+      { pattern: /(?:\b(?:me|men|di)?transfer\s+(?:biaya|uang|dana|tiket|reservasi|admin|deposit|sebesar|rp|ke\s*rekening)\b|transfer\s*(?:biaya|uang|dana|sebesar|rp|ke\s*rekening))/gi, label: "Instruksi Transfer Uang di Muka" },
       { pattern: /(?:modal\s*deposit|uang\s*jaminan|dana\s*talangan)/gi, label: "Klausa Modal Jaminan" },
+      { pattern: /(?:rekening\s*(?:penampung|sementara)|alihkan\s*saldo|amankan\s*saldo)/gi, label: "Modus Rekening Penampung Aman" },
       { pattern: /(?:reimburse\s*100%|uang\s*akan\s*diganti)/gi, label: "Iming-iming Reimburse Biaya" }
     ]
   },
@@ -76,8 +77,8 @@ export const HEURISTIC_ENGINES = [
     explanation: "Mencatut nama institusi besar (BUMN, Bank, Ekspedisi, Pajak) menggunakan kanal personal yang tidak dapat diverifikasi secara resmi.",
     actionStep: "Verifikasi melalui akun resmi bercentang biru atau hotline resmi di situs utama institusi bersangkutan.",
     rules: [
-      { pattern: /(?:pt\s*telkom\s*indonesia|rekrutmen\s*bersama\s*bumn|seleksi\s*(?:berkas\s*)?bumn|pt\s*pln|pertamina)/gi, label: "Catut Nama Instansi BUMN" },
-      { pattern: /(?:bank\s*(?:central\s*asia|bca|bri|mandiri|bni|cimb|bsi)|pt\s*bank\s*central\s*asia)/gi, label: "Catut Nama Bank Nasional" },
+      { pattern: /(?:pt\s*(?:telekomunikasi\s*nusantara|telkom\s*indonesia|pln|pertamina)|rekrutmen\s*bersama\s*bumn|seleksi\s*(?:berkas\s*)?bumn)/gi, label: "Catut Nama Instansi BUMN" },
+      { pattern: /(?:bank\s*nasional\s*nusantara|bank\s*(?:central\s*asia|bca|bri|mandiri|bni|cimb|bsi)|pt\s*bank\s*central\s*asia|(?:bank\s*)?(?:bca|bri|mandiri|bni)\b)/gi, label: "Catut Nama Bank Nasional" },
       { pattern: /(?:j&t\s*express|jnt|pos\s*indonesia|sicepat|jne|kurir\s*ekspedisi)/gi, label: "Catut Nama Jasa Ekspedisi" },
       { pattern: /(?:gebyar\s*(?:undian|hadiah|poin|akhir\s*tahun)|pemenang\s*undian|kupon\s*pemenang)/gi, label: "Pencatutan Program Gebyar Hadiah" },
       { pattern: /(?:djp|ditjen\s*pajak|kantor\s*pajak|kemensos|bansos|surat\s*tilang)/gi, label: "Pencatutan Lembaga Pemerintah" }
@@ -94,6 +95,20 @@ export const HEURISTIC_ENGINES = [
   }
 ];
 
+// Helper: Hitung Shannon Entropy ternormalisasi
+function normalizedEntropy(str) {
+  if (!str || str.length < 2) return 0;
+  const freq = {};
+  for (const ch of str) freq[ch] = (freq[ch] || 0) + 1;
+  const len = str.length;
+  let H = 0;
+  for (const count of Object.values(freq)) {
+    const p = count / len;
+    H -= p * Math.log2(p);
+  }
+  return H / Math.log2(len);
+}
+
 // Helper khusus pengecekan URL / Link Phishing
 export function inspectLinksInText(text) {
   if (!text || typeof text !== "string") return [];
@@ -103,10 +118,23 @@ export function inspectLinksInText(text) {
 
   const suspiciousTlds = [".xyz", ".top", ".click", ".site", ".work", ".info", ".vip", ".club", ".online", ".buzz", ".live", ".space", ".cfd", ".gq", ".ml", ".tk", ".ga", ".zip", ".mov", ".icu"];
   const shorteners = ["bit.ly", "s.id", "t.ly", "tinyurl.com", "is.gd", "cutt.ly", "rb.gy", "linktr.ee"];
-  const spoofedBrands = ["bca", "bri", "mandiri", "bni", "telkom", "shopee", "tokopedia", "dana", "pajak", "kupon", "klaim", "gebyar", "hadiah"];
+  const spoofedBrands = [
+    "bca", "bri", "mandiri", "bni", "bsi", "cimb", "telkom", "shopee", "tokopedia",
+    "dana", "ovo", "gopay", "shopeepay", "linkaja", "pajak", "kupon", "klaim",
+    "gebyar", "hadiah", "pln", "bpjs"
+  ];
 
   for (const rawUrl of matches) {
     const urlLower = rawUrl.toLowerCase();
+
+    // Ekstrak hostname/domain
+    let domain = "";
+    try {
+      const urlObj = new URL(rawUrl.startsWith("www.") ? "https://" + rawUrl : rawUrl);
+      domain = urlObj.hostname;
+    } catch {
+      domain = urlLower.replace(/^https?:\/\//, "").split("/")[0];
+    }
 
     // Cek Shortener
     for (const sh of shorteners) {
@@ -132,7 +160,7 @@ export function inspectLinksInText(text) {
 
     // Cek Spoofed Brands dalam domain tidak resmi
     for (const brand of spoofedBrands) {
-      if (urlLower.includes(brand) && !urlLower.includes(".co.id") && !urlLower.includes(".id") && !urlLower.includes(".go.id") && !urlLower.includes(".com/")) {
+      if (urlLower.includes(brand) && !urlLower.includes(".co.id") && !urlLower.includes(".go.id") && !urlLower.match(/\.(com|net|org)\//)) {
         findings.push({
           url: rawUrl,
           reason: `Domain mencatut merek '${brand}' dengan nama domain pihak ketiga yang tidak resmi`,
@@ -158,6 +186,19 @@ export function inspectLinksInText(text) {
         reason: "Menggunakan IP Address langsung tanpa nama domain terverifikasi",
         severity: "HIGH"
       });
+    }
+
+    // Cek Shannon Entropy untuk domain panjang >= 8 karakter (tanda domain acak/obfuscated)
+    const domainBase = domain.split(".")[0];
+    if (domainBase.length >= 8) {
+      const entropy = normalizedEntropy(domainBase);
+      if (entropy >= 0.85) {
+        findings.push({
+          url: rawUrl,
+          reason: `Domain '${domain}' memiliki karakter acak/obfuscated (Entropy Tinggi: ${entropy.toFixed(2)}) — ciri umum domain phishing`,
+          severity: "HIGH"
+        });
+      }
     }
   }
 
