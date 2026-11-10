@@ -10,11 +10,11 @@ export default function PrivacyBanner() {
           <div
             className="p-2.5 rounded-xl shrink-0"
             style={{
-              background: "rgba(93, 240, 168, 0.08)",
-              border: "1px solid rgba(93, 240, 168, 0.20)",
+              background: "rgba(90, 185, 252, 0.08)",
+              border: "1px solid rgba(90, 185, 252, 0.20)",
             }}
           >
-            <Lock className="w-4 h-4 text-[#5df0a8]" />
+            <Lock className="w-4 h-4 text-[#5ab9fc]" />
           </div>
         }
         title="Jaminan Privasi 100% Sisi Klien (Local-First Architecture)"
@@ -23,9 +23,9 @@ export default function PrivacyBanner() {
           <span
             className="text-[11px] px-2.5 py-0.5 rounded-full font-semibold"
             style={{
-              background: "rgba(93, 240, 168, 0.08)",
+              background: "rgba(90, 185, 252, 0.08)",
               color: "var(--accent)",
-              border: "1px solid rgba(93, 240, 168, 0.22)",
+              border: "1px solid rgba(90, 185, 252, 0.22)",
             }}
           >
             Zero Data Stored

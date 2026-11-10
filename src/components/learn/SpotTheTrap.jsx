@@ -418,7 +418,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-3">
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
-              <Lightbulb className="w-5 h-5 text-[#5df0a8]" />
+              <Lightbulb className="w-5 h-5 text-[#5ab9fc]" />
               <span>Simulasi Interaktif: Tebak Jebakan Chat (Spot The Trap)</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -428,7 +428,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
 
           <div
             className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-slate-300 self-start sm:self-auto"
-            style={{ background: "rgba(12,18,38,0.40)", border: "1px solid var(--border)" }}
+            style={{ background: "rgba(19, 24, 36,0.40)", border: "1px solid var(--border)" }}
           >
             Skenario {currentQuestion + 1} / {quizScenarios.length}
           </div>
@@ -440,14 +440,14 @@ export default function SpotTheTrap({ onTestInScanner }) {
             <div
               className="max-w-xl mx-auto rounded-3xl p-5 sm:p-6 space-y-3.5"
               style={{
-                background: "rgba(4, 6, 15, 0.50)",
+                background: "rgba(10, 13, 20, 0.50)",
                 border: "1px solid rgba(150, 175, 230, 0.08)",
               }}
             >
               <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.06] text-slate-400">
                 <span className="font-semibold text-slate-300">{curr.sender}</span>
-                <span className="text-[11px] text-[#5df0a8] font-medium flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5df0a8]"></span>
+                <span className="text-[11px] text-[#5ab9fc] font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#5ab9fc]"></span>
                   Online
                 </span>
               </div>
@@ -468,7 +468,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                 <div className="flex justify-end pt-1">
                   <button
                     onClick={() => onTestInScanner(curr.chatPreview)}
-                    className="text-xs text-[#5df0a8] hover:text-[#2fd38a] flex items-center gap-1.5 transition-all font-semibold px-3 py-1.5 rounded-full hover:bg-[#5df0a8]/10 border border-[#5df0a8]/25"
+                    className="text-xs text-[#5ab9fc] hover:text-[#86cdfd] flex items-center gap-1.5 transition-all font-semibold px-3 py-1.5 rounded-full hover:bg-[#5ab9fc]/10 border border-[#5ab9fc]/25"
                     title="Bedah teks skenario ini langsung di Tab 1 (Recognize)"
                   >
                     <span>🔍 Uji Teks Ini di Scanner Tab 1</span>
@@ -481,7 +481,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
             {/* Pertanyaan */}
             <div className="space-y-4">
               <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2.5">
-                <HelpCircle className="w-5 h-5 text-[#5df0a8]" />
+                <HelpCircle className="w-5 h-5 text-[#5ab9fc]" />
                 <span>{curr.question}</span>
               </h3>
 
@@ -490,7 +490,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                 {curr.options.map((option, idx) => {
                   const isSelected = selectedOption?.id === option.id;
                   const letter = String.fromCharCode(65 + idx);
-                  let bgStyle = "rgba(12, 18, 38, 0.35)";
+                  let bgStyle = "rgba(19, 24, 36, 0.35)";
                   let borderStyle = "rgba(150, 175, 230, 0.07)";
                   let textColor = "text-slate-200";
 
@@ -504,7 +504,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                       borderStyle = "rgba(239, 68, 68, 0.35)";
                       textColor = "text-red-200";
                     } else {
-                      bgStyle = "rgba(12, 18, 38, 0.15)";
+                      bgStyle = "rgba(19, 24, 36, 0.15)";
                       borderStyle = "rgba(150, 175, 230, 0.03)";
                       textColor = "text-slate-500 opacity-60";
                     }
@@ -522,7 +522,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                       }}
                       onMouseEnter={(e) => {
                         if (!showExplanation) {
-                          e.currentTarget.style.borderColor = "rgba(93, 240, 168, 0.35)";
+                          e.currentTarget.style.borderColor = "rgba(90, 185, 252, 0.35)";
                           e.currentTarget.style.transform = "translateY(-1px)";
                         }
                       }}
@@ -544,7 +544,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                       </span>
                       <span className="flex-1 pt-0.5 leading-relaxed">{option.text}</span>
                       {showExplanation && option.isCorrect && (
-                        <CheckCircle className="w-5 h-5 text-[#5df0a8] shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-[#5ab9fc] shrink-0 mt-0.5" />
                       )}
                       {showExplanation && isSelected && !option.isCorrect && (
                         <XCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
@@ -560,11 +560,11 @@ export default function SpotTheTrap({ onTestInScanner }) {
               <div
                 className="p-5 sm:p-6 rounded-2xl space-y-3.5 text-xs sm:text-sm"
                 style={{
-                  background: "rgba(93, 240, 168, 0.05)",
-                  border: "1px solid rgba(93, 240, 168, 0.18)",
+                  background: "rgba(90, 185, 252, 0.05)",
+                  border: "1px solid rgba(90, 185, 252, 0.18)",
                 }}
               >
-                <div className="font-bold flex items-center gap-2 text-[#5df0a8]">
+                <div className="font-bold flex items-center gap-2 text-[#5ab9fc]">
                   <Lightbulb className="w-4 h-4 text-amber-400" />
                   <span>Penjelasan Pola Rekayasa Sosial:</span>
                 </div>
@@ -587,10 +587,10 @@ export default function SpotTheTrap({ onTestInScanner }) {
           /* Hasil Skor Akhir Kuis */
           <div className="text-center py-10 space-y-5">
             <div
-              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-[#5df0a8]"
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-[#5ab9fc]"
               style={{
-                background: "rgba(93, 240, 168, 0.10)",
-                border: "1px solid rgba(93, 240, 168, 0.25)",
+                background: "rgba(90, 185, 252, 0.10)",
+                border: "1px solid rgba(90, 185, 252, 0.25)",
               }}
             >
               <Award className="w-10 h-10" />
@@ -623,7 +623,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
       <div className="glass-card p-6 sm:p-8 space-y-6">
         <div className="pb-4 border-b border-white/[0.06] flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
-            <BookOpen className="w-5 h-5 text-[#5df0a8] shrink-0" />
+            <BookOpen className="w-5 h-5 text-[#5ab9fc] shrink-0" />
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-white">
                 Kamus {THREAT_MATRIX.length} Pola Manipulasi Rekayasa Sosial
@@ -679,7 +679,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                 <div
                   className="p-4 rounded-2xl space-y-3"
                   style={{
-                    background: "rgba(12, 18, 38, 0.35)",
+                    background: "rgba(19, 24, 36, 0.35)",
                     border: "1px solid rgba(150, 175, 230, 0.08)",
                   }}
                 >
@@ -694,7 +694,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
                     </div>
                     <div>
                       <span className="font-semibold text-slate-400">Benteng Nalar: </span>
-                      <span className="text-[#5df0a8] [overflow-wrap:anywhere] break-words">{item.countermeasure}</span>
+                      <span className="text-[#5ab9fc] [overflow-wrap:anywhere] break-words">{item.countermeasure}</span>
                     </div>
                   </div>
                 </div>
