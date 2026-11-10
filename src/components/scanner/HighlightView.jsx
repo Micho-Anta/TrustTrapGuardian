@@ -102,7 +102,7 @@ export default function HighlightView({ scanResult }) {
       <div className="glass-card p-6 sm:p-8 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.06] gap-3">
           <div className="flex items-center gap-2.5">
-            <ShieldAlert className="w-5 h-5 text-[#5df0a8] shrink-0" />
+            <ShieldAlert className="w-5 h-5 text-[#5ab9fc] shrink-0" />
             <h3 className="font-bold text-base sm:text-lg text-white">
               Bedah Sorotan Kalimat Manipulatif (Explainable Evidence)
             </h3>
@@ -119,17 +119,17 @@ export default function HighlightView({ scanResult }) {
             <button
               type="button"
               onClick={handleCopySanitized}
-              className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[#5df0a8] focus-visible:outline-offset-2"
+              className="px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[#5ab9fc] focus-visible:outline-offset-2"
               style={{
                 background: "rgba(150, 175, 230, 0.08)",
                 border: "1px solid rgba(150, 175, 230, 0.15)",
-                color: copiedSanitized ? "#5df0a8" : "var(--ink)",
+                color: copiedSanitized ? "#5ab9fc" : "var(--ink)",
               }}
               title="Salin teks yang telah disamarkan data pribadinya"
             >
               {copiedSanitized ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-[#5df0a8]" />
+                  <Check className="w-3.5 h-3.5 text-[#5ab9fc]" />
                   <span>Tersalin!</span>
                 </>
               ) : (
@@ -145,7 +145,7 @@ export default function HighlightView({ scanResult }) {
         <div
           className="p-5 rounded-2xl"
           style={{
-            background: "rgba(4, 6, 15, 0.45)",
+            background: "rgba(10, 13, 20, 0.45)",
             border: "1px solid rgba(150, 175, 230, 0.06)",
           }}
         >
@@ -174,7 +174,7 @@ export default function HighlightView({ scanResult }) {
       <div className="glass-card p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
           <h3 className="font-bold text-base sm:text-lg text-white flex items-center gap-2.5">
-            <Info className="w-5 h-5 text-[#5df0a8] shrink-0" />
+            <Info className="w-5 h-5 text-[#5ab9fc] shrink-0" />
             <span>
               Rincian Pemeriksaan ({dangerEngines.length} dari {sortedEngines.length} modul menyala)
             </span>
@@ -194,7 +194,7 @@ export default function HighlightView({ scanResult }) {
                   key={engine.id}
                   className="p-5 rounded-2xl transition-all"
                   style={{
-                    background: "rgba(12,18,38,0.45)",
+                    background: "rgba(19, 24, 36,0.45)",
                     border: "1px solid rgba(150,175,230,0.12)",
                     borderLeft: "3px solid #f59e0b",
                   }}
@@ -258,12 +258,12 @@ export default function HighlightView({ scanResult }) {
                     <div
                       className="text-xs sm:text-sm p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-2.5 leading-relaxed"
                       style={{
-                        background: "rgba(4,6,15,0.50)",
+                        background: "rgba(10, 13, 20,0.50)",
                         border: "1px solid rgba(150,175,230,0.08)",
                         color: "var(--muted)",
                       }}
                     >
-                      <span className="font-bold shrink-0 text-[#5df0a8]">Langkah Cepat:</span>
+                      <span className="font-bold shrink-0 text-[#5ab9fc]">Langkah Cepat:</span>
                       <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{engine.actionStep}</span>
                     </div>
                   </div>
@@ -289,7 +289,7 @@ export default function HighlightView({ scanResult }) {
         {cleanEngines.length > 0 && (
           <div className="pt-2 border-t border-white/[0.06]">
             <Disclosure
-              icon={<CheckCircle className="w-4 h-4 shrink-0 text-[#5df0a8]" aria-hidden="true" />}
+              icon={<CheckCircle className="w-4 h-4 shrink-0 text-[#5ab9fc]" aria-hidden="true" />}
               title={`${cleanEngines.length} modul lain tidak menemukan pola`}
               badge={
                 <span
@@ -311,13 +311,13 @@ export default function HighlightView({ scanResult }) {
                   key={engine.id}
                   className="p-3.5 rounded-2xl space-y-1"
                   style={{
-                    background: "rgba(12,18,38,0.30)",
+                    background: "rgba(19, 24, 36,0.30)",
                     border: "1px solid rgba(150,175,230,0.06)",
                   }}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                      <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#5df0a8]" />
+                      <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#5ab9fc]" />
                       <span className="font-bold text-xs sm:text-sm text-white [overflow-wrap:anywhere] break-words">
                         {engine.name}
                       </span>

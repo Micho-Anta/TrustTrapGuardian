@@ -155,11 +155,11 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
                 onClick={onGoToAct}
                 className="btn-ascend w-full sm:w-auto"
                 style={{
-                  background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
-                  color: "#032018",
+                  background: "var(--accent)",
+                  color: "#0a0d14",
                   fontWeight: 600,
                   borderRadius: "999px",
-                  boxShadow: "0 10px 28px -6px rgba(93,240,168,0.45)",
+                  boxShadow: "0 10px 28px -6px rgba(90, 185, 252,0.45)",
                 }}
               >
                 <span>🚨 Terlanjur Klik / Transfer? Buka Penyelamatan Darurat</span>
@@ -190,11 +190,11 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
             <span
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full [overflow-wrap:anywhere] break-words"
               style={{
-                background: "rgba(12,18,38,0.50)",
+                background: "rgba(19, 24, 36,0.50)",
                 border: "1px solid rgba(150,175,230,0.10)",
               }}
             >
-              <Info className="w-3 h-3 text-[#5df0a8] shrink-0" />
+              <Info className="w-3 h-3 text-[#5ab9fc] shrink-0" />
               <span>Formula: Min(100, {rawScore ?? "Base Score"} × Combo Multiplier {comboBonus ?? 1}x)</span>
             </span>
           </div>
@@ -218,8 +218,8 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
                   className="p-3 rounded-2xl text-xs flex flex-col justify-between min-w-0"
                   style={
                     isDanger
-                      ? { background: "rgba(12,18,38,0.55)", border: "1px solid rgba(245,158,11,0.26)", color: "#fde68a" }
-                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)", color: "var(--muted)" }
+                      ? { background: "rgba(19, 24, 36,0.55)", border: "1px solid rgba(245,158,11,0.26)", color: "#fde68a" }
+                      : { background: "rgba(19, 24, 36,0.30)", border: "1px solid rgba(150,175,230,0.06)", color: "var(--muted)" }
                   }
                 >
                   <div className="flex items-center justify-between gap-1 mb-1.5 min-w-0">

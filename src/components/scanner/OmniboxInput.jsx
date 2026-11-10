@@ -50,7 +50,7 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
       <div className="glass-card p-6 sm:p-8 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
-            <Sparkles className="w-4 h-4 text-[#5df0a8]" />
+            <Sparkles className="w-4 h-4 text-[#5ab9fc]" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
               Skenario Cepat Uji Juri (1-Click Presets)
             </h3>
@@ -58,9 +58,9 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
           <span
             className="text-[11px] px-3 py-1 rounded-full font-medium"
             style={{
-              background: "rgba(93, 240, 168, 0.08)",
+              background: "rgba(90, 185, 252, 0.08)",
               color: "var(--accent)",
-              border: "1px solid rgba(93, 240, 168, 0.20)",
+              border: "1px solid rgba(90, 185, 252, 0.20)",
             }}
           >
             Siap Uji Langsung
@@ -74,11 +74,11 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
               onClick={() => handlePresetSelect(preset)}
               className="text-left p-4 rounded-2xl transition-all group flex flex-col justify-between"
               style={{
-                background: "rgba(12, 18, 38, 0.40)",
+                background: "rgba(19, 24, 36, 0.40)",
                 border: "1px solid rgba(150, 175, 230, 0.07)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(93, 240, 168, 0.35)";
+                e.currentTarget.style.borderColor = "rgba(90, 185, 252, 0.35)";
                 e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
@@ -88,10 +88,10 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
             >
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5df0a8]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5ab9fc]">
                     {preset.badge}
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 transition-transform group-hover:translate-x-1 group-hover:text-[#5df0a8]" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 transition-transform group-hover:translate-x-1 group-hover:text-[#5ab9fc]" />
                 </div>
                 <div className="text-sm font-semibold text-white group-hover:text-slate-100 line-clamp-1">
                   {preset.title}
@@ -109,7 +109,7 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
       <div className="glass-card p-6 sm:p-8 space-y-4">
         <div className="flex items-center justify-between pb-3.5 mb-2 border-b border-white/[0.06]">
           <label className="text-xs sm:text-sm font-medium text-slate-300 flex items-center gap-2">
-            <Search className="w-4 h-4 text-[#5df0a8]" />
+            <Search className="w-4 h-4 text-[#5ab9fc]" />
             <span>Tempel Teks Chat WhatsApp / SMS / Tawaran Loker / Link Mencurigakan</span>
           </label>
           {text && (
@@ -150,7 +150,7 @@ export default function OmniboxInput({ text, setText, onAnalyze, onClear, isAnal
         {/* Footer Action Bar */}
         <div className="pt-2 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#5df0a8] shadow-[0_0_8px_rgba(93,240,168,0.6)]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#5ab9fc] shadow-[0_0_8px_rgba(90, 185, 252,0.6)]"></span>
             <span>Sensor Privasi Aktif (NIK/Rekening/OTP otomatis disamarkan secara lokal)</span>
           </div>
 
