@@ -5,8 +5,9 @@ import { ChevronDown } from "lucide-react";
  * Komponen Disclosure aksesibel (pola WAI-ARIA Disclosure).
  * - Memakai elemen native <button type="button"> (mendukung Enter & Space).
  * - Menghubungkan tombol dan panel lewat aria-expanded dan aria-controls.
- * - Konten tertutup disembunyikan dengan atribut HTML hidden.
- * - Animasi tinggi panel menghormati prefers-reduced-motion melalui CSS.
+ * - Panel tetap ter-mount di DOM; saat tertutup memakai inert dan visibility: hidden
+ *   setelah transisi tutup selesai agar animasi buka/tutup berjalan halus di dua arah.
+ * - Menghormati prefers-reduced-motion melalui CSS (transisi instan).
  */
 export default function Disclosure({
   id,
@@ -66,7 +67,12 @@ export default function Disclosure({
         />
       </button>
 
-      <div id={panelId} hidden={!isOpen} className="disclosure-panel">
+      <div
+        id={panelId}
+        inert={!isOpen}
+        data-open={isOpen ? "true" : "false"}
+        className="disclosure-panel"
+      >
         <div className="disclosure-panel-inner">
           <div className={`pt-2.5 min-w-0 ${panelClassName}`.trim()}>
             {children}

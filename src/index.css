@@ -260,25 +260,29 @@ body {
 }
 
 .disclosure-chevron {
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .disclosure-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 200ms;
+}
+
+.disclosure-panel[data-open="true"] {
   grid-template-rows: 1fr;
   opacity: 1;
-  transition: grid-template-rows 0.22s ease, opacity 0.2s ease;
-}
-
-.disclosure-panel[hidden] {
-  display: none !important;
-}
-
-@starting-style {
-  .disclosure-panel:not([hidden]) {
-    grid-template-rows: 0fr;
-    opacity: 0;
-  }
+  visibility: visible;
+  transition:
+    grid-template-rows 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0s;
 }
 
 .disclosure-panel-inner {
@@ -292,6 +296,7 @@ body {
     scroll-behavior: auto;
   }
   .disclosure-panel,
+  .disclosure-panel[data-open="true"],
   .disclosure-chevron,
   .disclosure-trigger {
     transition: none !important;
