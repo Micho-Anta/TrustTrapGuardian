@@ -12,6 +12,7 @@ import PanicTriage from "./components/action/PanicTriage";
 import WarningCard from "./components/action/WarningCard";
 import SpotTheTrap from "./components/learn/SpotTheTrap";
 import PrivacyBanner from "./components/learn/PrivacyBanner";
+import BackgroundFx from "./components/BackgroundFx";
 import { scanText } from "./engine/scannerIndex";
 import { JUDGE_PRESETS } from "./data/judgePresets";
 
@@ -75,6 +76,7 @@ export default function AppGuardian() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans" style={{ color: "var(--ink)" }}>
+      <BackgroundFx active={activeTab === "recognize"} />
 
       {/* ── Top Hackathon Ribbon ── */}
       <div
@@ -181,7 +183,7 @@ export default function AppGuardian() {
       </header>
 
       {/* ── Main Content Area ── */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8 sm:space-y-10">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-8 sm:space-y-10 relative z-10">
 
         {/* ── TAB 1: RECOGNIZE ── */}
         {activeTab === "recognize" && (

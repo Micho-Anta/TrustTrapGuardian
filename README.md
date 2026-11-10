@@ -165,6 +165,7 @@ Sebagai wujud kejujuran ilmiah, transparansi akademis, dan kepatuhan etis:
 | **React 19 & Vite** | MIT License | Runtime framework antarmuka reaktif dan bundler modern berbasis ESM |
 | **Tailwind CSS v4** | MIT License | Styling engine utility-first dengan implementasi sistem desain Ascend Glassmorphism |
 | **Lucide React** | ISC License | Pustaka ikon visual untuk indikator ancaman dan navigasi |
+| **React Bits** | [reactbits.dev](https://reactbits.dev) / MIT + Commons Clause License | Komponen background Particles (dekoratif). Efek visual hanya dekoratif dan tidak memproses data pengguna. |
 | **Bantuan Coding AI (LLM)** | Google DeepMind / Antigravity | Asistensi refactoring kode, penyusunan regex heuristik, dan struktur skenario kuis |
 | **Scam Heuristic Engine** | Orisinal (Tim Nanti Ajah) | 100% arsitektur deteksi rekayasa sosial, formula combo multiplier, dan logika privacy scrubber dirancang khusus untuk MIT-Week 2026 |
 
