@@ -13,6 +13,7 @@ import WarningCard from "./components/action/WarningCard";
 import SpotTheTrap from "./components/learn/SpotTheTrap";
 import PrivacyBanner from "./components/learn/PrivacyBanner";
 import BackgroundFx from "./components/BackgroundFx";
+import AnimatedContent from "./components/AnimatedContent";
 import { scanText } from "./engine/scannerIndex";
 import { JUDGE_PRESETS } from "./data/judgePresets";
 
@@ -21,6 +22,7 @@ export default function AppGuardian() {
   const [hasOpenedLearn, setHasOpenedLearn] = useState(false);
   const [inputText, setInputText] = useState(JUDGE_PRESETS[0].text);
   const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
+  const [scanCount, setScanCount] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Ref untuk scroll ke hasil setelah analisis
@@ -34,6 +36,7 @@ export default function AppGuardian() {
     setTimeout(() => {
       const result = scanText(text);
       setScanResult(result);
+      setScanCount((prev) => prev + 1);
       setIsAnalyzing(false);
       // Scroll ke hasil setelah sedikit delay agar DOM sudah ter-render
       setTimeout(() => {
@@ -194,7 +197,15 @@ export default function AppGuardian() {
           <div className="space-y-8 sm:space-y-10">
 
             {/* Hero header - Strong typography & breathing room */}
-            <div className="text-center sm:text-left space-y-3">
+            <AnimatedContent
+              trigger="mount"
+              distance={16}
+              duration={0.5}
+              direction="vertical"
+              ease="power2.out"
+              stagger={0.06}
+              className="text-center sm:text-left space-y-3"
+            >
               <p className="eyebrow">THE TRUST TRAP · NAVIGATING DIGITAL DECEPTION</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Deteksi Rekayasa Sosial &amp;{" "}
@@ -204,7 +215,7 @@ export default function AppGuardian() {
                 Tempel teks pesan WhatsApp, tawaran loker, atau tautan mencurigakan.
                 Scam Heuristic Engine akan membedah tanda bahaya manipulasi psikologis secara instan dan explainable.
               </p>
-            </div>
+            </AnimatedContent>
 
             {/* Omnibox */}
             <OmniboxInput
@@ -218,13 +229,23 @@ export default function AppGuardian() {
 
             {/* Results */}
             {scanResult && (
-              <div ref={resultsRef} className="space-y-8 sm:space-y-10 animate-in fade-in duration-300">
-                <ScoreGauge
-                  summary={scanResult.summary}
-                  engines={scanResult.engines}
-                  onGoToAct={handleGoToAct}
-                />
-                <HighlightView scanResult={scanResult} />
+              <div ref={resultsRef}>
+                <AnimatedContent
+                  key={scanCount}
+                  trigger="mount"
+                  distance={12}
+                  duration={0.4}
+                  direction="vertical"
+                  ease="power2.out"
+                  className="space-y-8 sm:space-y-10"
+                >
+                  <ScoreGauge
+                    summary={scanResult.summary}
+                    engines={scanResult.engines}
+                    onGoToAct={handleGoToAct}
+                  />
+                  <HighlightView scanResult={scanResult} />
+                </AnimatedContent>
               </div>
             )}
           </div>
@@ -233,7 +254,15 @@ export default function AppGuardian() {
         {/* ── TAB 2: ACT ── */}
         {activeTab === "act" && (
           <div className="space-y-8 sm:space-y-10">
-            <div className="text-center sm:text-left space-y-3">
+            <AnimatedContent
+              trigger="mount"
+              distance={8}
+              duration={0.3}
+              direction="vertical"
+              ease="power2.out"
+              stagger={0.06}
+              className="text-center sm:text-left space-y-3"
+            >
               <p className="eyebrow">LANGKAH PENYELAMATAN · PANIC TRIAGE</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Panduan Darurat &amp;{" "}
@@ -243,7 +272,7 @@ export default function AppGuardian() {
                 Panduan darurat langkah demi langkah jika Anda baru menerima chat atau sudah terlanjur melakukan transaksi,
                 dilengkapi generator kartu peringatan keluarga.
               </p>
-            </div>
+            </AnimatedContent>
 
             <PanicTriage scanResult={scanResult} />
             <WarningCard scanResult={scanResult} />
@@ -256,7 +285,15 @@ export default function AppGuardian() {
             hidden={activeTab !== "learn"}
             className="space-y-8 sm:space-y-10"
           >
-            <div className="text-center sm:text-left space-y-3">
+            <AnimatedContent
+              trigger="mount"
+              distance={16}
+              duration={0.5}
+              direction="vertical"
+              ease="power2.out"
+              stagger={0.06}
+              className="text-center sm:text-left space-y-3"
+            >
               <p className="eyebrow">EDUKASI · SIMULASI INTERAKTIF</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Pusat Edukasi &amp;{" "}
@@ -266,7 +303,7 @@ export default function AppGuardian() {
                 Pelajari bagaimana sindikat penipuan memanfaatkan celah psikologis rasa panik, serakah, dan empati
                 melalui simulasi kuis interaktif.
               </p>
-            </div>
+            </AnimatedContent>
             <SpotTheTrap onTestInScanner={handleTestFromLearn} />
           </div>
         )}
