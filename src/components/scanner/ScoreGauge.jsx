@@ -1,6 +1,7 @@
 import React from "react";
 import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight, Info } from "lucide-react";
 import Disclosure from "../ui/Disclosure";
+import { sortEnginesForDisplay } from "./sortEngines";
 
 /**
  * ScoreGauge - Ascend polished theme.
@@ -47,6 +48,7 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
 
   // Show Seamless Handoff button for HIGH or MEDIUM risk
   const showHandoff = score >= 35 && typeof onGoToAct === "function";
+  const sortedEngines = sortEnginesForDisplay(engines);
 
   return (
     <div className="glass-card p-6 sm:p-8 space-y-8">
@@ -208,7 +210,7 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
           )}
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
-            {engines.map((eng) => {
+            {sortedEngines.map((eng) => {
               const isDanger = eng.status === "DANGER";
               return (
                 <div

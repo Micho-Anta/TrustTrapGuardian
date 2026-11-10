@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AlertCircle, Check, CheckCircle, Copy, Info, Lock, ShieldAlert } from "lucide-react";
 import Disclosure from "../ui/Disclosure";
+import { sortEnginesForDisplay } from "./sortEngines";
 
 export default function HighlightView({ scanResult }) {
   const [copiedSanitized, setCopiedSanitized] = useState(false);
@@ -91,8 +92,9 @@ export default function HighlightView({ scanResult }) {
     );
   };
 
-  const dangerEngines = (engines || []).filter((e) => e.status === "DANGER");
-  const cleanEngines = (engines || []).filter((e) => e.status !== "DANGER");
+  const sortedEngines = sortEnginesForDisplay(engines || []);
+  const dangerEngines = sortedEngines.filter((e) => e.status === "DANGER");
+  const cleanEngines = sortedEngines.filter((e) => e.status !== "DANGER");
 
   return (
     <div className="space-y-8 sm:space-y-10">
@@ -168,98 +170,119 @@ export default function HighlightView({ scanResult }) {
         )}
       </div>
 
-      {/* Engine Detail Cards with Progressive Disclosure */}
-      <div className="glass-card p-6 sm:p-8 space-y-5">
+      {/* Engine Detail Cards: DANGER sorted first, clean grouped in Disclosure */}
+      <div className="glass-card p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
           <h3 className="font-bold text-base sm:text-lg text-white flex items-center gap-2.5">
             <Info className="w-5 h-5 text-[#5df0a8] shrink-0" />
-            <span>Rincian Hasil {engines?.length || 11} Modul Pemeriksaan (Scam Engines)</span>
+            <span>
+              Rincian Pemeriksaan ({dangerEngines.length} dari {sortedEngines.length} modul menyala)
+            </span>
           </h3>
-          <span className="text-xs text-slate-400">
-            {dangerEngines.length} terdeteksi · {cleanEngines.length} tanpa temuan
-          </span>
         </div>
 
         {dangerEngines.length > 0 ? (
-          <div className="space-y-3">
-            {dangerEngines.map((engine) => (
-              <Disclosure
-                key={engine.id}
-                icon={<AlertCircle className="w-4 h-4 shrink-0 text-amber-400" aria-hidden="true" />}
-                title={engine.name}
-                summary={engine.category}
-                badge={
-                  <span
-                    className="text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap"
-                    style={{
-                      background: "rgba(245,158,11,0.12)",
-                      border: "1px solid rgba(245,158,11,0.28)",
-                      color: "#fcd34d",
-                    }}
-                  >
-                    BAHAYA (+{engine.score} Poin)
-                  </span>
-                }
-                defaultOpen={false}
-                panelClassName="px-2 pb-2"
-              >
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>Tanda Bahaya Terdeteksi ({dangerEngines.length})</span>
+            </h4>
+
+            <div className="space-y-3.5">
+              {dangerEngines.map((engine) => (
                 <div
-                  className="p-4 sm:p-5 rounded-2xl space-y-3"
+                  key={engine.id}
+                  className="p-5 rounded-2xl transition-all"
                   style={{
                     background: "rgba(12,18,38,0.45)",
-                    border: "1px solid rgba(150,175,230,0.08)",
+                    border: "1px solid rgba(150,175,230,0.12)",
+                    borderLeft: "3px solid #f59e0b",
                   }}
                 >
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5">
+                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+                      <span className="font-bold text-sm sm:text-base text-white [overflow-wrap:anywhere] break-words">
+                        {engine.name}
+                      </span>
+                      <span
+                        className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-0.5 rounded-full"
+                        style={{
+                          background: "rgba(150,175,230,0.06)",
+                          color: "var(--muted)",
+                          border: "1px solid rgba(150,175,230,0.10)",
+                        }}
+                      >
+                        {engine.category}
+                      </span>
+                    </div>
+
+                    <span
+                      className="text-xs font-bold px-3 py-0.5 rounded-full self-start sm:self-auto whitespace-nowrap shrink-0"
+                      style={{
+                        background: "rgba(245,158,11,0.12)",
+                        border: "1px solid rgba(245,158,11,0.28)",
+                        color: "#fcd34d",
+                      }}
+                    >
+                      BAHAYA (+{engine.score} Poin)
+                    </span>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-300 mb-3 leading-relaxed [overflow-wrap:anywhere] break-words">
                     {engine.explanation}
                   </p>
 
-                  {engine.evidence && engine.evidence.length > 0 && (
-                    <div className="text-xs pt-2 border-t border-white/[0.06]">
-                      <span className="font-semibold text-slate-300">Bukti Kata/Frasa: </span>
-                      <div className="inline-flex flex-wrap gap-1.5 mt-1.5">
-                        {engine.evidence.map((ev, i) => (
-                          <span
-                            key={i}
-                            className="px-2.5 py-0.5 rounded-md font-mono text-[11px] [overflow-wrap:anywhere] break-words"
-                            style={{
-                              background: "rgba(150,175,230,0.08)",
-                              color: "#e2e8f0",
-                              border: "1px solid rgba(150,175,230,0.16)",
-                            }}
-                          >
-                            "{ev}"
-                          </span>
-                        ))}
+                  <div className="space-y-2.5 pt-3 border-t border-white/[0.06]">
+                    {engine.evidence && engine.evidence.length > 0 && (
+                      <div className="text-xs">
+                        <span className="font-semibold text-slate-300">Bukti Kata/Frasa: </span>
+                        <div className="inline-flex flex-wrap gap-1.5 mt-1.5">
+                          {engine.evidence.map((ev, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-0.5 rounded-md font-mono text-[11px] [overflow-wrap:anywhere] break-words"
+                              style={{
+                                background: "rgba(150,175,230,0.08)",
+                                color: "#e2e8f0",
+                                border: "1px solid rgba(150,175,230,0.16)",
+                              }}
+                            >
+                              "{ev}"
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div
-                    className="text-xs sm:text-sm p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-2.5 leading-relaxed"
-                    style={{
-                      background: "rgba(4,6,15,0.50)",
-                      border: "1px solid rgba(150,175,230,0.08)",
-                      color: "var(--muted)",
-                    }}
-                  >
-                    <span className="font-bold shrink-0 text-[#5df0a8]">Langkah Cepat:</span>
-                    <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{engine.actionStep}</span>
+                    <div
+                      className="text-xs sm:text-sm p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-2.5 leading-relaxed"
+                      style={{
+                        background: "rgba(4,6,15,0.50)",
+                        border: "1px solid rgba(150,175,230,0.08)",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      <span className="font-bold shrink-0 text-[#5df0a8]">Langkah Cepat:</span>
+                      <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{engine.actionStep}</span>
+                    </div>
                   </div>
                 </div>
-              </Disclosure>
-            ))}
+              ))}
+            </div>
           </div>
         ) : (
           <div
-            className="p-4 rounded-2xl text-xs sm:text-sm text-slate-300 flex items-center gap-2.5"
+            className="p-4 rounded-2xl text-xs sm:text-sm text-slate-300 flex items-start gap-2.5 leading-relaxed"
             style={{
-              background: "rgba(16,185,129,0.06)",
-              border: "1px solid rgba(16,185,129,0.18)",
+              background: "rgba(150,175,230,0.06)",
+              border: "1px solid rgba(150,175,230,0.14)",
             }}
           >
-            <CheckCircle className="w-4 h-4 shrink-0 text-[#5df0a8]" />
-            <span>Tidak ada modul yang mendeteksi pola penipuan pada pesan ini.</span>
+            <Info className="w-4 h-4 shrink-0 mt-0.5 text-slate-400" />
+            <span>
+              Tidak ada tanda bahaya yang cocok dengan aturan kami. Ini bukan jaminan pesan aman.
+            </span>
           </div>
         )}
 
@@ -267,7 +290,7 @@ export default function HighlightView({ scanResult }) {
           <div className="pt-2 border-t border-white/[0.06]">
             <Disclosure
               icon={<CheckCircle className="w-4 h-4 shrink-0 text-[#5df0a8]" aria-hidden="true" />}
-              title={`Modul tanpa temuan indikasi (${cleanEngines.length} modul)`}
+              title={`${cleanEngines.length} modul lain tidak menemukan pola`}
               badge={
                 <span
                   className="text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap"
@@ -286,7 +309,7 @@ export default function HighlightView({ scanResult }) {
               {cleanEngines.map((engine) => (
                 <div
                   key={engine.id}
-                  className="p-4 rounded-2xl space-y-1.5"
+                  className="p-3.5 rounded-2xl space-y-1"
                   style={{
                     background: "rgba(12,18,38,0.30)",
                     border: "1px solid rgba(150,175,230,0.06)",
@@ -320,7 +343,7 @@ export default function HighlightView({ scanResult }) {
                       TIDAK TERDETEKSI
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed [overflow-wrap:anywhere] break-words">
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 [overflow-wrap:anywhere] break-words">
                     {engine.explanation}
                   </p>
                 </div>
