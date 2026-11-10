@@ -52,7 +52,7 @@ flowchart TD
 
 | ID Modul | Nama Modul | Kategori Ancaman | Bobot Dasar | Trik Psikologis yang Dieksploitasi | Pola / Regex Deteksi Utama |
 |---|---|---|---|---|---|
-| `upfront_fee` | **Upfront Fee & Deposit Trap** | Financial Manipulation | 30 | *Sunk Cost Fallacy* & Komitmen Bertingkat | `\b(?:me\|men\|di)?transfer\s+(?:biaya\|uang\|dana\|tiket\|reservasi\|admin\|deposit)\b`, `rekening penampung/sementara`, `alihkan saldo` |
+| `upfront_fee` | **Upfront Fee & Deposit Trap** | Financial Manipulation | 35 | *Sunk Cost Fallacy* & Komitmen Bertingkat | `\b(?:me\|men\|di)?transfer\s+(?:biaya\|uang\|dana\|tiket\|reservasi\|admin\|deposit)\b`, bayar/transfer (seragam/pelatihan/training/berkas/medical/alat kerja), `rekening penampung/sementara`, `alihkan saldo` |
 | `artificial_urgency` | **Artificial Urgency & Fear** | Psychological Manipulation | 20 | *Fight-or-Flight Response* & Kepanikan | `dalam (?:15\|30\|10\|5) menit`, `sebelum kuota hangus`, `akun diblokir/dibekukan`, `denda keterlambatan`, `darurat`, `penting banget` |
 | `unrealistic_reward` | **Unrealistic Reward / Task Scam** | Deceptive Employment | 25 | *Greed Heuristic* & *Foot-in-the-Door* | `komisi harian rp[0-9]+`, `cukup like & subscribe`, `kerja dari hp tanpa modal`, `misi vip` |
 | `apk_otp_harvester` | **OTP & APK Harvester** | Malware & Credential Theft | 40 | Kepercayaan terhadap Dokumen Resmi | `[a-zA-Z0-9_\-]+\.apk\b`, `kode otp`, `pin 6 digit`, `surat_.*\.apk`, `instal/download aplikasi` |

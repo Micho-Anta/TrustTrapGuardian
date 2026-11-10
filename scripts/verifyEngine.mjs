@@ -336,6 +336,36 @@ runTest("Safe OTP SMS", "SMS OTP Asli dengan Larangan Berbagi: 'Kode OTP BNN And
   return scan.summary.score;
 }, "Kode OTP BNN Anda 482913. Jangan berikan kode ini kepada siapa pun. Berlaku 5 menit.");
 
+runTest("Safe Message 9", "Pesan Aman 9: Notifikasi Pengiriman Paket Resmi Ekspedisi (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Paket dengan nomor resi JP1234567890 sedang dibawa kurir menuju alamat Anda. Harap pastikan ada penerima di lokasi.";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Paket dengan nomor resi JP1234567890 sedang dibawa kurir menuju alamat Anda. Harap pastikan ada penerima di lokasi.");
+
+runTest("Safe Message 10", "Pesan Aman 10: Pengingat Jadwal Janji Temu Faskes Resmi (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Pengingat: Jadwal konsultasi dokter gigi Anda di Klinik Sehat Nusantara besok Sabtu pukul 10.00 WIB. Harap hadir 15 menit sebelum jadwal.";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Pengingat: Jadwal konsultasi dokter gigi Anda di Klinik Sehat Nusantara besok Sabtu pukul 10.00 WIB. Harap hadir 15 menit sebelum jadwal.");
+
+runTest("Safe Message 11", "Pesan Aman 11: Ucapan Selamat Ulang Tahun Personal (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Selamat ulang tahun ya Andi! Semoga panjang umur, sehat selalu, dan sukses dalam karier dan studinya.";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Selamat ulang tahun ya Andi! Semoga panjang umur, sehat selalu, dan sukses dalam karier dan studinya.");
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 4: SPECIAL TESTS (SECRECY EXCEPTION & BOUNDARIES)
 // ─────────────────────────────────────────────────────────────
@@ -396,6 +426,24 @@ runTest("OTP Request Attack", "Permintaan Aktif Kode OTP: 'Kirim kode OTP kamu k
   assert.ok(triggeredIds.includes("apk_otp_harvester"), "Modul apk_otp_harvester harus tetap terpicu pada permintaan kode");
   return scan.summary.score;
 }, "Kirim kode OTP kamu ke saya sekarang");
+
+runTest("Brand Spoofing Generic", "Modul Brand Spoofing Generic Word: 'tokopedia-order.id' (skor >= 35)", () => {
+  const text = "tokopedia-order.id";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("phishing_link"), "Modul phishing_link harus terpicu pada domain tiruan tokopedia-order.id");
+  return scan.summary.score;
+}, "tokopedia-order.id");
+
+runTest("Fake Job Upfront Fee", "Pungutan Biaya Loker Palsu: 'Dibutuhkan admin online shop... bayar seragam 150rb dulu' (skor >= 35)", () => {
+  const text = "Dibutuhkan admin online shop... bayar seragam 150rb dulu";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus terpicu pada pungutan biaya seragam");
+  return scan.summary.score;
+}, "Dibutuhkan admin online shop... bayar seragam 150rb dulu");
 
 // ─────────────────────────────────────────────────────────────
 // TABEL RINGKASAN & LAPORAN AKHIR

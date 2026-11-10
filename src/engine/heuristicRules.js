@@ -10,7 +10,7 @@ export const HEURISTIC_ENGINES = [
     id: "upfront_fee",
     name: "Upfront Fee & Deposit Trap",
     category: "Financial Manipulation",
-    baseWeight: 30,
+    baseWeight: 35,
     explanation: "Meminta uang di muka sebagai syarat rekrutmen kerja, pencairan hadiah, atau deposit tugas. Instansi resmi dan undian legal tidak pernah memungut biaya di awal.",
     actionStep: "Jangan transfer uang sepeser pun. Rekrutmen & undian resmi tidak pernah meminta transfer biaya reservasi/administrasi di awal.",
     rules: [
@@ -18,6 +18,7 @@ export const HEURISTIC_ENGINES = [
       { pattern: /(?:deposit\s*(?:tugas|saldo|awal|misi))/gi, label: "Pola Deposit Tugas" },
       { pattern: /(?:top\s*up\s*(?:deposit|saldo\s*tugas))/gi, label: "Top Up Saldo Misi" },
       { pattern: /\b(?:me|men|di)?transfer\s+(?:biaya|uang|dana|tiket|reservasi|admin|deposit|\d+(?:\s*(?:juta|ribu|rb|k))?)\b/gi, label: "Instruksi Transfer Uang di Muka" },
+      { pattern: /(?:(?:bayar|transfer|me?transfer|di?transfer|biaya)\s+(?:biaya\s+|uang\s+)?(?:seragam|pelatihan|training|berkas|administrasi|kit|medical|alat\s*kerja))/gi, label: "Pungutan Biaya Rekrutmen / Loker Palsu" },
       { pattern: /(?:modal\s*deposit|uang\s*jaminan)/gi, label: "Klausa Modal Jaminan" },
       { pattern: /(?:rekening\s*(?:penampung|sementara)|alihkan\s*saldo|amankan\s*saldo)/gi, label: "Modus Rekening Penampung Aman" }
     ]
@@ -184,7 +185,7 @@ function normalizedEntropy(str) {
 
 // Helper khusus pengecekan URL / Link Phishing
 export function inspectLinksInText(text) {
-  const urlRegex = /(?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*/gi;
+  const urlRegex = /(?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*|\b[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.(?:com|id|co\.id|net|org|xyz|top|site|online|info|me|live|shop|club|biz|cc|vip)\b(?:\/[^\s]*)?/gi;
   const matches = text.match(urlRegex) || [];
   const findings = [];
 
@@ -197,7 +198,8 @@ export function inspectLinksInText(text) {
     "whatsapp", "instagram", "tiktok"
   ];
   const baitWords = [
-    "verifikasi", "login", "klaim", "promo", "cek", "resi", "update", "akun", "secure", "hadiah"
+    "order", "pesanan", "resi", "akun", "cek", "update", "promo",
+    "verifikasi", "login", "klaim", "secure", "hadiah"
   ];
 
   for (const rawUrl of matches) {
@@ -206,7 +208,7 @@ export function inspectLinksInText(text) {
     // Ekstrak hostname/domain
     let domain = "";
     try {
-      const urlObj = new URL(rawUrl.startsWith("www.") ? "https://" + rawUrl : rawUrl);
+      const urlObj = new URL(rawUrl.includes("://") ? rawUrl : "https://" + rawUrl);
       domain = urlObj.hostname;
     } catch {
       domain = urlLower.replace(/^https?:\/\//, "").split("/")[0];

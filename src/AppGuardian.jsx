@@ -128,7 +128,7 @@ export default function AppGuardian() {
                 </span>
               </div>
               <p className="text-xs text-slate-400 hidden sm:block mt-0.5">
-                VirusTotal-Style Social Engineering &amp; Scam Detector
+                Deteksi Pola Rekayasa Sosial &amp; Penipuan Digital
               </p>
             </div>
           </div>

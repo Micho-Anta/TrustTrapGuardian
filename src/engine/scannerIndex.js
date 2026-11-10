@@ -239,7 +239,7 @@ export function scanText(rawText) {
 
       if (allOfficial) {
         triggeredIds.delete("upfront_fee");
-        totalRawScore = Math.max(0, totalRawScore - 30);
+        totalRawScore = Math.max(0, totalRawScore - 35);
 
         const upfrontResult = engineResults.find((e) => e.id === "upfront_fee");
         if (upfrontResult) {
