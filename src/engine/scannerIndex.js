@@ -1,4 +1,5 @@
 import { scrubPrivacy } from "./privacyScrubber.js";
+import { normalizeForDetection } from "./textNormalizer.js";
 import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules.js";
 import {
   splitSentences,
@@ -9,7 +10,7 @@ import {
 /**
  * Scan text using Scam Heuristic Engine v1.0
  * Alur 4 Tahap:
- * 1. Auto-Redaction Sensor Privasi
+ * 1. Auto-Redaction Sensor Privasi & Normalisasi Salinan Deteksi
  * 2. Multi-Module Heuristic Examination dengan Context Guards
  * 3. Combo Multiplier Calculation
  * 4. Action & Explanation Mapping
@@ -22,13 +23,32 @@ export function scanText(rawText) {
   // Tahap 1: Sensor Privasi Otomatis (Auto-Redaction)
   const { sanitizedText, redactions } = scrubPrivacy(rawText);
 
+  // Tahap 1b: Salinan Khusus Normalisasi Regex (Teks asli tampilan tetap sanitizedText)
+  const { normalizedText, tokenMap } = normalizeForDetection(sanitizedText);
+
   const engineResults = [];
   const highlightedEvidence = [];
   let totalRawScore = 0;
   const triggeredIds = new Set();
 
-  const sentences = splitSentences(sanitizedText);
+  const sentences = splitSentences(normalizedText);
   const upfrontFeeEvidenceSentences = [];
+
+  // Helper pemeta bukti ke token asli sebelum normalisasi
+  const mapWithOriginals = (words) => {
+    if (!words || words.length === 0 || tokenMap.length === 0) return words;
+    const res = [...words];
+    for (const w of words) {
+      const wLower = w.toLowerCase();
+      for (const t of tokenMap) {
+        const normLower = t.normalized.toLowerCase();
+        if (wLower.includes(normLower) || normLower.includes(wLower)) {
+          res.push(t.original);
+        }
+      }
+    }
+    return Array.from(new Set(res));
+  };
 
   // Tahap 2: Pemeriksaan Seluruh Modul Modus Penipuan
   for (const engine of HEURISTIC_ENGINES) {
@@ -36,7 +56,7 @@ export function scanText(rawText) {
     const matchedPatterns = [];
 
     if (engine.inspectUrl) {
-      // Modul Khusus: Phishing Link & Domain Inspector
+      // Modul Khusus: Phishing Link & Domain Inspector (Gunakan sanitizedText asli agar URL tidak rusak)
       const linkFindings = inspectLinksInText(sanitizedText);
       if (linkFindings.length > 0) {
         for (const finding of linkFindings) {
@@ -58,7 +78,7 @@ export function scanText(rawText) {
       const matchedB = [];
 
       for (const item of engine.groupA) {
-        const m = sanitizedText.match(item.pattern);
+        const m = normalizedText.match(item.pattern);
         if (m) {
           matchedA.push(...m);
           matchedPatterns.push(item.label);
@@ -66,7 +86,7 @@ export function scanText(rawText) {
       }
 
       for (const item of engine.groupB) {
-        const m = sanitizedText.match(item.pattern);
+        const m = normalizedText.match(item.pattern);
         if (m) {
           matchedB.push(...m);
           matchedPatterns.push(item.label);
@@ -74,7 +94,7 @@ export function scanText(rawText) {
       }
 
       if (matchedA.length > 0 && matchedB.length > 0) {
-        const combined = [...matchedA, ...matchedB];
+        const combined = mapWithOriginals([...matchedA, ...matchedB]);
         for (const word of combined) {
           evidenceList.push(word);
           highlightedEvidence.push({
@@ -89,7 +109,7 @@ export function scanText(rawText) {
       // Modul Khusus: Pinjol Ilegal (Minimal Dua Pola Cocok)
       const matchedRules = [];
       for (const rule of engine.rules) {
-        const m = sanitizedText.match(rule.pattern);
+        const m = normalizedText.match(rule.pattern);
         if (m) {
           matchedRules.push({ rule, matches: m });
         }
@@ -98,7 +118,8 @@ export function scanText(rawText) {
       if (matchedRules.length >= 2) {
         for (const item of matchedRules) {
           matchedPatterns.push(item.rule.label);
-          for (const word of item.matches) {
+          const mappedWords = mapWithOriginals(item.matches);
+          for (const word of mappedWords) {
             evidenceList.push(word);
             highlightedEvidence.push({
               text: word,
@@ -120,7 +141,7 @@ export function scanText(rawText) {
         /travel\s+rekanan|mitra\s+kami\s+ini/gi,
       ];
       const hasUnofficialChannel = unofficialChannelPatterns.some(
-        (pat) => pat.test(sanitizedText)
+        (pat) => pat.test(normalizedText)
       );
 
       for (const rule of engine.rules) {
@@ -133,7 +154,8 @@ export function scanText(rawText) {
           if (!isBrandRule || hasUnofficialChannel) {
             const matches = sentence.match(rule.pattern);
             if (matches) {
-              for (const m of matches) {
+              const mappedMatches = mapWithOriginals(matches);
+              for (const m of mappedMatches) {
                 evidenceList.push(m);
                 highlightedEvidence.push({
                   text: m,
@@ -161,7 +183,8 @@ export function scanText(rawText) {
 
           const matches = sentence.match(rule.pattern);
           if (matches) {
-            for (const m of matches) {
+            const mappedMatches = mapWithOriginals(matches);
+            for (const m of mappedMatches) {
               evidenceList.push(m);
               highlightedEvidence.push({
                 text: m,

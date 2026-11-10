@@ -348,6 +348,38 @@ runTest("Boundary Check", "Input kosong / whitespace menghasilkan return null se
 });
 
 // ─────────────────────────────────────────────────────────────
+// SUITE 5: OBFUSCATION & TEXT NORMALIZATION DEFENSE
+// ─────────────────────────────────────────────────────────────
+console.log("\n📦 SUITE 5: Obfuscation Defense & Normalisasi Teks (Skor >= 35)");
+
+runTest("Obfuscation Leetspeak", "Normalisasi Leetspeak: 'tr4nsf3r b14y4 4dm1n 150rb s3k4r4ng' (skor >= 35)", () => {
+  const text = "tr4nsf3r b14y4 4dm1n 150rb s3k4r4ng";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("upfront_fee"), "Harus mendeteksi upfront_fee dari tr4nsf3r b14y4 4dm1n");
+  return scan.summary.score;
+}, "tr4nsf3r b14y4 4dm1n 150rb s3k4r4ng");
+
+runTest("Obfuscation Spaced", "Normalisasi Pemisah Huruf: 'kirim p.u.l.s.a 100rb dulu ya, nomor baru nih hp lama hilang' (skor >= 35)", () => {
+  const text = "kirim p.u.l.s.a 100rb dulu ya, nomor baru nih hp lama hilang";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("family_impersonation"), "Harus mendeteksi family_impersonation dari p.u.l.s.a dan nomor baru");
+  return scan.summary.score;
+}, "kirim p.u.l.s.a 100rb dulu ya, nomor baru nih hp lama hilang");
+
+runTest("Obfuscation Slang", "Normalisasi Singkatan Obrolan: 'mam, hp aku ilang jd ini nmr baru ya. bisa tf dulu ga 500rb, urgent bgt' (skor >= 35)", () => {
+  const text = "mam, hp aku ilang jd ini nmr baru ya. bisa tf dulu ga 500rb, urgent bgt";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("family_impersonation"), "Harus mendeteksi family_impersonation dari nmr baru dan tf");
+  return scan.summary.score;
+}, "mam, hp aku ilang jd ini nmr baru ya. bisa tf dulu ga 500rb, urgent bgt");
+
+// ─────────────────────────────────────────────────────────────
 // TABEL RINGKASAN & LAPORAN AKHIR
 // ─────────────────────────────────────────────────────────────
 console.log("\n📊 TABEL SKOR & HASIL VERIFIKASI ENGINE (MIT-041):\n");

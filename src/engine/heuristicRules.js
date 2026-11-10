@@ -34,9 +34,9 @@ export const HEURISTIC_ENGINES = [
       { pattern: /(?:sebelum\s*(?:kuota\s*)?hangus)/gi, label: "Manipulasi Kuota Hangus" },
       { pattern: /(?:akun\s*(?:anda\s*)?(?:diblokir|dibekukan|ditangguhkan))/gi, label: "Ancaman Pemblokiran Akun" },
       { pattern: /(?:denda\s*keterlambatan|tindakan\s*hukum)/gi, label: "Ancaman Denda / Sanksi" },
-      { pattern: /(?:berlaku\s*hari\s*ini\s*saja|segera\s*(?:transfer|klaim|konfirmasi|verifikasi))/gi, label: "Tekanan Urgensi Hari Ini" },
+      { pattern: /(?:berlaku\s*hari\s*ini\s*saja|segera\s*(?:transfer|klaim|konfirmasi|verifikasi)|\bsekarang(?:\s*juga)?\b)/gi, label: "Tekanan Urgensi Hari Ini / Sekarang" },
       { pattern: /(?:darurat(?:\s+di\s+rumah\s+sakit|\s+tolong|\s+butuh)?|\bdarurat\b)/gi, label: "Pura-pura Kondisi Darurat" },
-      { pattern: /(?:penting\s*banget|mendesak|sangat\s*penting|butuh\s*(?:cepat|sekarang))/gi, label: "Manipulasi Urgensi Mendesak" }
+      { pattern: /(?:penting\s*banget|mendesak|sangat\s*penting|butuh\s*(?:cepat|sekarang)|\burgent(?:\s*banget)?\b)/gi, label: "Manipulasi Urgensi Mendesak" }
     ]
   },
   {
@@ -98,13 +98,13 @@ export const HEURISTIC_ENGINES = [
     id: "family_impersonation",
     name: "Family Impersonation / Urgensi Kerabat",
     category: "Social Engineering",
-    baseWeight: 30,
+    baseWeight: 35,
     explanation: "Menyamar sebagai anak atau keluarga yang mengaku ganti nomor atau dalam kondisi darurat musibah untuk meminta pulsa atau transfer uang.",
     actionStep: "Telepon langsung nomor lama kerabat untuk verifikasi suara sebelum mengirimkan pulsa atau uang. Jangan percaya nomor baru.",
     groupA: [
       { pattern: /nomor\s*baru/gi, label: "Klaim Nomor Baru" },
       { pattern: /ganti\s*nomor/gi, label: "Klaim Ganti Nomor" },
-      { pattern: /hp\s*(?:lama\s*)?(?:rusak|hilang|error)/gi, label: "Klaim HP Lama Rusak/Hilang" },
+      { pattern: /hp\s*(?:lama\s*|aku\s*|ku\s*)?(?:rusak|hilang|error)/gi, label: "Klaim HP Rusak/Hilang" },
       { pattern: /aku\s*(?:anakmu|anak\s*mama)/gi, label: "Pengakuan Sebagai Anak" },
       { pattern: /\bdarurat\b/gi, label: "Klaim Situasi Darurat" },
       { pattern: /rumah\s*sakit/gi, label: "Klaim Berada di Rumah Sakit" },
@@ -119,7 +119,7 @@ export const HEURISTIC_ENGINES = [
       { pattern: /\brekening\b/gi, label: "Penyebutan Nomor Rekening" }
     ],
     rules: [
-      { pattern: /(?:nomor\s*baru|ganti\s*nomor|hp\s*(?:lama\s*)?(?:rusak|hilang|error)|aku\s*(?:anakmu|anak\s*mama)|darurat|rumah\s*sakit|kecelakaan)/gi, label: "Identitas / Musibah Kerabat Palsu" },
+      { pattern: /(?:nomor\s*baru|ganti\s*nomor|hp\s*(?:lama\s*|aku\s*|ku\s*)?(?:rusak|hilang|error)|aku\s*(?:anakmu|anak\s*mama)|darurat|rumah\s*sakit|kecelakaan)/gi, label: "Identitas / Musibah Kerabat Palsu" },
       { pattern: /(?:pulsa|transfer|kirim(?:in)?\s*uang|talangin|pinjam(?:in)?\s*uang|rekening)/gi, label: "Permintaan Dana / Pulsa Darurat" }
     ]
   },
