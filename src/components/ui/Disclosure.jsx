@@ -60,7 +60,7 @@ export default function Disclosure({
 
         <ChevronDown
           className={`disclosure-chevron w-4 h-4 shrink-0 text-slate-400 ${
-            isOpen ? "rotate-180 text-[#5df0a8]" : ""
+            isOpen ? "rotate-180 text-[#5ab9fc]" : ""
           }`}
           aria-hidden="true"
         />
