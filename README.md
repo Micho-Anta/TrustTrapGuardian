@@ -165,7 +165,7 @@ Sebagai wujud kejujuran ilmiah, transparansi akademis, dan kepatuhan etis:
 | **React 19 & Vite** | MIT License | Runtime framework antarmuka reaktif dan bundler modern berbasis ESM |
 | **Tailwind CSS v4** | MIT License | Styling engine utility-first dengan implementasi sistem desain Ascend Glassmorphism |
 | **Lucide React** | ISC License | Pustaka ikon visual untuk indikator ancaman dan navigasi |
-| **React Bits (Particles, AnimatedContent, GradualBlur)** | [reactbits.dev](https://reactbits.dev) / MIT + Commons Clause License Condition v1.0 | Komponen visual dekoratif (background `Particles`, animasi masuk `AnimatedContent`, dan blur tepi bawah `GradualBlur`). Hanya untuk tampilan visual dan tidak memproses data pengguna. |
+| **React Bits (Particles, AnimatedContent, GradualBlur, AnimatedList)** | [reactbits.dev](https://reactbits.dev) / MIT + Commons Clause License Condition v1.0 | Komponen visual dan interaksi UI (background `Particles`, animasi masuk `AnimatedContent`, blur tepi bawah `GradualBlur`, dan daftar preset `AnimatedList` dengan ikon default `@hugeicons` dihapus). Hanya untuk tampilan/navigasi UI dan tidak memproses data pengguna. |
 | **GSAP (3.x)** | [gsap.com/standard-license](https://gsap.com/standard-license) (Standard 'no charge' license) | Engine animasi untuk komponen `AnimatedContent`. Tidak mengirim atau menyimpan data pengguna. |
 | **Bantuan Coding AI (LLM)** | Google DeepMind / Antigravity | Asistensi refactoring kode, penyusunan regex heuristik, dan struktur skenario kuis |
 | **Scam Heuristic Engine** | Orisinal (Tim Nanti Ajah) | 100% arsitektur deteksi rekayasa sosial, formula combo multiplier, dan logika privacy scrubber dirancang khusus untuk MIT-Week 2026 |
