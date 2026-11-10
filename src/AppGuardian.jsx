@@ -18,6 +18,7 @@ import { JUDGE_PRESETS } from "./data/judgePresets";
 
 export default function AppGuardian() {
   const [activeTab, setActiveTab] = useState("recognize"); // 'recognize' | 'act' | 'learn'
+  const [hasOpenedLearn, setHasOpenedLearn] = useState(false);
   const [inputText, setInputText] = useState(JUDGE_PRESETS[0].text);
   const [scanResult, setScanResult] = useState(() => scanText(JUDGE_PRESETS[0].text));
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -64,6 +65,9 @@ export default function AppGuardian() {
 
   /** Change tab with smooth scroll to top */
   const handleTabChange = (tabId) => {
+    if (tabId === "learn") {
+      setHasOpenedLearn(true);
+    }
     setActiveTab(tabId);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -246,9 +250,12 @@ export default function AppGuardian() {
           </div>
         )}
 
-        {/* ── TAB 3: LEARN ── */}
-        {activeTab === "learn" && (
-          <div className="space-y-8 sm:space-y-10">
+        {/* ── TAB 3: LEARN (Lazy mount on first visit, stay mounted hidden) ── */}
+        {(hasOpenedLearn || activeTab === "learn") && (
+          <div
+            hidden={activeTab !== "learn"}
+            className="space-y-8 sm:space-y-10"
+          >
             <div className="text-center sm:text-left space-y-3">
               <p className="eyebrow">EDUKASI · SIMULASI INTERAKTIF</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
