@@ -623,13 +623,13 @@ export default function SpotTheTrap({ onTestInScanner }) {
       <div className="glass-card p-6 sm:p-8 space-y-6">
         <div className="pb-4 border-b border-white/[0.06] flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
-            <BookOpen className="w-5 h-5 text-[#5df0a8]" />
+            <BookOpen className="w-5 h-5 text-[#5df0a8] shrink-0" />
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-white">
-                Kamus {THREAT_MATRIX.length} Pola Manipulasi Rekayasa Sosial (Threat Matrix)
+                Kamus {THREAT_MATRIX.length} Pola Manipulasi Rekayasa Sosial
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-                Pemetaan taktik psikologis, kata pemicu, dan benteng pertahanan dari {THREAT_MATRIX.length} modul Scam Heuristic Engine.
+                Ketuk pola untuk melihat taktik, pemicu, dan cara menghindarinya.
               </p>
             </div>
           </div>
@@ -641,7 +641,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-start">
+        <div className="space-y-2.5">
           {THREAT_MATRIX.map((item) => {
             const Icon = item.icon;
             return (
@@ -660,7 +660,19 @@ export default function SpotTheTrap({ onTestInScanner }) {
                   </span>
                 }
                 title={item.title}
-                summary={item.category}
+                badge={
+                  <span
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold tracking-wide uppercase"
+                    style={{
+                      background: `${item.color}12`,
+                      color: item.color,
+                      border: `1px solid ${item.color}25`,
+                    }}
+                  >
+                    {item.category}
+                  </span>
+                }
+                buttonClassName="py-2.5 px-3.5"
                 defaultOpen={false}
                 panelClassName="pt-2"
               >
@@ -675,10 +687,10 @@ export default function SpotTheTrap({ onTestInScanner }) {
                     {item.tactic}
                   </p>
 
-                  <div className="space-y-2 pt-3 border-t border-white/[0.06] text-[11px]">
+                  <div className="space-y-2 pt-3 border-t border-white/[0.05] text-[11px]">
                     <div>
                       <span className="font-semibold text-slate-400">Trigger Phrases: </span>
-                      <span className="text-amber-200 font-mono [overflow-wrap:anywhere] break-words">{item.trigger}</span>
+                      <span className="text-red-300 font-mono [overflow-wrap:anywhere] break-words">{item.trigger}</span>
                     </div>
                     <div>
                       <span className="font-semibold text-slate-400">Benteng Nalar: </span>
