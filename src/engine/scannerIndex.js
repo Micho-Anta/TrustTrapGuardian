@@ -4,7 +4,9 @@ import { HEURISTIC_ENGINES, inspectLinksInText } from "./heuristicRules.js";
 import {
   splitSentences,
   isEducationalWarningSentence,
-  isOfficialChannelSentence
+  isOfficialChannelSentence,
+  isSharingProhibitionSentence,
+  isRequestToSendCodeSentence
 } from "./contextGuards.js";
 
 /**
@@ -252,6 +254,54 @@ export function scanText(rawText) {
           if (highlightedEvidence[i].engineId === "upfront_fee") {
             highlightedEvidence.splice(i, 1);
           }
+        }
+      }
+    }
+  }
+
+  // Evaluasi Khusus: Abaikan apk_otp_harvester jika pesan adalah notifikasi SMS OTP resmi asli
+  // Aturan: pesan memuat kode OTP DAN kalimat larangan membagikan DAN tidak ada tautan,
+  // tidak ada permintaan mengirim kode, tidak ada .apk
+  if (triggeredIds.has("apk_otp_harvester")) {
+    const hasOtp =
+      /(?:kode\s*otp|otp\b|kode\s*verifikasi|pin\s*6\s*digit)/i.test(normalizedText) ||
+      /\[KODE_OTP_DISAMARKAN\]/.test(sanitizedText) ||
+      redactions.includes("Kode OTP / PIN Transaksi");
+
+    const hasSharingProhibition = sentences.some((s) => isSharingProhibitionSentence(s));
+
+    const linkFindings = inspectLinksInText(sanitizedText);
+    const hasLinks =
+      linkFindings.length > 0 ||
+      /https?:\/\/|www\.|\.xyz\b|\.top\b|bit\.ly/i.test(sanitizedText);
+
+    const hasApk = /\.apk\b/i.test(sanitizedText);
+
+    const hasRequestToSendCode = sentences.some((s) => isRequestToSendCodeSentence(s));
+
+    const isLegitOtpNotification =
+      hasOtp &&
+      hasSharingProhibition &&
+      !hasLinks &&
+      !hasApk &&
+      !hasRequestToSendCode;
+
+    if (isLegitOtpNotification) {
+      triggeredIds.delete("apk_otp_harvester");
+      totalRawScore = Math.max(0, totalRawScore - 40);
+
+      const otpResult = engineResults.find((e) => e.id === "apk_otp_harvester");
+      if (otpResult) {
+        otpResult.status = "CLEAN";
+        otpResult.score = 0;
+        otpResult.evidence = [];
+        otpResult.patterns = [];
+      }
+
+      // Hapus temuan apk_otp_harvester dari highlightedEvidence
+      for (let i = highlightedEvidence.length - 1; i >= 0; i--) {
+        if (highlightedEvidence[i].engineId === "apk_otp_harvester") {
+          highlightedEvidence.splice(i, 1);
         }
       }
     }

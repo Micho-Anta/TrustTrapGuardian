@@ -327,6 +327,15 @@ runTest("Safe Message 8", "Pesan Aman 8: Pengingat Rapat Organisasi Internal (Sk
   return scan.summary.score;
 }, "Halo rekan panitia, pengingat rapat evaluasi divisi perlengkapan malam ini pukul 19.30 WIB via Google Meet internal.");
 
+runTest("Safe OTP SMS", "SMS OTP Asli dengan Larangan Berbagi: 'Kode OTP BNN Anda 482913. Jangan berikan...' (Skor < 35)", () => {
+  const text = "Kode OTP BNN Anda 482913. Jangan berikan kode ini kepada siapa pun. Berlaku 5 menit.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("apk_otp_harvester"), "Modul apk_otp_harvester tidak boleh terpicu pada SMS OTP resmi");
+  return scan.summary.score;
+}, "Kode OTP BNN Anda 482913. Jangan berikan kode ini kepada siapa pun. Berlaku 5 menit.");
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 4: SPECIAL TESTS (SECRECY EXCEPTION & BOUNDARIES)
 // ─────────────────────────────────────────────────────────────
@@ -378,6 +387,15 @@ runTest("Obfuscation Slang", "Normalisasi Singkatan Obrolan: 'mam, hp aku ilang 
   assert.ok(triggeredIds.includes("family_impersonation"), "Harus mendeteksi family_impersonation dari nmr baru dan tf");
   return scan.summary.score;
 }, "mam, hp aku ilang jd ini nmr baru ya. bisa tf dulu ga 500rb, urgent bgt");
+
+runTest("OTP Request Attack", "Permintaan Aktif Kode OTP: 'Kirim kode OTP kamu ke saya sekarang' (skor >= 35)", () => {
+  const text = "Kirim kode OTP kamu ke saya sekarang";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("apk_otp_harvester"), "Modul apk_otp_harvester harus tetap terpicu pada permintaan kode");
+  return scan.summary.score;
+}, "Kirim kode OTP kamu ke saya sekarang");
 
 // ─────────────────────────────────────────────────────────────
 // TABEL RINGKASAN & LAPORAN AKHIR

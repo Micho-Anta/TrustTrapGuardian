@@ -64,6 +64,44 @@ export function isEducationalWarningSentence(sentence) {
 }
 
 /**
+ * Mendeteksi kalimat larangan penyerahan/pembagian kode OTP atau PIN.
+ * Contoh: "Jangan berikan kode ini kepada siapa pun.", "Jangan bagikan kode OTP Anda."
+ */
+export function isSharingProhibitionSentence(sentence) {
+  if (!sentence) return false;
+  if (isScamSecrecySentence(sentence)) return false;
+  const s = sentence.toLowerCase();
+
+  const patterns = [
+    /jangan\s+(?:pernah\s+)?(?:berikan|bagikan|kasih|sebarkan|kirim|serahkan|menyerahkan|memberikan|membagikan|beritahu|beritahukan)\s+[^.!?\n]{0,50}?(?:otp|pin|kode|password|kata\s*sandi|rahasia|ini)/i,
+    /tidak\s+(?:pernah\s+)?(?:meminta|menagih)\s+[^.!?\n]{0,50}?(?:otp|pin|kode|password)/i,
+    /(?:jaga|menjaga)\s+kerahasiaan\s+(?:kode|otp|pin|password)/i,
+    /jangan\s+(?:berikan|kasih|bagikan|share)\s+(?:ke|kepada)?\s*(?:siapa\s*pun|siapapun|pihak\s*mana\s*pun)/i,
+    /bersifat\s+rahasia[,\s]+jangan\s+(?:berikan|bagikan|kasih|share)/i
+  ];
+
+  return patterns.some((p) => p.test(s)) || isEducationalWarningSentence(sentence);
+}
+
+/**
+ * Mendeteksi kalimat permintaan aktif untuk mengirim atau menyerahkan kode OTP/PIN.
+ * Contoh: "Kirim kode OTP kamu ke saya sekarang", "Sebutkan kode OTP yang masuk".
+ */
+export function isRequestToSendCodeSentence(sentence) {
+  if (!sentence) return false;
+  if (isSharingProhibitionSentence(sentence)) return false;
+  const s = sentence.toLowerCase();
+
+  const patterns = [
+    /(?:kirim(?:kan)?|sebutkan|serahkan|kasih(?:kan)?|bagi(?:kan)?|berikan|ketik|masukkan|forward|balas|reply)\s+[^.!?\n]{0,35}?(?:kode|otp|pin|token|password)/i,
+    /(?:kode|otp|pin|token)\s+[^.!?\n]{0,35}?(?:kirim(?:kan)?|sebutkan|serahkan|ke\s+(?:saya|kami|nomor|sini|wa)|via\s+wa)/i,
+    /minta\s+(?:kode|otp|pin)/i
+  ];
+
+  return patterns.some((p) => p.test(s));
+}
+
+/**
  * Mendeteksi apakah kalimat memuat penanda kanal pembayaran resmi.
  * Contoh: "aplikasi resmi", "PLN Mobile", "melalui aplikasi", "sudah termasuk".
  */
