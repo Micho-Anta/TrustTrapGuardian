@@ -189,8 +189,8 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
         </div>
       </div>
 
-      {/* 6 Engine Status Mini Bar - Cleaner & Thinner Borders */}
-      <div className="pt-6 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      {/* Engine Status Mini Bar - Cleaner & Thinner Borders */}
+      <div className="pt-6 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {engines.map((eng) => {
           const isDanger = eng.status === "DANGER";
           return (

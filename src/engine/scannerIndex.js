@@ -10,7 +10,7 @@ import {
  * Scan text using Scam Heuristic Engine v1.0
  * Alur 4 Tahap:
  * 1. Auto-Redaction Sensor Privasi
- * 2. 6-Module Heuristic Examination dengan Context Guards
+ * 2. Multi-Module Heuristic Examination dengan Context Guards
  * 3. Combo Multiplier Calculation
  * 4. Action & Explanation Mapping
  */
@@ -30,7 +30,7 @@ export function scanText(rawText) {
   const sentences = splitSentences(sanitizedText);
   const upfrontFeeEvidenceSentences = [];
 
-  // Tahap 2: Pemeriksaan 6 Modul Modus Penipuan
+  // Tahap 2: Pemeriksaan Seluruh Modul Modus Penipuan
   for (const engine of HEURISTIC_ENGINES) {
     const evidenceList = [];
     const matchedPatterns = [];
@@ -48,6 +48,65 @@ export function scanText(rawText) {
             engineName: engine.name,
             reason: finding.reason
           });
+        }
+      }
+    } else if (engine.id === "family_impersonation") {
+      // Modul Khusus: Family Impersonation (Wajib Co-occurrence Dua Kelompok)
+      // Kelompok A: nomor baru, ganti nomor, hp rusak/hilang, anakmu, darurat, rumah sakit, kecelakaan
+      // Kelompok B: pulsa, transfer, kirim uang, talangin, pinjam uang, rekening
+      const matchedA = [];
+      const matchedB = [];
+
+      for (const item of engine.groupA) {
+        const m = sanitizedText.match(item.pattern);
+        if (m) {
+          matchedA.push(...m);
+          matchedPatterns.push(item.label);
+        }
+      }
+
+      for (const item of engine.groupB) {
+        const m = sanitizedText.match(item.pattern);
+        if (m) {
+          matchedB.push(...m);
+          matchedPatterns.push(item.label);
+        }
+      }
+
+      if (matchedA.length > 0 && matchedB.length > 0) {
+        const combined = [...matchedA, ...matchedB];
+        for (const word of combined) {
+          evidenceList.push(word);
+          highlightedEvidence.push({
+            text: word,
+            engineId: engine.id,
+            engineName: engine.name,
+            reason: "Pola penyamaran kerabat meminta uang atau pulsa darurat"
+          });
+        }
+      }
+    } else if (engine.id === "illegal_loan") {
+      // Modul Khusus: Pinjol Ilegal (Minimal Dua Pola Cocok)
+      const matchedRules = [];
+      for (const rule of engine.rules) {
+        const m = sanitizedText.match(rule.pattern);
+        if (m) {
+          matchedRules.push({ rule, matches: m });
+        }
+      }
+
+      if (matchedRules.length >= 2) {
+        for (const item of matchedRules) {
+          matchedPatterns.push(item.rule.label);
+          for (const word of item.matches) {
+            evidenceList.push(word);
+            highlightedEvidence.push({
+              text: word,
+              engineId: engine.id,
+              engineName: engine.name,
+              reason: item.rule.label
+            });
+          }
         }
       }
     } else if (engine.id === "identity_mismatch") {
@@ -89,7 +148,7 @@ export function scanText(rawText) {
         }
       }
     } else {
-      // Modul Berbasis Pola Kalimat / Regex
+      // Modul Berbasis Pola Kalimat / Regex Standar
       for (const rule of engine.rules) {
         for (const sentence of sentences) {
           // Abaikan kalimat peringatan/edukasi resmi untuk apk_otp_harvester dan upfront_fee
@@ -197,6 +256,27 @@ export function scanText(rawText) {
     combosTriggered.push("Pola Pembajakan Akun Perbankan / Trojan APK dengan Kedok Instansi Resmi");
   }
 
+  // Kombinasi Maut 4: Penyamaran Kerabat + Uang Muka atau Urgensi
+  if (
+    triggeredIds.has("family_impersonation") &&
+    (triggeredIds.has("upfront_fee") || triggeredIds.has("artificial_urgency"))
+  ) {
+    comboBonus += 0.3;
+    combosTriggered.push("Pola Penyamaran Kerabat Disertai Desakan Finansial atau Kondisi Darurat");
+  }
+
+  // Kombinasi Maut 5: Pinjol Ilegal + Pemerasan Kontak
+  if (triggeredIds.has("illegal_loan") && triggeredIds.has("threat_extortion")) {
+    comboBonus += 0.3;
+    combosTriggered.push("Pola Jeratan Pinjol Ilegal Disertai Pemerasan dan Ancaman Kontak");
+  }
+
+  // Kombinasi Maut 6: Investasi Bodong + Setoran Uang Muka
+  if (triggeredIds.has("investment_scam") && triggeredIds.has("upfront_fee")) {
+    comboBonus += 0.3;
+    combosTriggered.push("Pola Investasi Bodong Berkedok Setoran Modal atau Biaya Registrasi");
+  }
+
   let finalScore = Math.min(100, Math.round(totalRawScore * comboBonus));
 
   // Tentukan Level Risiko
@@ -226,6 +306,18 @@ export function scanText(rawText) {
   }
   if (triggeredIds.has("artificial_urgency")) {
     recommendedActions.push("Tunda aksi minimal 30 menit dan diskusikan pesan ini dengan rekan atau keluarga yang tenang.");
+  }
+  if (triggeredIds.has("family_impersonation")) {
+    recommendedActions.push("Telepon langsung nomor lama kerabat untuk verifikasi suara sebelum mengirimkan pulsa atau uang. Jangan percaya nomor baru.");
+  }
+  if (triggeredIds.has("illegal_loan")) {
+    recommendedActions.push("Jangan berikan izin akses kontak, galeri, atau kamera kepada aplikasi pinjaman. Pinjol berizin resmi OJK dilarang menuntut akses data tersebut.");
+  }
+  if (triggeredIds.has("threat_extortion")) {
+    recommendedActions.push("Jangan penuhi ancaman tebusan pelaku. Amankan bukti percakapan dan segera laporkan ke kanal resmi kepolisian di patrolisiber.id.");
+  }
+  if (triggeredIds.has("investment_scam")) {
+    recommendedActions.push("Periksa legalitas entitas di Satgas Pasti OJK (kontak 157). Jangan transfer modal investasi ke rekening pribadi di grup chat.");
   }
   if (recommendedActions.length === 0) {
     recommendedActions.push("Pesan tidak menunjukkan ciri manipulasi rekayasa sosial umum, namun tetaplah waspada terhadap permintaan data sensitif.");

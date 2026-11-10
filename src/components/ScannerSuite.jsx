@@ -11,12 +11,12 @@ import {
   AlertCircle,
   Zap,
   ArrowRight,
-  Share2,
   Copy,
   Check,
   RefreshCw
 } from "lucide-react";
 import { scanText } from "../engine/scannerIndex";
+import { HEURISTIC_ENGINES } from "../engine/heuristicRules";
 import { JUDGE_PRESETS } from "../data/judgePresets";
 
 export default function Scanner() {
@@ -244,7 +244,7 @@ export default function Scanner() {
             {isScanning ? (
               <>
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Memeriksa 6 Modul...</span>
+                <span>Memeriksa {HEURISTIC_ENGINES.length} Modul...</span>
               </>
             ) : (
               <>
@@ -342,8 +342,8 @@ export default function Scanner() {
               </div>
             </div>
 
-            {/* 6 Modul Grid Mini */}
-            <div className="mt-5 pt-4 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {/* Grid Mini Status Modul Heuristik */}
+            <div className="mt-5 pt-4 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               {scanResult.engines.map((eng) => {
                 const isDanger = eng.status === "DANGER";
                 return (
@@ -413,7 +413,7 @@ export default function Scanner() {
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 pb-2 border-b border-slate-800">
               <AlertCircle className="w-4 h-4 text-indigo-400" />
-              <span>Detail Analisis 6 Modul Scam Heuristic Engine</span>
+              <span>Detail Analisis {scanResult.engines.length} Modul Scam Heuristic Engine</span>
             </h3>
 
             <div className="space-y-2.5">

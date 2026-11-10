@@ -13,7 +13,11 @@ import {
   Briefcase,
   Smartphone,
   Landmark,
-  Globe
+  Globe,
+  Users,
+  CreditCard,
+  AlertOctagon,
+  TrendingUp
 } from "lucide-react";
 
 const THREAT_MATRIX = [
@@ -33,7 +37,7 @@ const THREAT_MATRIX = [
     category: "Psychological Manipulation",
     icon: Clock,
     color: "#ef4444",
-    tactic: "Memicu respons fight-or-flight korban melalui batas waktu sempit (5–15 menit) atau ancaman pemblokiran akun/denda agar nalar kritis lumpuh.",
+    tactic: "Memicu respons fight-or-flight korban melalui batas waktu sempit (5-15 menit) atau ancaman pemblokiran akun/denda agar nalar kritis lumpuh.",
     trigger: "Dalam 15 menit, sebelum kuota hangus, akun akan dibekukan, denda",
     countermeasure: "Rule of 30 Minutes: Tunda setiap transaksi darurat minimal 30 menit dan diskusikan dengan orang terdekat."
   },
@@ -44,7 +48,7 @@ const THREAT_MATRIX = [
     icon: Briefcase,
     color: "#8b5cf6",
     tactic: "Mengeksploitasi greed bias & teknik foot-in-the-door melalui tugas sepele (like video YouTube/TikTok) dengan komisi fantastis untuk memancing deposit bertingkat.",
-    trigger: "Komisi harian Rp500rb–Rp2,5jt, kerja dari HP tanpa modal, misi VIP",
+    trigger: "Komisi harian Rp500rb - Rp2,5jt, kerja dari HP tanpa modal, misi VIP",
     countermeasure: "Realita Ekonomi: Tidak ada model bisnis legal yang membayar ratusan ribu rupiah untuk klik tombol like video."
   },
   {
@@ -55,7 +59,7 @@ const THREAT_MATRIX = [
     color: "#ec4899",
     tactic: "Menyamarkan file installer malware Android (.APK) sebagai surat undangan nikah, dokumen tilang, atau resi paket untuk menyadap SMS OTP perbankan.",
     trigger: "Undangan_Vip.apk, Surat_Paket.apk, sebutkan kode OTP 6-digit",
-    countermeasure: "Aturan Mutlak Dokumen: Surat/undangan digital resmi berformat link web, PDF, atau gambar — tidak pernah berakhiran .APK."
+    countermeasure: "Aturan Mutlak Dokumen: Surat dan undangan digital resmi berbentuk link web, PDF, atau gambar, bukan file berekstensi .APK."
   },
   {
     id: "identity_mismatch",
@@ -73,9 +77,49 @@ const THREAT_MATRIX = [
     category: "Malicious Infrastructure",
     icon: Globe,
     color: "#06b6d4",
-    tactic: "Menggunakan shortlink, domain murah berisiko (.xyz, .top), atau typosquatting untuk mengelabui mata korban ke halaman login tiruan.",
-    trigger: "bit.ly/xxx, bnn-klaim-gebyar.xyz, domain dengan karakter acak ber-entropy tinggi",
+    tactic: "Menggunakan shortlink, domain murah berisiko (.xyz, .top), atau brand spoofing untuk mengelabui korban ke halaman login tiruan.",
+    trigger: "bit.ly/xxx, bnn-klaim-gebyar.xyz, domain tiruan brand dengan karakter acak ber-entropy tinggi",
     countermeasure: "Inspeksi URL: Periksa domain induk (TLD) berakhiran resmi seperti .co.id, .id, atau .go.id sebelum memasukkan kredensial."
+  },
+  {
+    id: "family_impersonation",
+    title: "7. Family Impersonation / Urgensi Kerabat",
+    category: "Social Engineering",
+    icon: Users,
+    color: "#10b981",
+    tactic: "Menyamar sebagai anak atau keluarga yang mengaku ganti nomor HP atau dalam musibah darurat untuk meminta pulsa atau transfer uang kilat.",
+    trigger: "Mah nomor baru, hp lama rusak, lagi darurat di rumah sakit, tolong kirimin pulsa/transfer",
+    countermeasure: "Verifikasi Panggilan Suara: Segera telepon langsung nomor lama keluarga untuk memastikan identitas sebelum mengirimkan dana."
+  },
+  {
+    id: "illegal_loan",
+    title: "8. Pinjol Ilegal & Akses Data Sensitif",
+    category: "Predatory Lending",
+    icon: CreditCard,
+    color: "#f97316",
+    tactic: "Menjanjikan pinjaman kilat tanpa jaminan atau SLIK, namun memaksa izin akses kontak telepon dan galeri foto untuk sarana intimidasi.",
+    trigger: "Pinjaman online cair 5 menit, tanpa jaminan/SLIK, izinkan akses kontak & galeri",
+    countermeasure: "Batasan Akses OJK: Pinjol berizin resmi hanya diizinkan mengakses kamera, mikrofon, dan lokasi (CAMILAN), dilarang mengakses kontak dan galeri."
+  },
+  {
+    id: "threat_extortion",
+    title: "9. Ancaman & Pemerasan Kontak",
+    category: "Coercion & Extortion",
+    icon: AlertOctagon,
+    color: "#ef4444",
+    tactic: "Mengintimidasi korban dengan ancaman menyebarkan foto, video, atau data pribadi ke seluruh kontak keluarga jika tagihan tidak dilunasi hari ini.",
+    trigger: "Bayar hari ini atau sebar foto dan kontak keluargamu, viralkan data",
+    countermeasure: "Simpan Bukti & Laporkan: Jangan transfer tebusan karena pemerasan tidak akan berhenti. Amankan bukti tangkapan layar dan lapor ke patrolisiber.id."
+  },
+  {
+    id: "investment_scam",
+    title: "10. Investasi Bodong & Skema Ponzi",
+    category: "Financial Fraud",
+    icon: TrendingUp,
+    color: "#a855f7",
+    tactic: "Menjanjikan keuntungan berkala tidak wajar dengan klaim tanpa risiko, skema keanggotaan VIP, dan ajakan masuk ke grup chat tertutup.",
+    trigger: "Profit 30% per minggu, dijamin cuan, member VIP, modal minimal, join grup telegram",
+    countermeasure: "Prinsip 2L (Legal & Logis): Pastikan izin entitas terdaftar di OJK/Bappebti dan tolak tawaran investasi dengan imbal hasil tetap tidak realistis."
   }
 ];
 
@@ -110,7 +154,7 @@ export default function SpotTheTrap({ onTestInScanner }) {
           id: "c",
           text: "Karena nomor pengirimnya tidak tersimpan di kontak kita sehingga pasti penipu.",
           isCorrect: false,
-          reason: "Kurang tepat. Nomor tidak dikenal tidak selalu berarti penipu — kerabat bisa ganti nomor. Ancaman nyata adalah ekstensi .APK yang digunakan sebagai 'undangan', bukan identitas pengirim semata."
+          reason: "Kurang tepat. Nomor tidak dikenal tidak selalu berarti penipu, kerabat bisa ganti nomor. Ancaman nyata adalah ekstensi .APK yang digunakan sebagai 'undangan', bukan identitas pengirim semata."
         }
       ]
     },
@@ -404,17 +448,17 @@ export default function SpotTheTrap({ onTestInScanner }) {
         )}
       </div>
 
-      {/* ── Kamus 6 Pola Manipulasi Rekayasa Sosial (Threat Matrix) ── */}
+      {/* Kamus Pola Manipulasi Rekayasa Sosial (Threat Matrix) */}
       <div className="glass-card p-6 sm:p-8 space-y-6">
         <div className="pb-4 border-b border-white/[0.06] flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
             <BookOpen className="w-5 h-5 text-[#5df0a8]" />
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-white">
-                Kamus 6 Pola Manipulasi Rekayasa Sosial (Threat Matrix)
+                Kamus {THREAT_MATRIX.length} Pola Manipulasi Rekayasa Sosial (Threat Matrix)
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-                Pemetaan taktik psikologis, kata pemicu, dan benteng pertahanan dari 6 modul Scam Heuristic Engine.
+                Pemetaan taktik psikologis, kata pemicu, dan benteng pertahanan dari {THREAT_MATRIX.length} modul Scam Heuristic Engine.
               </p>
             </div>
           </div>

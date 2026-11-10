@@ -108,6 +108,66 @@ test("Deteksi Modus Baru: Rekening Penampung / Alihkan Saldo Aman", () => {
   assert.ok(triggeredIds.includes("upfront_fee"), "Harus mendeteksi modus rekening penampung");
 });
 
+test("Modul Investasi Bodong (Crypto Profit Mingguan + Member VIP): skor >= 35", () => {
+  const text = "Hai kak, aku Sarah, kenalan di IG kemarin. Aku punya info investasi crypto profit 30% per minggu, modal minimal 500rb, member VIP dijamin cuan. Join grup telegram ya";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("investment_scam"));
+});
+
+test("Modul Pinjol Ilegal (Tanpa SLIK + Izin Akses Kontak & Galeri): skor >= 35", () => {
+  const text = "Pinjaman online cair 5 juta tanpa jaminan, tanpa slik, proses 5 menit. Download aplikasi di link ini dan izinkan akses kontak & galeri.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("illegal_loan"));
+});
+
+test("Modul Family Impersonation (Ganti Nomor + Minta Pulsa): skor >= 35", () => {
+  const text = "Mah ini aku nomor baru, hp lama rusak. Tolong kirimin pulsa dulu 200rb ya, nanti aku ganti, penting banget";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("family_impersonation"));
+});
+
+test("Modul Family Impersonation (Darurat RS + Transfer Rekening): skor >= 35", () => {
+  const text = "Ini aku lagi darurat di rumah sakit, tolong transfer 3 juta ke rekening 1234567890 sekarang";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("family_impersonation"));
+});
+
+test("Modul Ancaman & Pemerasan (Sebar Foto/Kontak + Paksaan Bayar): skor >= 35", () => {
+  const text = "Bayar hutangmu hari ini atau kami sebar foto dan kontak keluargamu";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("threat_extortion"));
+});
+
+test("Modul Brand Spoofing (shopee-id-verifikasi.com non-official): skor >= 35", () => {
+  const text = "Akun Shopee kamu bermasalah, verifikasi sekarang di https://shopee-id-verifikasi.com/login";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("phishing_link"));
+});
+
+test("Kasus Kurir + APK + .top menghasilkan skor 100", () => {
+  const text = "Halo paket Anda tertahan di gudang J&T. Silakan unduh dan pasang resi_pengiriman.apk di https://jnt-tracking.top untuk konfirmasi.";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 100);
+});
+
+test("Kasus Lotere + link bit.ly menghasilkan skor >= 35", () => {
+  const text = "Congratulations! You won the UK National Lottery jackpot of 1,000,000 GBP. Claim your prize immediately at https://bit.ly/uk-lottery-claim before it expires in 15 minutes.";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+});
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 3: ANTI FALSE-POSITIVE & ETHICAL BOUNDARIES
 // ─────────────────────────────────────────────────────────────
@@ -153,6 +213,15 @@ test("Frasa kerahasiaan penipu (jangan beritahu siapa pun) tidak dianggap pering
   assert.ok(scan.summary.score >= 40, `Expected score >= 40, got ${scan.summary.score}`);
   const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
   assert.ok(triggeredIds.includes("apk_otp_harvester"), "apk_otp_harvester harus terdeteksi");
+});
+
+test("Pesan ganti nomor tanpa permintaan finansial tidak memicu family_impersonation (Skor 0)", () => {
+  const safeFamily = "Mah, aku pakai nomor baru, simpan ya";
+  const scan = scanText(safeFamily);
+  assert.equal(scan.summary.score, 0);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("family_impersonation"));
 });
 
 test("Input kosong / whitespace menghasilkan return null secara aman", () => {

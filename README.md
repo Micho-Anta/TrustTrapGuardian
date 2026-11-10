@@ -1,6 +1,6 @@
 # 🛡️ The Trust Trap Guardian
 > **VirusTotal-Style Social Engineering & Scam Detector for Digital Deception Defense**  
-> *Karya Inovasi Kompetisi Web Development MIT-WEEK 2026 — Tim Nanti Ajah (MIT-041)*
+> *Karya Inovasi Kompetisi Web Development MIT-WEEK 2026 - Tim Nanti Ajah (MIT-041)*
 
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react)](https://react.dev/)
@@ -92,19 +92,23 @@ Berbeda dari pemindai teknis biasa yang pasif, antarmuka **TrustTrap Guardian** 
 
 ---
 
-## ⚙️ 5. Scam Heuristic Engine (6 Modul Deteksi)
+## ⚙️ 5. Scam Heuristic Engine (10 Modul Deteksi)
 
 Engine bekerja secara sekuensial instan (<1 milidetik) di sisi peramban:
-1. **Tahap 1 — Sensor Privasi Otomatis (Auto-Redaction):** Mengaburkan NIK 16-digit, Nomor Rekening Bank, Nomor HP, dan Kode OTP menjadi token aman `[DATA_DISAMARKAN]` secara lokal. Termasuk sanitasi *zero-width spaces* dan normalisasi unicode NFKC.
-2. **Tahap 2 — Evaluasi 6 Modul Independen:**
-   * **Modul 1: Upfront Fee & Deposit Trap (Bobot 30)** — Permintaan biaya di muka, uang jaminan, deposit misi, atau modus baru *rekening penampung aman*.
-   * **Modul 2: Artificial Urgency & Fear (Bobot 20)** — Tekanan batas waktu sempit ("dalam 15 menit", "kuota hangus", ancaman denda/pemblokiran).
-   * **Modul 3: Unrealistic Reward / Task Scam (Bobot 25)** — Iming-iming komisi jutaan rupiah dari like YouTube / follow medsos.
-   * **Modul 4: OTP & APK Harvester (Bobot 40)** — Jebakan file installer Android berbahaya (`.APK`) dan pancingan kode OTP/PIN.
-   * **Modul 5: Identity & Channel Mismatch (Bobot 25)** — Pencatutan nama instansi besar (BUMN/Bank) yang dipadukan dengan saluran tidak resmi (nomor personal/email gratisan).
-   * **Modul 6: Phishing Link & Domain Inspector (Bobot 35)** — Pemeriksaan shortlink, TLD murah berisiko (`.xyz`, `.top`), spoofed brands, serta **rasio Shannon Entropy** ($H/\log_2(\text{len}) \ge 0.85$) untuk domain terobfuskasi.
-3. **Tahap 3 — Pengali Kombinasi (Combo Multiplier):** Penalti pengali hingga 1.35x jika beberapa pola maut terjadi bersamaan.
-4. **Tahap 4 — Pemetaan Tindakan & Explainable Text:** Menyorot kalimat bukti manipulasi dan memetakan rekomendasi langkah aman.
+1. **Tahap 1: Sensor Privasi Otomatis (Auto-Redaction):** Mengaburkan NIK 16-digit, Nomor Rekening Bank, Nomor HP, dan Kode OTP menjadi token aman `[DATA_DISAMARKAN]` secara lokal. Termasuk sanitasi *zero-width spaces* dan normalisasi unicode NFKC.
+2. **Tahap 2: Evaluasi 10 Modul Independen:**
+   * **Modul 1: Upfront Fee & Deposit Trap (Bobot 30):** Permintaan biaya di muka, uang jaminan, deposit misi, atau modus rekening penampung aman.
+   * **Modul 2: Artificial Urgency & Fear (Bobot 20):** Tekanan batas waktu sempit ("dalam 15 menit", "kuota hangus", ancaman denda atau pemblokiran).
+   * **Modul 3: Unrealistic Reward / Task Scam (Bobot 25):** Iming-iming komisi jutaan rupiah dari like YouTube atau follow medsos.
+   * **Modul 4: OTP & APK Harvester (Bobot 40):** Jebakan file installer Android berbahaya (`.APK`) dan pancingan kode OTP atau PIN.
+   * **Modul 5: Identity & Channel Mismatch (Bobot 25):** Pencatutan nama instansi besar (BUMN, Bank) yang dipadukan dengan saluran tidak resmi.
+   * **Modul 6: Phishing Link & Domain Inspector (Bobot 35):** Pemeriksaan shortlink, TLD murah berisiko (`.xyz`, `.top`), brand spoofing pada domain pihak ketiga, serta **rasio Shannon Entropy** ($H/\log_2(\text{len}) \ge 0.85$).
+   * **Modul 7: Family Impersonation Trap (Bobot 30):** Penyamaran sebagai anak atau kerabat yang mengaku ganti nomor atau mengalami kondisi darurat untuk meminta pulsa atau transfer uang.
+   * **Modul 8: Pinjol Ilegal & Akses Data Sensitif (Bobot 30):** Tawaran pinjaman online tanpa jaminan atau SLIK yang memaksa izin akses kontak telepon dan galeri foto.
+   * **Modul 9: Ancaman & Pemerasan Kontak (Bobot 35):** Intimidasi penyebaran data pribadi, foto, atau video ke daftar kontak keluarga disertai paksaan membayar tagihan segera.
+   * **Modul 10: Investasi Bodong & Skema Ponzi (Bobot 30):** Tawaran profit berkala tidak wajar, klaim dijamin cuan tanpa risiko, keanggotaan member VIP, dan undangan ke grup chat privat.
+3. **Tahap 3: Pengali Kombinasi (Combo Multiplier):** Penalti pengali hingga 1.35x dari 6 pola kombinasi berbahaya (urgensi, task scam, pembajakan akun, impersonasi kerabat, pemerasan pinjol, dan investasi bodong).
+4. **Tahap 4: Pemetaan Tindakan & Explainable Text:** Menyorot kalimat bukti manipulasi dan memetakan rekomendasi langkah konkret penyelamatan.
 
 ---
 
@@ -112,7 +116,7 @@ Engine bekerja secara sekuensial instan (<1 milidetik) di sisi peramban:
 
 Tersedia 6 skenario siap uji di halaman utama menggunakan entitas fiktif yang aman:
 * **Preset 1 (Loker BUMN Palsu):** Undangan rekrutmen PT Telekomunikasi Nusantara (Persero) palsu yang meminta transfer biaya reservasi tiket Rp1.750.000 ke panitia Bank Nasional Nusantara dalam 15 menit.
-* **Preset 2 (Task Scam Like & Subscribe):** Tawaran freelance like YouTube bergaji Rp500.000–Rp2.500.000 dengan syarat deposit saldo tugas Rp50.000.
+* **Preset 2 (Task Scam Like & Subscribe):** Tawaran freelance like YouTube bergaji Rp500.000 - Rp2.500.000 dengan syarat deposit saldo tugas Rp50.000.
 * **Preset 3 (Pancingan File .APK & OTP):** Kurir ekspedisi mengabarkan paket pending dan memaksa menginstal `Surat_Paket_Hilang.apk` serta meminta kode OTP SMS.
 * **Preset 4 (Link Phishing Hadiah Bank):** Pengumuman undian Bank Nasional Nusantara Rp15.000.000 yang mengarahkan ke link phishing `bnn-klaim-gebyar.xyz`.
 * **Preset 5 (Kuota Gratis & Link Pendek):** Tautan pemendek `bit.ly` dengan klaim kuota gratis 50GB.
@@ -169,7 +173,7 @@ npm run build
 ---
 
 ## 🏆 Tim Pengembang
-**Tim Nanti Ajah (MIT-041) — Universitas Gunadarma**  
+**Tim Nanti Ajah (MIT-041) - Universitas Gunadarma**  
 *Solusi Kompetisi Web Development MIT-WEEK 2026*  
 *Live Deployment:* [https://trusttrapguardian.vercel.app/](https://trusttrapguardian.vercel.app/)  
 *GitHub Repository:* [https://github.com/Micho-Anta/TrustTrapGuardian](https://github.com/Micho-Anta/TrustTrapGuardian)

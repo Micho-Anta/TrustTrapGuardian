@@ -119,7 +119,7 @@ export const MODE_GUIDES = [
     steps: [
       "Keluar dari grup tugas, jangan deposit 'level berikutnya'.",
       "Laporkan rekening penampung ke IASC.",
-      "Waspadai jasa 'balik dana' berbayar — itu penipuan lanjutan."
+      "Waspadai jasa 'balik dana' berbayar, itu penipuan lanjutan."
     ],
     docs: ["Riwayat deposit", "Link grup Telegram/WA", "Nama akun admin"]
   },
@@ -150,6 +150,46 @@ export const MODE_GUIDES = [
       "Jika ada ancaman/pemerasan, lapor ke SPKT Polri (Polres/Polda terdekat)."
     ],
     docs: ["Pesan ancaman", "Kronologi singkat"]
+  },
+  {
+    engineId: "family_impersonation",
+    title: "Penyamaran Kerabat / Keluarga",
+    steps: [
+      "Telepon langsung ke nomor lama kerabat untuk konfirmasi suara.",
+      "Jangan transfer atau kirim pulsa sebelum terverifikasi.",
+      "Beri tahu anggota keluarga lain agar tidak menjadi target berikutnya."
+    ],
+    docs: ["Nomor baru pengirim", "Nomor rekening atau nomor pulsa tujuan", "Tangkapan layar percakapan"]
+  },
+  {
+    engineId: "illegal_loan",
+    title: "Jeratan Pinjol Ilegal",
+    steps: [
+      "Copot pemasangan (uninstall) aplikasi pinjol segera.",
+      "Cabut izin akses kontak, galeri, dan kamera di setelan HP.",
+      "Laporkan aplikasi ke Satgas Pasti OJK di kontak 157."
+    ],
+    docs: ["Nama aplikasi pinjol", "Bukti chat penawaran", "Bukti tagihan tidak wajar"]
+  },
+  {
+    engineId: "threat_extortion",
+    title: "Pemerasan & Ancaman Sebar Data",
+    steps: [
+      "Jangan transfer uang tebusan, pemerasan tidak akan berhenti.",
+      "Amankan bukti tangkapan layar chat, nomor HP, dan materi ancaman.",
+      "Segera buat laporan resmi ke patrolisiber.id dan SPKT kepolisian terdekat."
+    ],
+    docs: ["Tangkapan layar ancaman", "Nomor telepon & akun pelaku", "Nomor rekening tujuan pemerasan"]
+  },
+  {
+    engineId: "investment_scam",
+    title: "Investasi Bodong / Grup Privat",
+    steps: [
+      "Hentikan setoran modal dan jangan percaya janji pencairan dengan syarat deposit baru.",
+      "Keluar dari grup chat dan blokir kontak admin/mentor palsu.",
+      "Laporkan entitas ke Satgas Pasti OJK (waspadainvestasi@ojk.go.id)."
+    ],
+    docs: ["Bukti transfer setoran", "Tautan grup Telegram/WhatsApp", "Tangkapan layar janji keuntungan"]
   }
 ];
 
@@ -217,7 +257,7 @@ export const CRITICAL_ENGINES = [
 
 /** Catatan penutup di bawah daftar kanal pelaporan. */
 export const REPORTING_DISCLAIMER =
-  "Melapor membantu membatasi akses pelaku dan mempercepat pemblokiran rekening penampung, tetapi tidak menjamin dana kembali. Waspadai jasa \"balik dana\" berbayar — itu sering penipuan lanjutan.";
+  "Melapor membantu membatasi akses pelaku dan mempercepat pemblokiran rekening penampung, tetapi tidak menjamin dana kembali. Waspadai jasa \"balik dana\" berbayar, itu sering penipuan lanjutan.";
 
 /** Ambil ID engine yang terdeteksi (status DANGER) dari hasil scanText(). */
 export function getTriggeredEngineIds(scanResult) {

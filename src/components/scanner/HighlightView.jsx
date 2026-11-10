@@ -163,11 +163,11 @@ export default function HighlightView({ scanResult }) {
         )}
       </div>
 
-      {/* 6 Engine Detail Cards - No Heavy Borders */}
+      {/* Engine Detail Cards - No Heavy Borders */}
       <div className="glass-card p-6 sm:p-8 space-y-6">
         <h3 className="font-bold text-base sm:text-lg text-white flex items-center gap-2.5">
           <Info className="w-5 h-5 text-[#5df0a8]" />
-          <span>Rincian Hasil 6 Modul Pemeriksaan (Scam Engines)</span>
+          <span>Rincian Hasil {engines?.length || 10} Modul Pemeriksaan (Scam Engines)</span>
         </h3>
 
         <div className="space-y-3.5">
