@@ -3,7 +3,8 @@ import {
   Search,
   LifeBuoy,
   BookOpen,
-  Code2
+  Code2,
+  ShieldCheck
 } from "lucide-react";
 import OmniboxInput from "./components/scanner/OmniboxInput";
 import ScoreGauge from "./components/scanner/ScoreGauge";
@@ -80,14 +81,11 @@ export default function AppGuardian() {
 
       {/* ── Top Hackathon Ribbon ── */}
       <div
-        style={{
-          background: "linear-gradient(90deg, rgba(58,108,255,0.12) 0%, rgba(12,18,38,0.50) 50%, rgba(93,240,168,0.08) 100%)",
-          borderBottom: "1px solid rgba(150,175,230,0.06)",
-        }}
+        style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}
         className="px-3 sm:px-4 py-2 sm:py-2.5 text-center text-xs"
       >
         <span className="inline-flex items-center gap-1.5 sm:gap-2 font-medium">
-          <span style={{ color: "var(--accent)" }}>✦</span>
+          <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent)" }} aria-hidden="true"></span>
           <span className="sm:hidden font-semibold text-white tracking-wide">
             MIT-WEEK 2026 | The Trust Trap
           </span>
@@ -104,7 +102,7 @@ export default function AppGuardian() {
       <header
         className="sticky top-0 z-40 transition-all"
         style={{
-          background: "rgba(4, 6, 15, 0.72)",
+          background: "rgba(10, 13, 20, 0.72)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
           borderBottom: "1px solid var(--border)",
@@ -116,24 +114,26 @@ export default function AppGuardian() {
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Mint triangle brand mark with gentle glow */}
             <span
-              className="text-xl sm:text-2xl leading-none select-none transition-transform hover:scale-105 shrink-0"
-              style={{ color: "var(--accent)", filter: "drop-shadow(0 0 10px rgba(93,240,168,0.55))" }}
+              className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl shrink-0 transition-transform hover:scale-105"
+              style={{ background: "rgba(90,185,252,0.12)", border: "1px solid rgba(90,185,252,0.28)", color: "var(--accent)" }}
               aria-hidden="true"
-            >▲</span>
+            >
+              <ShieldCheck className="w-5 h-5" />
+            </span>
             <div className="min-w-0">
               <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <span className="brand-text-mobile">
                   TrustTrap
                 </span>
                 <span className="brand-text-desktop">
-                  TRUST TRAP GUARDIAN
+                  TrustTrap Guardian
                 </span>
                 <span
-                  className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0"
+                  className="hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full shrink-0"
                   style={{
-                    background: "rgba(93,240,168,0.10)",
+                    background: "rgba(90, 185, 252,0.10)",
                     color: "var(--accent)",
-                    border: "1px solid rgba(93,240,168,0.22)",
+                    border: "1px solid rgba(90, 185, 252,0.22)",
                   }}
                 >
                   MIT-041
@@ -149,7 +149,7 @@ export default function AppGuardian() {
           <nav
             className="flex items-center p-1 sm:p-1.5 rounded-full shrink-0 min-w-0"
             style={{
-              background: "rgba(12,18,38,0.55)",
+              background: "rgba(19, 24, 36,0.55)",
               border: "1px solid var(--border)",
               boxShadow: "0 4px 16px -4px rgba(0,0,0,0.40)",
             }}
@@ -190,7 +190,7 @@ export default function AppGuardian() {
           <div className="space-y-8 sm:space-y-10">
 
             {/* Hero header - Strong typography & breathing room */}
-            <div className="text-center sm:text-left space-y-3">
+            <div className="text-left space-y-3 page-enter">
               <p className="eyebrow">THE TRUST TRAP · NAVIGATING DIGITAL DECEPTION</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Deteksi Rekayasa Sosial &amp;{" "}
@@ -229,7 +229,7 @@ export default function AppGuardian() {
         {/* ── TAB 2: ACT ── */}
         {activeTab === "act" && (
           <div className="space-y-8 sm:space-y-10">
-            <div className="text-center sm:text-left space-y-3">
+            <div className="text-left space-y-3 page-enter">
               <p className="eyebrow">LANGKAH PENYELAMATAN · PANIC TRIAGE</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Panduan Darurat &amp;{" "}
@@ -249,7 +249,7 @@ export default function AppGuardian() {
         {/* ── TAB 3: LEARN ── */}
         {activeTab === "learn" && (
           <div className="space-y-8 sm:space-y-10">
-            <div className="text-center sm:text-left space-y-3">
+            <div className="text-left space-y-3 page-enter">
               <p className="eyebrow">EDUKASI · SIMULASI INTERAKTIF</p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Pusat Edukasi &amp;{" "}
@@ -273,7 +273,7 @@ export default function AppGuardian() {
         className="py-8 text-center text-xs"
         style={{
           borderTop: "1px solid var(--border)",
-          background: "rgba(4, 6, 15, 0.70)",
+          background: "rgba(10, 13, 20, 0.70)",
           color: "var(--muted)",
         }}
       >
@@ -283,7 +283,7 @@ export default function AppGuardian() {
             <strong className="text-white font-semibold">TrustTrap Guardian</strong>
             {" "}· Tim Nanti Ajah (MIT-041) · Universitas Gunadarma
           </div>
-          <div className="flex items-center gap-4 text-slate-400">
+          <div className="flex items-center gap-4 text-slate-400 font-mono text-[11px]">
             <span>Local-First Heuristic Engine</span>
             <span>•</span>
             <span>React 19 + Tailwind CSS v4 + Vite</span>
