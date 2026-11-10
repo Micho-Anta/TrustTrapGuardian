@@ -6,7 +6,7 @@
 [![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/TailwindCSS-v4.x-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-46%2F46%20Passing-10b981?style=flat&logo=node.js)](scripts/verifyEngine.mjs)
+[![Tests](https://img.shields.io/badge/Tests-49%2F49%20Passing-10b981?style=flat&logo=node.js)](scripts/verifyEngine.mjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 🌐 **Live Production App:** [https://trusttrapguardian.vercel.app/](https://trusttrapguardian.vercel.app/)  
@@ -182,7 +182,7 @@ cd TrustTrapGuardian
 # 2. Instal dependensi
 npm install
 
-# 3. Jalankan automated engine verification test (46/46 passing)
+# 3. Jalankan automated engine verification test (49/49 passing)
 npm test
 
 # 4. Jalankan server pengembangan lokal

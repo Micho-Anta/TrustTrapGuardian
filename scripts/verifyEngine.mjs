@@ -220,6 +220,17 @@ runTest("Lottery Shortlink", "Kasus Lotere + link bit.ly menghasilkan skor >= 35
   return scan.summary.score;
 }, "Congratulations! You won the UK National Lottery jackpot of 1,000,000 GBP. Claim your prize immediately at https://bit.ly/uk-lottery-claim before it expires in 15 minutes.");
 
+runTest("Task Scam Reviewer", "Modul Task Scam Reviewer TikTok Shop + Top Up Modal (skor >= 35)", () => {
+  const text = "Kamu terpilih jadi reviewer produk TikTok Shop, komisi 200rb per tugas. Top up modal 100rb untuk tugas pertama, pasti dikembalikan";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("unrealistic_reward"), "Modul unrealistic_reward harus terpicu");
+  assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus terpicu");
+  assert.ok(scan.summary.combosTriggered.some(c => c.includes("Task Scam")), "Combo Task Scam harus terpicu");
+  return scan.summary.score;
+}, "Kamu terpilih jadi reviewer produk TikTok Shop, komisi 200rb per tugas. Top up modal 100rb untuk tugas pertama, pasti dikembalikan");
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 3: ANTI FALSE-POSITIVE & 8+ PESAN AMAN
 // ─────────────────────────────────────────────────────────────
@@ -383,6 +394,26 @@ runTest("Safe Family Routine 2", "Pesan Aman 13: Konfirmasi Uang Kuliah Mahasisw
   assert.ok(!triggeredIds.includes("upfront_fee"), "Modul upfront_fee tidak boleh terpicu pada transfer uang kuliah");
   return scan.summary.score;
 }, "Pah, uang kuliah semester ini udah aku transfer ya");
+
+runTest("Safe Sales Commission", "Pesan Aman 14: Komisi Penjualan Ditransfer Resmi (Skor < 35)", () => {
+  const text = "Komisi penjualan bulan ini Rp 2.000.000 sudah ditransfer ke rekening kamu ya";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("unrealistic_reward"), "Modul unrealistic_reward tidak boleh terpicu");
+  assert.ok(!triggeredIds.includes("upfront_fee"), "Modul upfront_fee tidak boleh terpicu");
+  return scan.summary.score;
+}, "Komisi penjualan bulan ini Rp 2.000.000 sudah ditransfer ke rekening kamu ya");
+
+runTest("Safe Book Reviewer", "Pesan Aman 15: Reviewer Buku Perpustakaan Kampus (Skor 0 / TIDAK TERDETEKSI)", () => {
+  const text = "Aku jadi reviewer buku di perpustakaan kampus, rapat evaluasi jam 3 ya";
+  const scan = scanText(text);
+  assert.equal(scan.summary.score, 0, `Expected score 0, got ${scan.summary.score}`);
+  assert.equal(scan.summary.riskLevel, "TIDAK TERDETEKSI");
+  const dangerEngines = scan.engines.filter(e => e.status === "DANGER" && e.score >= 30);
+  assert.equal(dangerEngines.length, 0);
+  return scan.summary.score;
+}, "Aku jadi reviewer buku di perpustakaan kampus, rapat evaluasi jam 3 ya");
 
 // ─────────────────────────────────────────────────────────────
 // SUITE 4: SPECIAL TESTS (SECRECY EXCEPTION & BOUNDARIES)
