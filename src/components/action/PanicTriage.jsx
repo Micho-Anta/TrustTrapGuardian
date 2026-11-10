@@ -22,6 +22,7 @@ import {
   getTriggeredEngineIds,
   sortGuides
 } from "../../data/actGuides";
+import Disclosure from "../ui/Disclosure";
 
 /* ── Toast Notification Component ── */
 function Toast({ message, visible }) {
@@ -86,6 +87,7 @@ export default function PanicTriage({ scanResult = null }) {
     : 15;
 
   const guides = sortGuides(triggeredEngines);
+  const relevantGuidesCount = guides.filter((g) => g.relevant).length;
 
   // ── Defang URLs agar link aktif tidak tersebar ──
   const defangUrls = (text) =>
@@ -234,23 +236,30 @@ export default function PanicTriage({ scanResult = null }) {
           </div>
         </div>
 
-        {/* ── 2 Flash Action Cards (Emergency only with Cognitive Priority Marker) ── */}
+        {/* ── 2 Flash Action Cards (Emergency only with calm priority accent) ── */}
         {activeTab === "emergency" && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {/* Flash Card 1 - APK */}
-            <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
+            <div
+              className="p-5 rounded-2xl flex gap-3.5 relative overflow-hidden"
+              style={{
+                background: "rgba(12,18,38,0.48)",
+                border: "1px solid rgba(150,175,230,0.12)",
+                borderLeft: "3px solid #f59e0b",
+              }}
+            >
               <span className="text-2xl shrink-0 mt-0.5">⏱️</span>
-              <div className="space-y-1 w-full">
+              <div className="space-y-1 w-full min-w-0">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
+                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">
                     DETIK KE 0-30 (Jika Install .APK)
                   </p>
                   <span
-                    className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full"
                     style={{
-                      background: "rgba(239,68,68,0.20)",
-                      border: "1px solid rgba(239,68,68,0.40)",
-                      color: "#fca5a5",
+                      background: "rgba(245,158,11,0.12)",
+                      border: "1px solid rgba(245,158,11,0.28)",
+                      color: "#fde68a",
                     }}
                   >
                     PRIORITAS KOGNITIF UTAMA
@@ -267,19 +276,26 @@ export default function PanicTriage({ scanResult = null }) {
             </div>
 
             {/* Flash Card 2 - OTP / Transfer */}
-            <div className="flash-card-urgent flex gap-3.5 relative overflow-hidden">
+            <div
+              className="p-5 rounded-2xl flex gap-3.5 relative overflow-hidden"
+              style={{
+                background: "rgba(12,18,38,0.48)",
+                border: "1px solid rgba(150,175,230,0.12)",
+                borderLeft: "3px solid #f59e0b",
+              }}
+            >
               <span className="text-2xl shrink-0 mt-0.5">📞</span>
-              <div className="space-y-1 w-full">
+              <div className="space-y-1 w-full min-w-0">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-red-400">
+                  <p className="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">
                     MENIT KE 1-60 (Jika Kasih OTP / Transfer)
                   </p>
                   <span
-                    className="text-[9px] font-extrabold tracking-widest uppercase px-2 py-0.5 rounded-full"
+                    className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full"
                     style={{
-                      background: "rgba(239,68,68,0.20)",
-                      border: "1px solid rgba(239,68,68,0.40)",
-                      color: "#fca5a5",
+                      background: "rgba(245,158,11,0.12)",
+                      border: "1px solid rgba(245,158,11,0.28)",
+                      color: "#fde68a",
                     }}
                   >
                     PRIORITAS KOGNITIF UTAMA
@@ -343,11 +359,11 @@ export default function PanicTriage({ scanResult = null }) {
           {/* Visual horizontal Progress Bar */}
           <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "rgba(150,175,230,0.08)" }}>
             <div
-              className="h-full transition-all duration-500 rounded-full"
+              className="h-full transition-all duration-500 motion-reduce:transition-none rounded-full"
               style={{
                 width: `${endowedProgress}%`,
                 background: activeTab === "emergency"
-                  ? "linear-gradient(90deg, #ef4444, #f59e0b, #5df0a8)"
+                  ? "linear-gradient(90deg, #f59e0b, #5df0a8)"
                   : "linear-gradient(90deg, #5df0a8, #2fd38a)",
                 boxShadow: "0 0 12px rgba(93,240,168,0.35)",
               }}
@@ -408,12 +424,15 @@ export default function PanicTriage({ scanResult = null }) {
                 style={
                   isDone
                     ? { background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.20)", opacity: 0.8 }
-                    : activeTab === "emergency"
-                    ? { background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.20)" }
-                    : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
+                    : { background: "rgba(12,18,38,0.34)", border: "1px solid rgba(150,175,230,0.08)" }
                 }
               >
-                <button className="mt-0.5 shrink-0">
+                <button
+                  type="button"
+                  aria-pressed={isDone}
+                  aria-label={step.title}
+                  className="mt-0.5 shrink-0 focus-visible:outline-2 focus-visible:outline-[#5df0a8] focus-visible:outline-offset-2 rounded"
+                >
                   {isDone ? (
                     <CheckSquare className="w-5 h-5 text-[#5df0a8]" />
                   ) : (
@@ -421,12 +440,12 @@ export default function PanicTriage({ scanResult = null }) {
                   )}
                 </button>
 
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
                     {step.priority && (
                       <span
-                        className="inline-block text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full"
-                        style={{ background: "rgba(239,68,68,0.12)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.25)" }}
+                        className="inline-block text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full"
+                        style={{ background: "rgba(245,158,11,0.12)", color: "#fcd34d", border: "1px solid rgba(245,158,11,0.25)" }}
                       >
                         {step.priority}
                       </span>
@@ -453,44 +472,55 @@ export default function PanicTriage({ scanResult = null }) {
           })}
         </div>
 
-        {/* ── Guide Per Fraud Mode ── */}
+        {/* ── Guide Per Fraud Mode (Collapsed inside Disclosure) ── */}
         <div className="pt-6 border-t border-white/[0.06]">
-          <h4 className="text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2 text-slate-300">
-            <LifeBuoy className="w-4 h-4 text-[#5df0a8]" />
-            <span>Panduan Per Modus Penipuan</span>
-          </h4>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {guides.map((g) => (
-              <div
-                key={g.engineId}
-                className="p-5 rounded-2xl text-xs sm:text-sm"
-                style={
-                  g.relevant
-                    ? { background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.20)" }
-                    : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
-                }
+          <Disclosure
+            icon={LifeBuoy}
+            title="Panduan Per Modus Penipuan"
+            summary="Langkah penyelamatan khusus dan berkas yang perlu disiapkan per jenis modus"
+            badge={
+              <span
+                className="text-[11px] font-mono px-2.5 py-0.5 rounded-full text-slate-300"
+                style={{ background: "rgba(150,175,230,0.08)", border: "1px solid rgba(150,175,230,0.12)" }}
               >
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <h5 className="text-sm sm:text-base font-bold text-white">{g.title}</h5>
-                  {g.relevant && (
-                    <span
-                      className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full"
-                      style={{ background: "rgba(93,240,168,0.10)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.22)" }}
-                    >
-                      Relevan
-                    </span>
-                  )}
+                {relevantGuidesCount > 0 ? `${relevantGuidesCount} relevan · ${guides.length} modus` : `${guides.length} modus`}
+              </span>
+            }
+            defaultOpen={false}
+            panelClassName="pt-3"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {guides.map((g) => (
+                <div
+                  key={g.engineId}
+                  className="p-5 rounded-2xl text-xs sm:text-sm min-w-0"
+                  style={
+                    g.relevant
+                      ? { background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.20)" }
+                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
+                  }
+                >
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <h5 className="text-sm sm:text-base font-bold text-white [overflow-wrap:anywhere] break-words">{g.title}</h5>
+                    {g.relevant && (
+                      <span
+                        className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full"
+                        style={{ background: "rgba(93,240,168,0.10)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.22)" }}
+                      >
+                        Relevan
+                      </span>
+                    )}
+                  </div>
+                  <ol className="list-decimal pl-4 space-y-1.5 text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
+                    {g.steps.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
+                  <p className="mt-3 text-xs text-slate-400 [overflow-wrap:anywhere] break-words">Siapkan: {g.docs.join(" · ")}</p>
                 </div>
-                <ol className="list-decimal pl-4 space-y-1.5 text-slate-300 leading-relaxed">
-                  {g.steps.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ol>
-                <p className="mt-3 text-xs text-slate-400">Siapkan: {g.docs.join(" · ")}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </Disclosure>
         </div>
 
         {/* ── Official Channels ── */}

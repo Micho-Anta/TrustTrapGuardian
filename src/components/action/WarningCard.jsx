@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Check, Copy, MessageCircle, Share2, ShieldAlert } from "lucide-react";
+import Disclosure from "../ui/Disclosure";
 
 // Defang URLs agar link aktif tidak tersebar lewat pesan salin
 function defangUrls(text) {
@@ -69,8 +70,9 @@ export default function WarningCard({ scanResult }) {
         </div>
 
         <div className="flex flex-col sm:items-end gap-1.5">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <button
+              type="button"
               onClick={handleCopy}
               className="btn-ghost"
             >
@@ -79,6 +81,7 @@ export default function WarningCard({ scanResult }) {
             </button>
 
             <button
+              type="button"
               onClick={handleWhatsAppShare}
               className="btn-ascend"
               style={{
@@ -98,93 +101,119 @@ export default function WarningCard({ scanResult }) {
         </div>
       </div>
 
-      {/* Visual Kartu Peringatan (Preview Card) - Clean & Elegant */}
-      <div
-        className="max-w-xl mx-auto rounded-3xl p-6 sm:p-8 relative overflow-hidden"
-        style={{
-          background: "rgba(12, 18, 38, 0.55)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          border: "1px solid rgba(239, 68, 68, 0.20)",
-          boxShadow: "0 25px 60px -20px rgba(0,0,0,0.75)",
-        }}
+      {/* Visual Kartu Peringatan (Collapsed by default inside Disclosure) */}
+      <Disclosure
+        icon={ShieldAlert}
+        title="Pratinjau isi Kartu Peringatan"
+        summary="Lihat detail buletin peringatan sebelum dibagikan ke WhatsApp"
+        badge={
+          <span
+            className="text-[11px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap"
+            style={
+              summary.score >= 35
+                ? { background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.28)", color: "#fcd34d" }
+                : { background: "rgba(16,185,129,0.10)", border: "1px solid rgba(16,185,129,0.25)", color: "#6ee7b7" }
+            }
+          >
+            Skor {summary.score}/100
+          </span>
+        }
+        defaultOpen={false}
+        panelClassName="pt-3"
       >
-        {/* Soft Ambient glow */}
-        <div className="absolute top-0 right-0 w-56 h-56 bg-red-500/10 rounded-full blur-3xl -z-0 pointer-events-none"></div>
-
-        <div className="relative z-10 space-y-5">
-          <div className="flex items-center justify-between flex-wrap gap-2 border-b border-white/[0.08] pb-4">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2.5 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20 shrink-0">
-                <ShieldAlert className="w-5 h-5" />
+        <div
+          className="max-w-xl mx-auto rounded-3xl p-6 sm:p-8 relative overflow-hidden"
+          style={{
+            background: "rgba(12, 18, 38, 0.55)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: "1px solid rgba(150, 175, 230, 0.14)",
+            boxShadow: "0 25px 60px -20px rgba(0,0,0,0.75)",
+          }}
+        >
+          <div className="relative z-10 space-y-5">
+            <div className="flex items-center justify-between flex-wrap gap-2 border-b border-white/[0.08] pb-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-300 border border-amber-500/20 shrink-0">
+                  <ShieldAlert className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 block">
+                    SECURITY ADVISORY BULLETIN
+                  </span>
+                  <span className="text-sm sm:text-base font-extrabold text-white">
+                    The Trust Trap: Digital Guardian
+                  </span>
+                </div>
               </div>
-              <div className="min-w-0">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-red-400 block">
-                  SECURITY ADVISORY BULLETIN
-                </span>
-                <span className="text-sm sm:text-base font-extrabold text-white">
-                  The Trust Trap: Digital Guardian
+              <div className="text-right shrink-0">
+                <span
+                  className="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap shrink-0 inline-block"
+                  style={
+                    summary.score >= 70
+                      ? { background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.28)", color: "#fca5a5" }
+                      : summary.score >= 35
+                      ? { background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.28)", color: "#fcd34d" }
+                      : { background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", color: "#6ee7b7" }
+                  }
+                >
+                  Skor Bahaya {summary.score}/100
                 </span>
               </div>
             </div>
-            <div className="text-right shrink-0">
-              <span className="text-xs font-bold text-red-300 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full whitespace-nowrap shrink-0 inline-block">
-                Skor Bahaya {summary.score}/100
-              </span>
+
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 flex items-center gap-2">
+                <span>⚠️ Peringatan: {summary.riskLevel}</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Pesan yang Anda terima mengandung manipulasi psikologis khas sindikat penipuan digital Indonesia.
+              </p>
             </div>
-          </div>
 
-          <div>
-            <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 flex items-center gap-2">
-              <span>⚠️ Peringatan: {summary.riskLevel}</span>
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Pesan yang Anda terima mengandung manipulasi psikologis khas sindikat penipuan digital Indonesia.
-            </p>
-          </div>
+            {/* List of dangerous patterns */}
+            {dangerousEngines.length > 0 && (
+              <div
+                className="space-y-2 p-4 rounded-2xl"
+                style={{
+                  background: "rgba(4, 6, 15, 0.50)",
+                  border: "1px solid rgba(150, 175, 230, 0.08)",
+                }}
+              >
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+                  Modus Bahaya yang Teridentifikasi:
+                </span>
+                <ul className="space-y-2 text-xs sm:text-sm text-slate-200">
+                  {dangerousEngines.map((eng) => (
+                    <li key={eng.id} className="flex items-start gap-2.5">
+                      <span className="text-amber-400 font-bold">•</span>
+                      <span className="leading-relaxed">
+                        <strong className="text-slate-100 font-semibold">{eng.name}:</strong>{" "}
+                        <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{eng.explanation}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          {/* List of dangerous patterns */}
-          {dangerousEngines.length > 0 && (
+            {/* Golden Rules */}
             <div
-              className="space-y-2 p-4 rounded-2xl"
+              className="p-4 rounded-2xl text-xs sm:text-sm space-y-1.5 leading-relaxed"
               style={{
-                background: "rgba(4, 6, 15, 0.50)",
-                border: "1px solid rgba(150, 175, 230, 0.06)",
+                background: "rgba(93, 240, 168, 0.05)",
+                border: "1px solid rgba(93, 240, 168, 0.16)",
+                color: "#cbd5e1",
               }}
             >
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                Modus Bahaya yang Teridentifikasi:
-              </span>
-              <ul className="space-y-2 text-xs sm:text-sm text-slate-200">
-                {dangerousEngines.map((eng) => (
-                  <li key={eng.id} className="flex items-start gap-2.5">
-                    <span className="text-red-400 font-bold">•</span>
-                    <span className="leading-relaxed">
-                      <strong className="text-red-300 font-semibold">{eng.name}:</strong>{" "}
-                      <span className="text-slate-300 [overflow-wrap:anywhere] break-words">{eng.explanation}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="font-bold text-[#5df0a8]">Tiga Langkah Pencegahan Utama:</div>
+              <div>1. Jangan pernah transfer uang ke rekening yang diminta.</div>
+              <div>2. Jangan instal file berakhiran .APK apapun.</div>
+              <div>3. Jangan serahkan kode OTP 6-digit SMS ke siapapun.</div>
             </div>
-          )}
-
-          {/* Golden Rules */}
-          <div
-            className="p-4 rounded-2xl text-xs sm:text-sm space-y-1.5 leading-relaxed"
-            style={{
-              background: "rgba(239, 68, 68, 0.08)",
-              border: "1px solid rgba(239, 68, 68, 0.20)",
-              color: "#fca5a5",
-            }}
-          >
-            <div className="font-bold text-red-300">Tiga Langkah Pencegahan Utama:</div>
-            <div>1. Jangan pernah transfer uang ke rekening yang diminta.</div>
-            <div>2. Jangan instal file berakhiran .APK apapun.</div>
-            <div>3. Jangan serahkan kode OTP 6-digit SMS ke siapapun.</div>
           </div>
         </div>
-      </div>
+      </Disclosure>
     </div>
   );
 }
