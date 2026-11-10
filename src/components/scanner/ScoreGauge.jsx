@@ -1,5 +1,6 @@
 import React from "react";
 import { AlertTriangle, CheckCircle2, ShieldAlert, ShieldCheck, Zap, ArrowRight, Info } from "lucide-react";
+import Disclosure from "../ui/Disclosure";
 
 /**
  * ScoreGauge - Ascend polished theme.
@@ -84,7 +85,7 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 filter="url(#scoreGlow)"
-                className="transition-all duration-1000 ease-out"
+                className="transition-all duration-1000 ease-out motion-reduce:transition-none"
               />
             </svg>
 
@@ -98,23 +99,10 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
               </span>
             </div>
           </div>
-
-          {/* Keterangan / Tooltip Formula Kalkulasi Dewan Juri */}
-          <div
-            className="mt-3 text-[10px] sm:text-[11px] font-mono text-slate-400 text-center flex items-center gap-1.5 px-3 py-1 rounded-full"
-            style={{
-              background: "rgba(12,18,38,0.50)",
-              border: "1px solid rgba(150,175,230,0.08)",
-            }}
-            title="Transparansi Rumus Penilaian Heuristik"
-          >
-            <Info className="w-3 h-3 text-[#5df0a8] shrink-0" />
-            <span>Formula: Min(100, {rawScore ?? 'Base Score'} × Combo Multiplier {comboBonus ?? 1}x)</span>
-          </div>
         </div>
 
         {/* Status & Analysis Summary */}
-        <div className="flex-1 space-y-4 text-center md:text-left">
+        <div className="flex-1 min-w-0 space-y-4 text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
             <span
               className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold"
@@ -140,10 +128,10 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
 
             {comboBonus > 1.0 && (
               <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold animate-pulse"
-                style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+                style={{ background: "rgba(245,158,11,0.10)", border: "1px solid rgba(245,158,11,0.24)", color: "#fcd34d" }}
               >
-                <Zap className="w-3.5 h-3.5 text-red-400" />
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
                 Combo Multiplier {comboBonus}x
               </span>
             )}
@@ -157,20 +145,11 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
               : "Tidak ditemukan pola manipulasi umum yang mencolok. Tetap jaga kerahasiaan data pribadi seperti password dan kode OTP."}
           </p>
 
-          {combosTriggered && combosTriggered.length > 0 && (
-            <div
-              className="rounded-2xl p-3 text-xs"
-              style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.20)", color: "#fca5a5" }}
-            >
-              <span className="font-semibold text-red-300">Peringatan Kombinasi Modus: </span>
-              {combosTriggered.join(", ")}
-            </div>
-          )}
-
           {/* ── Seamless Handoff Button (Pill Capsule Mint Glow) ── */}
           {showHandoff && (
             <div className="pt-2">
               <button
+                type="button"
                 onClick={onGoToAct}
                 className="btn-ascend w-full sm:w-auto"
                 style={{
@@ -189,39 +168,79 @@ export default function ScoreGauge({ summary, engines = [], onGoToAct }) {
         </div>
       </div>
 
-      {/* Engine Status Mini Bar - Cleaner & Thinner Borders */}
-      <div className="pt-6 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {engines.map((eng) => {
-          const isDanger = eng.status === "DANGER";
-          return (
-            <div
-              key={eng.id}
-              className="p-3 rounded-2xl text-xs flex flex-col justify-between transition-all"
-              style={
-                isDanger
-                  ? { background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.22)", color: "#fca5a5" }
-                  : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)", color: "var(--muted)" }
-              }
+      {/* Collapsible score formula, combo alert, and module status summary */}
+      <div className="pt-4 border-t border-white/[0.06]">
+        <Disclosure
+          icon={Info}
+          title={`Detail kalkulasi skor & ringkasan status ${totalEngines} modul`}
+          badge={
+            <span
+              className="text-[11px] font-mono px-2.5 py-0.5 rounded-full text-slate-300"
+              style={{ background: "rgba(150,175,230,0.08)", border: "1px solid rgba(150,175,230,0.12)" }}
             >
-              <div className="flex items-center justify-between gap-1 mb-1.5">
-                <span className="font-semibold truncate text-slate-200" title={eng.name}>
-                  {eng.name}
-                </span>
-                {isDanger ? (
-                  <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-red-400" />
-                ) : (
-                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-slate-600" />
-                )}
-              </div>
-              <span
-                className="text-[10px] uppercase font-bold tracking-wider"
-                style={{ color: isDanger ? "#f87171" : "rgba(150,175,230,0.35)" }}
-              >
-                {isDanger ? "TERDETEKSI" : "BERSIH"}
-              </span>
+              {triggeredEngines} terdeteksi
+            </span>
+          }
+          defaultOpen={false}
+          panelClassName="space-y-4 pt-3"
+        >
+          <div className="flex flex-wrap items-center gap-2.5 text-[11px] font-mono text-slate-300">
+            <span
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full [overflow-wrap:anywhere] break-words"
+              style={{
+                background: "rgba(12,18,38,0.50)",
+                border: "1px solid rgba(150,175,230,0.10)",
+              }}
+            >
+              <Info className="w-3 h-3 text-[#5df0a8] shrink-0" />
+              <span>Formula: Min(100, {rawScore ?? "Base Score"} × Combo Multiplier {comboBonus ?? 1}x)</span>
+            </span>
+          </div>
+
+          {combosTriggered && combosTriggered.length > 0 && (
+            <div
+              className="rounded-2xl p-3 text-xs leading-relaxed [overflow-wrap:anywhere] break-words"
+              style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.22)", color: "#fde68a" }}
+            >
+              <span className="font-semibold text-amber-300">Kombinasi Modus Terdeteksi: </span>
+              {combosTriggered.join(", ")}
             </div>
-          );
-        })}
+          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+            {engines.map((eng) => {
+              const isDanger = eng.status === "DANGER";
+              return (
+                <div
+                  key={eng.id}
+                  className="p-3 rounded-2xl text-xs flex flex-col justify-between min-w-0"
+                  style={
+                    isDanger
+                      ? { background: "rgba(12,18,38,0.55)", border: "1px solid rgba(245,158,11,0.26)", color: "#fde68a" }
+                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)", color: "var(--muted)" }
+                  }
+                >
+                  <div className="flex items-center justify-between gap-1 mb-1.5 min-w-0">
+                    <span className="font-semibold truncate text-slate-200" title={eng.name}>
+                      {eng.name}
+                    </span>
+                    {isDanger ? (
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                    ) : (
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-slate-600" />
+                    )}
+                  </div>
+                  <span
+                    className="text-[10px] uppercase font-bold tracking-wider"
+                    style={{ color: isDanger ? "#fbbf24" : "rgba(150,175,230,0.40)" }}
+                  >
+                    {isDanger ? "TERDETEKSI" : "BERSIH"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </Disclosure>
       </div>
     </div>
   );
