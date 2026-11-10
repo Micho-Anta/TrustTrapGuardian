@@ -120,3 +120,71 @@ export function isOfficialChannelSentence(sentence) {
 
   return officialMarkers.some((p) => p.test(s));
 }
+
+/**
+ * Mendeteksi kalimat transfer kebutuhan rutin keluarga atau arah uang masuk ke penerima.
+ * Contoh: "uang kos", "uang kuliah", "ibu udah kirim ke rekening kamu".
+ */
+export function isFamilyRoutineFinancialSentence(sentence) {
+  if (!sentence) return false;
+  if (isScamSecrecySentence(sentence)) return false;
+  const s = sentence.toLowerCase();
+
+  const incomingDirection =
+    /(?:udah|sudah)\s+(?:[a-zA-Z]+\s+)?(?:kirim|transfer|ditransfer|dikirim)\s+ke\s+rekening\s+(?:kamu|mu|adek|kakak)/i;
+  const routineNeeds =
+    /uang\s+(?:kos|kuliah|jajan|saku|bulanan|belanja|sekolah|ukt|spp)\b/i;
+
+  return incomingDirection.test(s) || routineNeeds.test(s);
+}
+
+/**
+ * Memeriksa apakah guard kebutuhan rutin keluarga harus gugur.
+ * Gugur jika ada salah satu:
+ * 1. Kelompok A family_impersonation ("nomor baru", "hp lama rusak/hilang", dsb)
+ * 2. Modul artificial_urgency menyala
+ * 3. Ada tautan atau file .apk
+ * 4. Ada frasa kerahasiaan ("jangan beritahu siapa pun")
+ * 5. Rekening tujuan tidak dikenal ("rekening penampung", "rekening ini")
+ */
+export function shouldDropFamilyRoutineGuard({
+  normalizedText,
+  sentences,
+  hasUrgency,
+  hasLinks,
+  hasApk
+}) {
+  const text = normalizedText.toLowerCase();
+
+  // 1. Kelompok A family_impersonation
+  const groupAPatterns = [
+    /nomor\s*baru/i,
+    /ganti\s*nomor/i,
+    /hp\s*(?:lama\s*|aku\s*|ku\s*)?(?:rusak|hilang|error)/i,
+    /aku\s*(?:anakmu|anak\s*mama)/i,
+    /\bdarurat\b/i,
+    /rumah\s*sakit/i,
+    /kecelakaan/i
+  ];
+  if (groupAPatterns.some((p) => p.test(text))) return true;
+
+  // 2. Modul artificial_urgency menyala
+  if (hasUrgency) return true;
+
+  // 3. Ada tautan atau file .apk
+  if (hasLinks || hasApk) return true;
+
+  // 4. Ada frasa kerahasiaan
+  if (sentences.some((s) => isScamSecrecySentence(s))) return true;
+
+  // 5. Rekening tujuan tidak dikenal
+  if (
+    /(?:rekening\s*(?:penampung|sementara|ini|tersebut|berikut)|ke\s+rekening\s+ini)/i.test(
+      text
+    )
+  ) {
+    return true;
+  }
+
+  return false;
+}

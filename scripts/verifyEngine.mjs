@@ -366,6 +366,24 @@ runTest("Safe Message 11", "Pesan Aman 11: Ucapan Selamat Ulang Tahun Personal (
   return scan.summary.score;
 }, "Selamat ulang tahun ya Andi! Semoga panjang umur, sehat selalu, dan sukses dalam karier dan studinya.");
 
+runTest("Safe Family Routine 1", "Pesan Aman 12: Pengingat Uang Kos dari Orang Tua (Skor < 35)", () => {
+  const text = "Nak, besok transfer uang kos ya, ibu udah kirim ke rekening kamu kemarin";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("upfront_fee"), "Modul upfront_fee tidak boleh terpicu pada transfer rutin keluarga");
+  return scan.summary.score;
+}, "Nak, besok transfer uang kos ya, ibu udah kirim ke rekening kamu kemarin");
+
+runTest("Safe Family Routine 2", "Pesan Aman 13: Konfirmasi Uang Kuliah Mahasiswa ke Orang Tua (Skor < 35)", () => {
+  const text = "Pah, uang kuliah semester ini udah aku transfer ya";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score < 35, `Expected score < 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(!triggeredIds.includes("upfront_fee"), "Modul upfront_fee tidak boleh terpicu pada transfer uang kuliah");
+  return scan.summary.score;
+}, "Pah, uang kuliah semester ini udah aku transfer ya");
+
 // ─────────────────────────────────────────────────────────────
 // SUITE 4: SPECIAL TESTS (SECRECY EXCEPTION & BOUNDARIES)
 // ─────────────────────────────────────────────────────────────
@@ -379,6 +397,26 @@ runTest("Secrecy Exception", "Tes Khusus: 'jangan beritahu siapa pun soal transf
   assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus tetap terpicu");
   return scan.summary.score;
 }, "Segera transfer biaya administrasi Rp 500.000 ke rekening bendahara, dan jangan beritahu siapa pun soal transfer ini.");
+
+runTest("Guard Drop Impersonation", "Guard Gugur: Nomor baru + uang kos ke rekening ini (skor >= 35)", () => {
+  const text = "Mah ini nomor baru aku, hp lama hilang. Transfer uang kos dulu ya ke rekening ini";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("family_impersonation"), "Modul family_impersonation harus terpicu");
+  assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus tetap terpicu karena guard gugur");
+  return scan.summary.score;
+}, "Mah ini nomor baru aku, hp lama hilang. Transfer uang kos dulu ya ke rekening ini");
+
+runTest("Guard Drop Urgency & Secrecy", "Guard Gugur: Uang kos 15 menit + rekening penampung + rahasia (skor >= 35)", () => {
+  const text = "Transfer uang kos sekarang dalam 15 menit ke rekening penampung ini, jangan beritahu siapa pun";
+  const scan = scanText(text);
+  assert.ok(scan.summary.score >= 35, `Expected score >= 35, got ${scan.summary.score}`);
+  const triggeredIds = scan.engines.filter(e => e.status === "DANGER").map(e => e.id);
+  assert.ok(triggeredIds.includes("upfront_fee"), "Modul upfront_fee harus tetap terpicu karena guard gugur");
+  assert.ok(triggeredIds.includes("artificial_urgency"), "Modul artificial_urgency harus terpicu");
+  return scan.summary.score;
+}, "Transfer uang kos sekarang dalam 15 menit ke rekening penampung ini, jangan beritahu siapa pun");
 
 runTest("Boundary Check", "Input kosong / whitespace menghasilkan return null secara aman", () => {
   assert.equal(scanText(""), null);

@@ -6,7 +6,9 @@ import {
   isEducationalWarningSentence,
   isOfficialChannelSentence,
   isSharingProhibitionSentence,
-  isRequestToSendCodeSentence
+  isRequestToSendCodeSentence,
+  isFamilyRoutineFinancialSentence,
+  shouldDropFamilyRoutineGuard
 } from "./contextGuards.js";
 
 /**
@@ -238,6 +240,52 @@ export function scanText(rawText) {
         upfrontFeeEvidenceSentences.every((s) => isOfficialChannelSentence(s));
 
       if (allOfficial) {
+        triggeredIds.delete("upfront_fee");
+        totalRawScore = Math.max(0, totalRawScore - 35);
+
+        const upfrontResult = engineResults.find((e) => e.id === "upfront_fee");
+        if (upfrontResult) {
+          upfrontResult.status = "CLEAN";
+          upfrontResult.score = 0;
+          upfrontResult.evidence = [];
+          upfrontResult.patterns = [];
+        }
+
+        // Hapus temuan upfront_fee dari highlightedEvidence
+        for (let i = highlightedEvidence.length - 1; i >= 0; i--) {
+          if (highlightedEvidence[i].engineId === "upfront_fee") {
+            highlightedEvidence.splice(i, 1);
+          }
+        }
+      }
+    }
+  }
+
+  // Evaluasi Khusus: Abaikan upfront_fee jika pesan adalah transfer rutin keluarga / orang tua
+  // Aturan: memuat arah uang masuk ke penerima dan/atau kebutuhan rutin keluarga,
+  // dan guard TIDAK gugur.
+  if (triggeredIds.has("upfront_fee")) {
+    const hasUrgency = triggeredIds.has("artificial_urgency");
+    const linkFindings = inspectLinksInText(sanitizedText);
+    const hasLinks =
+      linkFindings.length > 0 ||
+      /https?:\/\/|www\.|\.xyz\b|\.top\b|bit\.ly/i.test(sanitizedText);
+    const hasApk = /\.apk\b/i.test(sanitizedText);
+
+    const guardGugur = shouldDropFamilyRoutineGuard({
+      normalizedText,
+      sentences,
+      hasUrgency,
+      hasLinks,
+      hasApk
+    });
+
+    if (!guardGugur) {
+      const isFamilyRoutine =
+        upfrontFeeEvidenceSentences.length > 0 &&
+        upfrontFeeEvidenceSentences.every((s) => isFamilyRoutineFinancialSentence(s));
+
+      if (isFamilyRoutine) {
         triggeredIds.delete("upfront_fee");
         totalRawScore = Math.max(0, totalRawScore - 35);
 
