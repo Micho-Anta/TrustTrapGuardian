@@ -32,12 +32,12 @@ function Toast({ message, visible }) {
       className="fixed bottom-6 left-1/2 z-50 flex items-center gap-3 px-5 py-3 rounded-2xl text-sm font-semibold shadow-2xl pointer-events-none"
       style={{
         transform: "translateX(-50%)",
-        background: "linear-gradient(135deg, rgba(93,240,168,0.20), rgba(45,211,138,0.15))",
+        background: "linear-gradient(135deg, rgba(90, 185, 252,0.20), rgba(45,211,138,0.15))",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        border: "1px solid rgba(93,240,168,0.40)",
-        color: "#5df0a8",
-        boxShadow: "0 20px 60px -15px rgba(0,0,0,0.70), 0 0 30px -10px rgba(93,240,168,0.30)",
+        border: "1px solid rgba(90, 185, 252,0.40)",
+        color: "#5ab9fc",
+        boxShadow: "0 20px 60px -15px rgba(0,0,0,0.70), 0 0 30px -10px rgba(90, 185, 252,0.30)",
         animation: "fadeSlideUp 0.3s ease",
       }}
     >
@@ -159,15 +159,15 @@ export default function PanicTriage({ scanResult = null }) {
               <span
                 className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full inline-block"
                 style={{
-                  background: "rgba(93,240,168,0.15)",
-                  color: "#5df0a8",
-                  border: "1px solid rgba(93,240,168,0.30)",
+                  background: "rgba(90, 185, 252,0.15)",
+                  color: "#5ab9fc",
+                  border: "1px solid rgba(90, 185, 252,0.30)",
                 }}
               >
                 Psychological First Aid (Anti-Shame Loop)
               </span>
             </div>
-            <p className="text-sm sm:text-base font-semibold text-[#5df0a8]">
+            <p className="text-sm sm:text-base font-semibold text-[#5ab9fc]">
               Anda tidak sendirian &amp; jangan malu melapor.
             </p>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -184,13 +184,13 @@ export default function PanicTriage({ scanResult = null }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-4">
           <div className="space-y-1">
             <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
-              <LifeBuoy className="w-5 h-5 text-[#5df0a8]" />
+              <LifeBuoy className="w-5 h-5 text-[#5ab9fc]" />
               <span>Panduan Penyelamatan &amp; Tindakan Darurat</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
               Pilih kondisi Anda saat ini untuk panduan langkah demi langkah yang terarah.
             </p>
-            <p className="text-[11px] text-[#5df0a8]/90 font-medium flex items-center gap-1.5 pt-0.5">
+            <p className="text-[11px] text-[#5ab9fc]/90 font-medium flex items-center gap-1.5 pt-0.5">
               <span>⚡</span>
               <span>Mode Triage Cepat (Hick's Law): Pilih 1 kondisi Anda saat ini agar panduan langsung disaring sesuai prioritas.</span>
             </p>
@@ -198,7 +198,7 @@ export default function PanicTriage({ scanResult = null }) {
 
           <div
             className="flex items-center p-1.5 rounded-full text-xs font-semibold self-start sm:self-auto shrink-0"
-            style={{ background: "rgba(12,18,38,0.50)", border: "1px solid var(--border)" }}
+            style={{ background: "rgba(19, 24, 36,0.50)", border: "1px solid var(--border)" }}
           >
             <button
               onClick={() => setActiveTab("preventive")}
@@ -206,9 +206,9 @@ export default function PanicTriage({ scanResult = null }) {
               style={
                 activeTab === "preventive"
                   ? {
-                      background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
+                      background: "var(--accent)",
                       color: "var(--accent-on)",
-                      boxShadow: "0 4px 16px -4px rgba(93,240,168,0.45)",
+                      boxShadow: "0 4px 16px -4px rgba(90, 185, 252,0.45)",
                     }
                   : { color: "var(--muted)" }
               }
@@ -242,7 +242,7 @@ export default function PanicTriage({ scanResult = null }) {
             <div
               className="p-5 rounded-2xl flex gap-3.5 relative overflow-hidden"
               style={{
-                background: "rgba(12,18,38,0.48)",
+                background: "rgba(19, 24, 36,0.48)",
                 border: "1px solid rgba(150,175,230,0.12)",
                 borderLeft: "3px solid #f59e0b",
               }}
@@ -278,7 +278,7 @@ export default function PanicTriage({ scanResult = null }) {
             <div
               className="p-5 rounded-2xl flex gap-3.5 relative overflow-hidden"
               style={{
-                background: "rgba(12,18,38,0.48)",
+                background: "rgba(19, 24, 36,0.48)",
                 border: "1px solid rgba(150,175,230,0.12)",
                 borderLeft: "3px solid #f59e0b",
               }}
@@ -315,9 +315,9 @@ export default function PanicTriage({ scanResult = null }) {
         {scanResult && (
           <div
             className="p-5 rounded-2xl space-y-2.5"
-            style={{ background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.16)" }}
+            style={{ background: "rgba(90, 185, 252,0.05)", border: "1px solid rgba(90, 185, 252,0.16)" }}
           >
-            <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-[#5df0a8]">
+            <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-[#5ab9fc]">
               <Sparkles className="w-4 h-4 text-amber-400" />
               <span>Dari Hasil Scan Anda</span>
               <span className="normal-case font-medium text-slate-400">
@@ -339,7 +339,7 @@ export default function PanicTriage({ scanResult = null }) {
           <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
             <span className="flex items-center gap-2">
               <span>Checklist Protokol · {doneCount}/{steps.length} Selesai</span>
-              <span className="text-[#5df0a8] font-bold">({endowedProgress}%)</span>
+              <span className="text-[#5ab9fc] font-bold">({endowedProgress}%)</span>
             </span>
             <button
               onClick={() => setCompletedSteps({})}
@@ -362,16 +362,16 @@ export default function PanicTriage({ scanResult = null }) {
               style={{
                 width: `${endowedProgress}%`,
                 background: activeTab === "emergency"
-                  ? "linear-gradient(90deg, #f59e0b, #5df0a8)"
-                  : "linear-gradient(90deg, #5df0a8, #2fd38a)",
-                boxShadow: "0 0 12px rgba(93,240,168,0.35)",
+                  ? "linear-gradient(90deg, #f59e0b, #5ab9fc)"
+                  : "linear-gradient(90deg, #5ab9fc, #86cdfd)",
+                boxShadow: "0 0 12px rgba(90, 185, 252,0.35)",
               }}
             />
           </div>
 
           {/* Endowed Progress Explanation Text */}
           {doneCount === 0 ? (
-            <p className="text-[11px] text-[#5df0a8]/90 italic flex items-center gap-1.5 pt-0.5">
+            <p className="text-[11px] text-[#5ab9fc]/90 italic flex items-center gap-1.5 pt-0.5">
               <span>✨</span>
               <span>Progres Awal 15%: Anda sudah mengambil langkah penyelamatan pertama dengan membuka panduan ini.</span>
             </p>
@@ -388,19 +388,19 @@ export default function PanicTriage({ scanResult = null }) {
           <div
             className="flex items-start gap-4 p-5 sm:p-6 rounded-2xl animate-in fade-in duration-300"
             style={{
-              background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(93,240,168,0.10))",
+              background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(90, 185, 252,0.10))",
               border: "1px solid rgba(16,185,129,0.40)",
-              boxShadow: "0 0 40px -15px rgba(93,240,168,0.35)",
+              boxShadow: "0 0 40px -15px rgba(90, 185, 252,0.35)",
             }}
           >
             <div
               className="p-2.5 rounded-2xl shrink-0"
-              style={{ background: "rgba(93,240,168,0.18)", border: "1px solid rgba(93,240,168,0.35)" }}
+              style={{ background: "rgba(90, 185, 252,0.18)", border: "1px solid rgba(90, 185, 252,0.35)" }}
             >
-              <Trophy className="w-6 h-6 text-[#5df0a8]" />
+              <Trophy className="w-6 h-6 text-[#5ab9fc]" />
             </div>
             <div>
-              <p className="text-sm sm:text-base font-bold text-[#5df0a8] mb-1">
+              <p className="text-sm sm:text-base font-bold text-[#5ab9fc] mb-1">
                 ✅ Seluruh Protokol Kritis Selesai! Anda telah menekan risiko kerugian dan penyadapan secara maksimal.
               </p>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -423,17 +423,17 @@ export default function PanicTriage({ scanResult = null }) {
                 style={
                   isDone
                     ? { background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.20)", opacity: 0.8 }
-                    : { background: "rgba(12,18,38,0.34)", border: "1px solid rgba(150,175,230,0.08)" }
+                    : { background: "rgba(19, 24, 36,0.34)", border: "1px solid rgba(150,175,230,0.08)" }
                 }
               >
                 <button
                   type="button"
                   aria-pressed={isDone}
                   aria-label={step.title}
-                  className="mt-0.5 shrink-0 focus-visible:outline-2 focus-visible:outline-[#5df0a8] focus-visible:outline-offset-2 rounded"
+                  className="mt-0.5 shrink-0 focus-visible:outline-2 focus-visible:outline-[#5ab9fc] focus-visible:outline-offset-2 rounded"
                 >
                   {isDone ? (
-                    <CheckSquare className="w-5 h-5 text-[#5df0a8]" />
+                    <CheckSquare className="w-5 h-5 text-[#5ab9fc]" />
                   ) : (
                     <Square className="w-5 h-5 text-slate-500" />
                   )}
@@ -452,7 +452,7 @@ export default function PanicTriage({ scanResult = null }) {
                     {step.relevant && (
                       <span
                         className="inline-block text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full"
-                        style={{ background: "rgba(93,240,168,0.10)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.22)" }}
+                        style={{ background: "rgba(90, 185, 252,0.10)", color: "var(--accent)", border: "1px solid rgba(90, 185, 252,0.22)" }}
                       >
                         Relevan dengan hasil scan
                       </span>
@@ -475,7 +475,7 @@ export default function PanicTriage({ scanResult = null }) {
         <div className="pt-6 border-t border-white/[0.06] space-y-3">
           <div className="space-y-1">
             <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-slate-300">
-              <LifeBuoy className="w-4 h-4 text-[#5df0a8]" />
+              <LifeBuoy className="w-4 h-4 text-[#5ab9fc]" />
               <span>Panduan Per Modus Penipuan</span>
             </h4>
             <p className="text-xs text-slate-400">
@@ -494,9 +494,9 @@ export default function PanicTriage({ scanResult = null }) {
                       <span
                         className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full"
                         style={{
-                          background: "rgba(93,240,168,0.10)",
+                          background: "rgba(90, 185, 252,0.10)",
                           color: "var(--accent)",
-                          border: "1px solid rgba(93,240,168,0.22)",
+                          border: "1px solid rgba(90, 185, 252,0.22)",
                         }}
                       >
                         Relevan
@@ -513,7 +513,7 @@ export default function PanicTriage({ scanResult = null }) {
                     </span>
                   </span>
                 }
-                buttonClassName={g.relevant ? "border-[#5df0a8]/25 bg-[#5df0a8]/[0.04]" : ""}
+                buttonClassName={g.relevant ? "border-[#5ab9fc]/25 bg-[#5ab9fc]/[0.04]" : ""}
                 defaultOpen={false}
                 panelClassName="pt-2"
               >
@@ -521,8 +521,8 @@ export default function PanicTriage({ scanResult = null }) {
                   className="p-4 rounded-2xl text-xs sm:text-sm min-w-0"
                   style={
                     g.relevant
-                      ? { background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.18)" }
-                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
+                      ? { background: "rgba(90, 185, 252,0.05)", border: "1px solid rgba(90, 185, 252,0.18)" }
+                      : { background: "rgba(19, 24, 36,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
                   }
                 >
                   <ol className="list-decimal pl-4 space-y-1.5 text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
@@ -542,7 +542,7 @@ export default function PanicTriage({ scanResult = null }) {
         {/* ── Official Channels ── */}
         <div className="pt-6 border-t border-white/[0.06] space-y-5">
           <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-slate-300">
-            <PhoneCall className="w-4 h-4 text-[#5df0a8]" />
+            <PhoneCall className="w-4 h-4 text-[#5ab9fc]" />
             <span>Kanal Bantuan &amp; Pelaporan Resmi Nasional</span>
           </h4>
 
@@ -555,9 +555,9 @@ export default function PanicTriage({ scanResult = null }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-4 rounded-2xl transition-all flex items-start justify-between gap-2.5 text-xs group min-w-0"
-                  style={{ background: "rgba(12,18,38,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
+                  style={{ background: "rgba(19, 24, 36,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(93,240,168,0.30)";
+                    e.currentTarget.style.borderColor = "rgba(90, 185, 252,0.30)";
                     e.currentTarget.style.transform = "translateY(-1px)";
                   }}
                   onMouseLeave={(e) => {
@@ -566,22 +566,22 @@ export default function PanicTriage({ scanResult = null }) {
                   }}
                 >
                   <div>
-                    <div className="font-bold text-white group-hover:text-[#5df0a8] transition-colors [overflow-wrap:anywhere] break-words">{c.name}</div>
+                    <div className="font-bold text-white group-hover:text-[#5ab9fc] transition-colors [overflow-wrap:anywhere] break-words">{c.name}</div>
                     <div className="text-[11px] text-slate-400 mt-0.5 [overflow-wrap:anywhere] break-words">{c.role}</div>
-                    <div className="text-xs font-mono font-semibold mt-1.5 text-[#5df0a8] [overflow-wrap:anywhere] break-words">{c.contact}</div>
+                    <div className="text-xs font-mono font-semibold mt-1.5 text-[#5ab9fc] [overflow-wrap:anywhere] break-words">{c.contact}</div>
                     <div className="text-[10px] text-slate-400 mt-1 [overflow-wrap:anywhere] break-words">Siapkan: {c.prep}</div>
                   </div>
-                  <ExternalLink className="w-4 h-4 shrink-0 text-slate-500 group-hover:text-[#5df0a8] transition-colors mt-0.5" />
+                  <ExternalLink className="w-4 h-4 shrink-0 text-slate-500 group-hover:text-[#5ab9fc] transition-colors mt-0.5" />
                 </a>
               ) : (
                 <div
                   key={c.id}
                   className="p-4 rounded-2xl text-xs"
-                  style={{ background: "rgba(12,18,38,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
+                  style={{ background: "rgba(19, 24, 36,0.35)", border: "1px solid rgba(150,175,230,0.06)" }}
                 >
                   <div className="font-bold text-white [overflow-wrap:anywhere] break-words">{c.name}</div>
                   <div className="text-[11px] text-slate-400 mt-0.5">{c.role}</div>
-                  <div className="text-xs font-mono font-semibold mt-1.5 text-[#5df0a8]">{c.contact}</div>
+                  <div className="text-xs font-mono font-semibold mt-1.5 text-[#5ab9fc]">{c.contact}</div>
                   <div className="text-[10px] text-slate-400 mt-1">Siapkan: {c.prep}</div>
                 </div>
               )
@@ -594,11 +594,11 @@ export default function PanicTriage({ scanResult = null }) {
               onClick={handleCopyReport}
               className="btn-ascend w-full sm:w-auto"
               style={{
-                background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
-                color: "#032018",
+                background: "var(--accent)",
+                color: "#0a0d14",
                 fontWeight: 600,
                 borderRadius: "999px",
-                boxShadow: "0 10px 28px -6px rgba(93,240,168,0.45)",
+                boxShadow: "0 10px 28px -6px rgba(90, 185, 252,0.45)",
               }}
             >
               <ClipboardCopy className="w-4 h-4" />

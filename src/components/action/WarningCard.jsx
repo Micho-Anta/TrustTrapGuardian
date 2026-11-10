@@ -61,7 +61,7 @@ export default function WarningCard({ scanResult }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/[0.06] gap-4">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2.5">
-            <Share2 className="w-5 h-5 text-[#5df0a8]" />
+            <Share2 className="w-5 h-5 text-[#5ab9fc]" />
             <span>Kartu Peringatan Siap Bagi (Guardian Family Share)</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -76,7 +76,7 @@ export default function WarningCard({ scanResult }) {
               onClick={handleCopy}
               className="btn-ghost"
             >
-              {copied ? <Check className="w-4 h-4 text-[#5df0a8]" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-[#5ab9fc]" /> : <Copy className="w-4 h-4" />}
               <span>{copied ? "Tersalin!" : "Salin Teks"}</span>
             </button>
 
@@ -85,8 +85,8 @@ export default function WarningCard({ scanResult }) {
               onClick={handleWhatsAppShare}
               className="btn-ascend"
               style={{
-                background: "linear-gradient(180deg, #5df0a8, #2fd38a)",
-                color: "#032018",
+                background: "var(--accent)",
+                color: "#0a0d14",
                 fontWeight: 600,
                 borderRadius: "999px",
               }}
@@ -124,7 +124,7 @@ export default function WarningCard({ scanResult }) {
         <div
           className="max-w-xl mx-auto rounded-3xl p-6 sm:p-8 relative overflow-hidden"
           style={{
-            background: "rgba(12, 18, 38, 0.55)",
+            background: "rgba(19, 24, 36, 0.55)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
             border: "1px solid rgba(150, 175, 230, 0.14)",
@@ -176,7 +176,7 @@ export default function WarningCard({ scanResult }) {
               <div
                 className="space-y-2 p-4 rounded-2xl"
                 style={{
-                  background: "rgba(4, 6, 15, 0.50)",
+                  background: "rgba(10, 13, 20, 0.50)",
                   border: "1px solid rgba(150, 175, 230, 0.08)",
                 }}
               >
@@ -201,12 +201,12 @@ export default function WarningCard({ scanResult }) {
             <div
               className="p-4 rounded-2xl text-xs sm:text-sm space-y-1.5 leading-relaxed"
               style={{
-                background: "rgba(93, 240, 168, 0.05)",
-                border: "1px solid rgba(93, 240, 168, 0.16)",
+                background: "rgba(90, 185, 252, 0.05)",
+                border: "1px solid rgba(90, 185, 252, 0.16)",
                 color: "#cbd5e1",
               }}
             >
-              <div className="font-bold text-[#5df0a8]">Tiga Langkah Pencegahan Utama:</div>
+              <div className="font-bold text-[#5ab9fc]">Tiga Langkah Pencegahan Utama:</div>
               <div>1. Jangan pernah transfer uang ke rekening yang diminta.</div>
               <div>2. Jangan instal file berakhiran .APK apapun.</div>
               <div>3. Jangan serahkan kode OTP 6-digit SMS ke siapapun.</div>
