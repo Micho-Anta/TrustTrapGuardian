@@ -87,7 +87,6 @@ export default function PanicTriage({ scanResult = null }) {
     : 15;
 
   const guides = sortGuides(triggeredEngines);
-  const relevantGuidesCount = guides.filter((g) => g.relevant).length;
 
   // ── Defang URLs agar link aktif tidak tersebar ──
   const defangUrls = (text) =>
@@ -472,55 +471,72 @@ export default function PanicTriage({ scanResult = null }) {
           })}
         </div>
 
-        {/* ── Guide Per Fraud Mode (Collapsed inside Disclosure) ── */}
-        <div className="pt-6 border-t border-white/[0.06]">
-          <Disclosure
-            icon={LifeBuoy}
-            title="Panduan Per Modus Penipuan"
-            summary="Langkah penyelamatan khusus dan berkas yang perlu disiapkan per jenis modus"
-            badge={
-              <span
-                className="text-[11px] font-mono px-2.5 py-0.5 rounded-full text-slate-300"
-                style={{ background: "rgba(150,175,230,0.08)", border: "1px solid rgba(150,175,230,0.12)" }}
-              >
-                {relevantGuidesCount > 0 ? `${relevantGuidesCount} relevan · ${guides.length} modus` : `${guides.length} modus`}
-              </span>
-            }
-            defaultOpen={false}
-            panelClassName="pt-3"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {guides.map((g) => (
-                <div
-                  key={g.engineId}
-                  className="p-5 rounded-2xl text-xs sm:text-sm min-w-0"
-                  style={
-                    g.relevant
-                      ? { background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.20)" }
-                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
-                  }
-                >
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <h5 className="text-sm sm:text-base font-bold text-white [overflow-wrap:anywhere] break-words">{g.title}</h5>
+        {/* ── Guide Per Fraud Mode (Individual closed Disclosures, Relevant first) ── */}
+        <div className="pt-6 border-t border-white/[0.06] space-y-3">
+          <div className="space-y-1">
+            <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-slate-300">
+              <LifeBuoy className="w-4 h-4 text-[#5df0a8]" />
+              <span>Panduan Per Modus Penipuan</span>
+            </h4>
+            <p className="text-xs text-slate-400">
+              Ketuk modus untuk melihat langkahnya.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-start">
+            {guides.map((g) => (
+              <Disclosure
+                key={g.engineId}
+                title={g.title}
+                badge={
+                  <span className="inline-flex items-center gap-1.5 flex-wrap">
                     {g.relevant && (
                       <span
-                        className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full"
-                        style={{ background: "rgba(93,240,168,0.10)", color: "var(--accent)", border: "1px solid rgba(93,240,168,0.22)" }}
+                        className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full"
+                        style={{
+                          background: "rgba(93,240,168,0.10)",
+                          color: "var(--accent)",
+                          border: "1px solid rgba(93,240,168,0.22)",
+                        }}
                       >
                         Relevan
                       </span>
                     )}
-                  </div>
+                    <span
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-full text-slate-300"
+                      style={{
+                        background: "rgba(150,175,230,0.08)",
+                        border: "1px solid rgba(150,175,230,0.12)",
+                      }}
+                    >
+                      {g.steps.length} langkah
+                    </span>
+                  </span>
+                }
+                buttonClassName={g.relevant ? "border-[#5df0a8]/25 bg-[#5df0a8]/[0.04]" : ""}
+                defaultOpen={false}
+                panelClassName="pt-2"
+              >
+                <div
+                  className="p-4 rounded-2xl text-xs sm:text-sm min-w-0"
+                  style={
+                    g.relevant
+                      ? { background: "rgba(93,240,168,0.05)", border: "1px solid rgba(93,240,168,0.18)" }
+                      : { background: "rgba(12,18,38,0.30)", border: "1px solid rgba(150,175,230,0.06)" }
+                  }
+                >
                   <ol className="list-decimal pl-4 space-y-1.5 text-slate-300 leading-relaxed [overflow-wrap:anywhere] break-words">
                     {g.steps.map((s) => (
                       <li key={s}>{s}</li>
                     ))}
                   </ol>
-                  <p className="mt-3 text-xs text-slate-400 [overflow-wrap:anywhere] break-words">Siapkan: {g.docs.join(" · ")}</p>
+                  <p className="mt-3 text-xs text-slate-400 [overflow-wrap:anywhere] break-words">
+                    Siapkan: {g.docs.join(" · ")}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </Disclosure>
+              </Disclosure>
+            ))}
+          </div>
         </div>
 
         {/* ── Official Channels ── */}
